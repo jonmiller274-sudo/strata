@@ -1,0 +1,211 @@
+// ===== Artifact Data Model =====
+// Each artifact is a structured document composed of ordered sections.
+// Sections are typed — each type has its own content shape.
+
+export interface Artifact {
+  id: string;
+  slug: string;
+  title: string;
+  subtitle?: string;
+  author_name?: string;
+  theme: "dark" | "light";
+  branding?: ArtifactBranding;
+  sections: Section[];
+  is_published: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ArtifactBranding {
+  primary_color?: string;
+  logo_url?: string;
+}
+
+// ===== Section Types =====
+
+export type SectionType =
+  | "rich-text"
+  | "expandable-cards"
+  | "timeline"
+  | "tier-table"
+  | "metric-dashboard"
+  | "data-viz"
+  | "hub-mockup";
+
+export type Section =
+  | RichTextSection
+  | ExpandableCardGridSection
+  | TimelineSection
+  | TierTableSection
+  | MetricDashboardSection
+  | DataVizSection
+  | HubMockupSection;
+
+// Base fields shared by all sections
+interface SectionBase {
+  id: string;
+  title: string;
+  subtitle?: string;
+}
+
+// ===== 1. Rich Text with Collapsible Detail =====
+export interface RichTextSection extends SectionBase {
+  type: "rich-text";
+  content: {
+    summary: string; // Visible by default (markdown)
+    detail?: string; // Revealed on expand (markdown)
+    callout?: {
+      type: "insight" | "warning" | "quote";
+      text: string;
+    };
+  };
+}
+
+// ===== 2. Expandable Card Grid =====
+export interface ExpandableCardGridSection extends SectionBase {
+  type: "expandable-cards";
+  content: {
+    columns?: 2 | 3 | 4;
+    cards: ExpandableCard[];
+  };
+}
+
+export interface ExpandableCard {
+  id: string;
+  title: string;
+  icon?: string; // Lucide icon name
+  summary: string;
+  detail?: string; // Revealed on expand
+  tags?: string[];
+  metric?: {
+    value: string;
+    label: string;
+  };
+}
+
+// ===== 3. Animated Timeline =====
+export interface TimelineSection extends SectionBase {
+  type: "timeline";
+  content: {
+    orientation?: "vertical" | "horizontal";
+    steps: TimelineStep[];
+  };
+}
+
+export interface TimelineStep {
+  id: string;
+  label: string; // e.g., "Day 1", "Week 2", "Q1 2026"
+  title: string;
+  description: string;
+  icon?: string;
+  status?: "completed" | "current" | "upcoming";
+}
+
+// ===== 4. Tier/Comparison Table =====
+export interface TierTableSection extends SectionBase {
+  type: "tier-table";
+  content: {
+    highlight_column?: number; // 0-indexed, which column to highlight
+    columns: TierColumn[];
+  };
+}
+
+export interface TierColumn {
+  name: string;
+  price?: string;
+  price_period?: string;
+  description?: string;
+  cta?: string;
+  features: TierFeature[];
+  is_highlighted?: boolean;
+}
+
+export interface TierFeature {
+  name: string;
+  included: boolean | string; // boolean for checkmark, string for custom value
+}
+
+// ===== 5. Metric Dashboard =====
+export interface MetricDashboardSection extends SectionBase {
+  type: "metric-dashboard";
+  content: {
+    metrics: MetricCard[];
+  };
+}
+
+export interface MetricCard {
+  id: string;
+  label: string;
+  value: string; // Display value (e.g., "$1M", "900", "20-24 months")
+  numeric_value?: number; // For animated counting
+  prefix?: string; // e.g., "$"
+  suffix?: string; // e.g., "%", " months"
+  change?: {
+    direction: "up" | "down" | "neutral";
+    value: string;
+  };
+  description?: string;
+}
+
+// ===== 6. Data Visualization =====
+export interface DataVizSection extends SectionBase {
+  type: "data-viz";
+  content: {
+    chart_type: "bar" | "line" | "pie" | "funnel" | "custom-svg";
+    data: Array<Record<string, string | number>>;
+    x_key?: string;
+    y_key?: string;
+    description?: string;
+  };
+}
+
+// ===== 7. Hub/Product Mockup =====
+export interface HubMockupSection extends SectionBase {
+  type: "hub-mockup";
+  content: {
+    center: HubNode;
+    nodes: HubNode[];
+    connections?: HubConnection[];
+    description?: string;
+  };
+}
+
+export interface HubNode {
+  id: string;
+  label: string;
+  icon?: string;
+  description?: string;
+  color?: string;
+}
+
+export interface HubConnection {
+  from: string; // node id
+  to: string; // node id
+  label?: string;
+}
+
+// ===== Template Types =====
+
+export type TemplateType =
+  | "platform-vision"
+  | "customer-journey"
+  | "gtm-strategy"
+  | "product-roadmap";
+
+export const TEMPLATE_LABELS: Record<TemplateType, string> = {
+  "platform-vision": "Platform Vision",
+  "customer-journey": "Customer Journey",
+  "gtm-strategy": "Go-to-Market Strategy",
+  "product-roadmap": "Product Roadmap",
+};
+
+export const TEMPLATE_DESCRIPTIONS: Record<TemplateType, string> = {
+  "platform-vision":
+    "Show how all your products and capabilities tie together into a unified platform.",
+  "customer-journey":
+    "Walk through the experience from first touch to fully embedded, day by day.",
+  "gtm-strategy":
+    "Map out how you reach, convert, and expand with your target customers.",
+  "product-roadmap":
+    "Communicate what you're building, when, and why — across quarters and teams.",
+};

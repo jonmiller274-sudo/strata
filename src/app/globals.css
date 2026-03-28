@@ -1,0 +1,154 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* ===== Dark theme (default) ===== */
+  --color-background: #0a0b10;
+  --color-surface: #12141d;
+  --color-card: #181b27;
+  --color-card-hover: #1f2333;
+  --color-border: #2a2e3f;
+
+  /* Text */
+  --color-foreground: #e8eaf0;
+  --color-muted: #8b92a8;
+  --color-muted-foreground: #6b7280;
+
+  /* Brand accent */
+  --color-accent: #6366f1;
+  --color-accent-hover: #818cf8;
+  --color-accent-muted: #4f46e520;
+
+  /* Semantic */
+  --color-success: #34d399;
+  --color-warning: #fbbf24;
+  --color-danger: #f87171;
+
+  /* Sidebar */
+  --color-sidebar: #0d0e14;
+  --color-sidebar-active: #6366f1;
+  --color-sidebar-text: #8b92a8;
+  --color-sidebar-text-active: #e8eaf0;
+
+  /* Footer */
+  --color-footer-bg: #080910;
+  --color-footer-text: #6b7280;
+
+  /* Spacing */
+  --sidebar-width: 280px;
+
+  /* Fonts */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Animation durations */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+}
+
+/* ===== Light theme overrides ===== */
+[data-theme="light"] {
+  --color-background: #fafbfc;
+  --color-surface: #ffffff;
+  --color-card: #ffffff;
+  --color-card-hover: #f8f9fb;
+  --color-border: #e5e7eb;
+  --color-foreground: #111827;
+  --color-muted: #6b7280;
+  --color-muted-foreground: #9ca3af;
+  --color-sidebar: #f3f4f6;
+  --color-sidebar-text: #6b7280;
+  --color-sidebar-text-active: #111827;
+  --color-footer-bg: #f3f4f6;
+  --color-footer-text: #9ca3af;
+  --color-accent-muted: #6366f110;
+}
+
+/* ===== Base styles ===== */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== Custom animations ===== */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes count-up {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes expand-down {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 1000px;
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up var(--duration-slow) ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in var(--duration-normal) ease-out forwards;
+}
+
+.animate-count-up {
+  animation: count-up var(--duration-slow) ease-out forwards;
+}
+
+.animate-expand-down {
+  animation: expand-down var(--duration-normal) ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right var(--duration-normal) ease-out forwards;
+}
+
+/* Stagger support */
+.stagger-1 { animation-delay: 0ms; }
+.stagger-2 { animation-delay: 100ms; }
+.stagger-3 { animation-delay: 200ms; }
+.stagger-4 { animation-delay: 300ms; }
+.stagger-5 { animation-delay: 400ms; }
+.stagger-6 { animation-delay: 500ms; }
+
+/* Tabular numbers for metrics */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
