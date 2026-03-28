@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import type { DataVizSection } from "@/types/artifact";
-import { cn } from "@/lib/utils/cn";
 
 function BarChart({
   data,

@@ -4,10 +4,11 @@
 
 - **What:** SaaS tool that turns structured strategic content into polished, interactive HTML documents — in 30 minutes instead of a full day
 - **For whom:** VP Sales/Growth at Series B-C startups (primary wedge), expanding to CEOs and indie consultants
-- **Stack:** Next.js 14+ (App Router), React, TypeScript, Tailwind CSS, Framer Motion, Vercel
-- **Repo:** TBD (will be created during MVP build)
-- **Deployed:** TBD
-- **Status:** Pre-build — research complete, orchestration system set up, ICP finalizing
+- **Stack:** Next.js 16+ (App Router), React 19, TypeScript, Tailwind CSS v4, Framer Motion, Vercel
+- **Repo:** https://github.com/jonmiller274-sudo/strata (private)
+- **Deployed:** https://strata-lake-delta.vercel.app (note: `strata-docs.vercel.app` alias blocked by Vercel team SSO)
+- **Status:** Phase 1 COMPLETE — rendering engine, AI structuring, creation flow, landing page, deployed
+- **Vercel deploy:** `NODE_ENV=production vercel --prod` then `vercel alias <deploy-url> strata-docs.vercel.app` (GitHub auto-deploy not connected)
 
 ## Commands
 
@@ -200,14 +201,29 @@ Full research documents are at: `/Users/JonMiller/Downloads/strata-research-pack
 
 ## Tech Stack Details
 
-- **Framework:** Next.js 14+ (App Router)
+- **Framework:** Next.js 16.2.1 (App Router, Turbopack)
 - **Language:** TypeScript (strict mode)
-- **Styling:** Tailwind CSS
-- **Animations:** Framer Motion
-- **AI:** Claude API for content scaffolding (start with single model call)
-- **Hosting:** Vercel (static HTML output for documents)
-- **Database:** Supabase (for accounts, analytics, document storage — Phase 2+)
+- **Styling:** Tailwind CSS v4 (CSS variables via `@theme inline`)
+- **Animations:** Framer Motion 12
+- **AI:** OpenAI GPT-4.1-mini via `openai` SDK (~$0.007/structuring call)
+- **Hosting:** Vercel
+- **Database:** Supabase (`xqmrfhfgrzwrypdwupvh` — `artifacts` table with JSON sections)
 - **Auth:** Supabase Auth (Phase 2+)
+
+### Environment Variables
+```
+NEXT_PUBLIC_SUPABASE_URL     # Supabase project URL
+SUPABASE_SERVICE_ROLE_KEY    # Server-side Supabase key (never expose to client)
+OPENAI_API_KEY               # GPT-4.1-mini for AI structuring
+NEXT_PUBLIC_APP_URL           # Production URL (https://strata-docs.vercel.app)
+```
+
+### Key Architecture Notes
+- Landing page is `"use client"` (Framer Motion animations)
+- Demo artifact at `/demo` is hardcoded (no DB dependency)
+- AI structuring at `/api/ai/structure` uses `json_object` response format
+- Slug pages fetch from Supabase `artifacts` table with `is_published = true`
+- Build script forces `NODE_ENV=production` (Jon's shell sets it to development)
 
 Keep infrastructure boring. Ship in 4 weeks.
 

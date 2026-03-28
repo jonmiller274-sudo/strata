@@ -1,5 +1,17 @@
+import type { Metadata } from "next";
 import { ArtifactViewer } from "@/components/viewer/ArtifactViewer";
 import type { Artifact } from "@/types/artifact";
+
+export const metadata: Metadata = {
+  title: "Strata Demo — Interactive Strategy Artifact",
+  description:
+    "See what a Strata artifact looks like. This demo showcases all 7 section types — built with Strata, pitching Strata.",
+  openGraph: {
+    title: "Strata Demo — Interactive Strategy Artifact",
+    description:
+      "See what a Strata artifact looks like. This demo showcases all 7 section types — built with Strata, pitching Strata.",
+  },
+};
 
 const DEMO_ARTIFACT: Artifact = {
   id: "demo",
