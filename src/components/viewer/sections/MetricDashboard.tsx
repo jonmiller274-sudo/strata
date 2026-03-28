@@ -76,13 +76,15 @@ function MetricCardComponent({
 
       <div className="mt-2 flex items-baseline gap-1">
         <span className="text-3xl font-bold tabular-nums">
-          {metric.prefix}
-          {metric.numeric_value != null ? (
-            <AnimatedCounter value={metric.numeric_value} />
+          {metric.numeric_value != null && metric.numeric_value <= 9999 ? (
+            <>
+              {metric.prefix}
+              <AnimatedCounter value={metric.numeric_value} />
+              {metric.suffix}
+            </>
           ) : (
             metric.value
           )}
-          {metric.suffix}
         </span>
       </div>
 
