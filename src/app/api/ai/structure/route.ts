@@ -3,55 +3,9 @@ import { getOpenAIClient } from "@/lib/ai/client";
 import { buildStructurePrompt } from "@/lib/ai/prompts/structure";
 import type { TemplateType } from "@/types/artifact";
 
-// JSON Schema for OpenAI Structured Outputs — guarantees valid output
-const ARTIFACT_RESPONSE_SCHEMA = {
-  name: "artifact",
-  strict: true,
-  schema: {
-    type: "object",
-    required: ["title", "subtitle", "sections"],
-    additionalProperties: false,
-    properties: {
-      title: { type: "string", description: "Artifact title" },
-      subtitle: {
-        type: ["string", "null"],
-        description: "One-line subtitle",
-      },
-      sections: {
-        type: "array",
-        description: "Ordered array of sections",
-        items: {
-          type: "object",
-          required: ["id", "type", "title", "content"],
-          additionalProperties: false,
-          properties: {
-            id: { type: "string" },
-            type: {
-              type: "string",
-              enum: [
-                "rich-text",
-                "expandable-cards",
-                "timeline",
-                "tier-table",
-                "metric-dashboard",
-                "data-viz",
-                "hub-mockup",
-              ],
-            },
-            title: { type: "string" },
-            subtitle: { type: ["string", "null"] },
-            content: {
-              type: "object",
-              description:
-                "Type-specific content. Shape depends on section type.",
-              additionalProperties: true,
-            },
-          },
-        },
-      },
-    },
-  },
-} as const;
+// Using json_object mode — guarantees valid JSON output.
+// The system prompt defines the schema; the content field varies by section type
+// which makes strict json_schema mode impractical.
 
 export async function POST(req: NextRequest) {
   try {
@@ -89,10 +43,7 @@ export async function POST(req: NextRequest) {
           content: `Here is the raw content to structure into an interactive ${templateType.replace(/-/g, " ")} artifact:\n\n${content}`,
         },
       ],
-      response_format: {
-        type: "json_schema",
-        json_schema: ARTIFACT_RESPONSE_SCHEMA,
-      },
+      response_format: { type: "json_object" },
     });
 
     const message = response.choices[0]?.message;
