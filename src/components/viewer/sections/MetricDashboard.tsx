@@ -74,8 +74,17 @@ function MetricCardComponent({
     >
       <p className="text-sm font-medium text-muted">{metric.label}</p>
 
-      <div className="mt-2 flex items-baseline gap-1">
-        <span className="text-3xl font-bold tabular-nums">
+      <div className="mt-2">
+        <span
+          className={cn(
+            "block font-bold tabular-nums break-words",
+            metric.value.length <= 4
+              ? "text-3xl"
+              : metric.value.length <= 8
+                ? "text-2xl"
+                : "text-lg"
+          )}
+        >
           {metric.numeric_value != null && metric.numeric_value <= 9999 ? (
             <>
               {metric.prefix}
@@ -121,9 +130,7 @@ export function MetricDashboard({
   const gridCols =
     metricCount <= 2
       ? "grid-cols-1 md:grid-cols-2"
-      : metricCount === 3
-        ? "grid-cols-1 md:grid-cols-3"
-        : "grid-cols-1 md:grid-cols-2 lg:grid-cols-4";
+      : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
 
   return (
     <div>
