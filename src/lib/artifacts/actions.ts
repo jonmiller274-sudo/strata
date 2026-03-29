@@ -84,15 +84,17 @@ export async function updateArtifact(
   slug: string,
   input: UpdateArtifactInput
 ): Promise<{ success: boolean } | { error: string }> {
+  console.log("[updateArtifact] saving slug:", slug, "title:", input.title, "sectionCount:", input.sections?.length);
   const { error } = await getSupabase()
     .from("artifacts")
     .update({ ...input, updated_at: new Date().toISOString() })
     .eq("slug", slug);
 
   if (error) {
-    console.error("[updateArtifact]", error);
+    console.error("[updateArtifact] FAILED:", error);
     return { error: error.message };
   }
 
+  console.log("[updateArtifact] SUCCESS for slug:", slug);
   return { success: true };
 }

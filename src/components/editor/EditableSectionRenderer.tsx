@@ -20,6 +20,23 @@ export function EditableSectionRenderer({
   section,
   onFieldChange,
 }: EditableSectionRendererProps) {
+  // Check if this section type has a custom editable renderer.
+  // Custom renderers handle their own layout, so we add editable title/subtitle.
+  // Section types that fall through to SectionRenderer already render their own
+  // title internally, so we skip the extra title to avoid duplication.
+  const hasCustomRenderer = [
+    "rich-text",
+    "expandable-cards",
+    "metric-dashboard",
+    "timeline",
+    "tier-table",
+  ].includes(section.type);
+
+  if (!hasCustomRenderer) {
+    // Fallback: use the viewer's SectionRenderer as-is (no duplication)
+    return <SectionRenderer section={section} />;
+  }
+
   return (
     <div>
       {/* Editable title */}

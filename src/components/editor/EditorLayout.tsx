@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import type { Artifact, Section } from "@/types/artifact";
 import { useEditor } from "@/hooks/useEditor";
 import { useAutoSave } from "@/hooks/useAutoSave";
@@ -11,6 +11,7 @@ import { AiCommand } from "./AiCommand";
 import { AddSection } from "./AddSection";
 import { InlineEditor } from "./InlineEditor";
 import { DocumentSettings } from "./DocumentSettings";
+import { DocumentAiCommand, type DocumentAiSuggestion } from "./DocumentAiCommand";
 
 export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact }) {
   const editor = useEditor(initialArtifact);
@@ -18,6 +19,11 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
   const [aiSuggestion, setAiSuggestion] = useState<{ sectionId: string; section: Section } | null>(null);
   const [showAiOriginal, setShowAiOriginal] = useState(false);
   const autoSave = useAutoSave(editor.artifact, editor.saveStatus, editor.setSaveStatus);
+
+  // Document-level AI state
+  const [docAiSuggestion, setDocAiSuggestion] = useState<DocumentAiSuggestion | null>(null);
+  const [showDocAiOriginal, setShowDocAiOriginal] = useState(false);
+  const originalArtifactRef = useRef<Artifact | null>(null);
 
   useEffect(() => {
     if (!editor.selectedSectionId) return;
@@ -41,7 +47,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
     <div className="h-screen flex flex-col bg-background text-foreground" style={paletteStyle}>
       <TopBar
         slug={editor.artifact.slug}
-        title={editor.artifact.title}
+        title={docAiSuggestion && !showDocAiOriginal ? docAiSuggestion.title : editor.artifact.title}
         saveStatus={editor.saveStatus}
         isPublished={editor.artifact.is_published}
         onPublishToggle={async () => {
@@ -49,6 +55,32 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
           // Save immediately — don't wait for debounce
           await autoSave.save();
         }}
+        documentAiSlot={
+          <DocumentAiCommand
+            artifact={editor.artifact}
+            onSuggestion={(suggestion) => {
+              originalArtifactRef.current = { ...editor.artifact };
+              setDocAiSuggestion(suggestion);
+              setShowDocAiOriginal(false);
+            }}
+            onApply={(suggestion) => {
+              editor.mergeArtifact({
+                title: suggestion.title,
+                subtitle: suggestion.subtitle,
+                sections: suggestion.sections,
+              });
+              setDocAiSuggestion(null);
+              setShowDocAiOriginal(false);
+              originalArtifactRef.current = null;
+            }}
+            onToggleOriginal={() => setShowDocAiOriginal((prev) => !prev)}
+            onClearSuggestion={() => {
+              setDocAiSuggestion(null);
+              setShowDocAiOriginal(false);
+              originalArtifactRef.current = null;
+            }}
+          />
+        }
       />
       <div className="flex-1 flex overflow-hidden">
         <div className="w-[300px] border-r border-white/10 overflow-y-auto flex flex-col">
@@ -121,26 +153,41 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
             {/* Document header in preview */}
             <header className="mb-12">
               <h1 className="text-3xl font-bold tracking-tight">
-                <InlineEditor
-                  value={editor.artifact.title}
-                  onChange={(v) => editor.updateArtifactField("title", v)}
-                />
+                {docAiSuggestion && !showDocAiOriginal ? (
+                  docAiSuggestion.title
+                ) : (
+                  <InlineEditor
+                    value={editor.artifact.title}
+                    onChange={(v) => editor.updateArtifactField("title", v)}
+                  />
+                )}
               </h1>
               <p className="mt-2 text-lg text-muted">
-                <InlineEditor
-                  value={editor.artifact.subtitle || ""}
-                  onChange={(v) => editor.updateArtifactField("subtitle", v)}
-                  placeholder="Add subtitle..."
-                />
+                {docAiSuggestion && !showDocAiOriginal ? (
+                  docAiSuggestion.subtitle || ""
+                ) : (
+                  <InlineEditor
+                    value={editor.artifact.subtitle || ""}
+                    onChange={(v) => editor.updateArtifactField("subtitle", v)}
+                    placeholder="Add subtitle..."
+                  />
+                )}
               </p>
             </header>
             {/* Sections */}
             <div className="space-y-16">
-              {editor.artifact.sections.map((section) => {
+              {editor.artifact.sections.map((section, index) => {
+                // Document-level AI suggestion takes precedence over section-level
+                const docSuggestionSection =
+                  docAiSuggestion && !showDocAiOriginal
+                    ? docAiSuggestion.sections[index]
+                    : null;
+
                 const displaySection =
-                  aiSuggestion?.sectionId === section.id && !showAiOriginal
+                  docSuggestionSection ??
+                  (aiSuggestion?.sectionId === section.id && !showAiOriginal
                     ? aiSuggestion.section
-                    : section;
+                    : section);
 
                 return (
                   <div

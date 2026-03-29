@@ -213,10 +213,15 @@ function TimelineTrack({
   onSelect: (index: number) => void;
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
+  const hasMounted = useRef(false);
   const phaseMap = Object.fromEntries(phases.map((p) => [p.id, p]));
 
-  // Auto-scroll active node into view
+  // Auto-scroll active node into view — skip on initial mount
   useEffect(() => {
+    if (!hasMounted.current) {
+      hasMounted.current = true;
+      return;
+    }
     if (!trackRef.current) return;
     const activeNode = trackRef.current.querySelector<HTMLElement>(
       `[data-index="${activeIndex}"]`
@@ -226,8 +231,13 @@ function TimelineTrack({
     }
   }, [activeIndex]);
 
-  const progressPct =
-    events.length > 1 ? (activeIndex / (events.length - 1)) * 100 : 0;
+  // Position dots proportionally by day value, not by index
+  const minDay = events.length > 0 ? Math.min(...events.map((e) => e.day)) : 0;
+  const maxDay = events.length > 0 ? Math.max(...events.map((e) => e.day)) : 1;
+  const daySpan = maxDay - minDay || 1;
+
+  const getDayPct = (day: number) => ((day - minDay) / daySpan) * 100;
+  const progressPct = events.length > 1 ? getDayPct(events[activeIndex].day) : 0;
 
   return (
     <div className="relative">
@@ -237,96 +247,100 @@ function TimelineTrack({
         className="overflow-x-auto pb-4"
         style={{ scrollbarWidth: "thin" }}
       >
-        <div className="relative min-w-max px-6 pt-2">
-          {/* Base rail */}
-          <div className="absolute left-6 right-6 top-[22px] h-[2px] bg-border" />
+        <div className="px-6 pt-2" style={{ minWidth: "600px" }}>
+          <div className="relative" style={{ height: "80px" }}>
+            {/* Base rail */}
+            <div className="absolute left-0 right-0 top-[20px] h-[2px] bg-border" />
 
-          {/* Progress fill — percentage of the total node span */}
-          <div
-            className="absolute left-6 top-[22px] h-[2px] transition-all duration-500 ease-out"
-            style={{
-              right: `calc(${100 - progressPct}% + 24px)`,
-              backgroundColor:
-                events[activeIndex]
-                  ? phaseMap[events[activeIndex].phase_id]?.color ??
-                    "var(--palette-accent1, #2fd8c8)"
-                  : "var(--palette-accent1, #2fd8c8)",
-            }}
-          />
+            {/* Progress fill — proportional to day value */}
+            <div
+              className="absolute left-0 top-[20px] h-[2px] transition-all duration-500 ease-out"
+              style={{
+                width: `${progressPct}%`,
+                backgroundColor:
+                  events[activeIndex]
+                    ? phaseMap[events[activeIndex].phase_id]?.color ??
+                      "var(--palette-accent1, #2fd8c8)"
+                    : "var(--palette-accent1, #2fd8c8)",
+              }}
+            />
 
-          {/* Nodes */}
-          <div className="relative flex items-start gap-0">
+            {/* Nodes — absolutely positioned by day */}
             {events.map((event, i) => {
               const phase = phaseMap[event.phase_id];
               const color =
                 phase?.color ?? "var(--palette-accent1, #2fd8c8)";
               const isActive = i === activeIndex;
               const isVisited = visited.has(i) && !isActive;
-              const minWidth = events.length > 6 ? "70px" : "90px";
+              const leftPct = getDayPct(event.day);
 
               return (
                 <button
                   key={event.id}
                   data-index={i}
                   onClick={() => onSelect(i)}
-                  className="group flex flex-col items-center focus:outline-none"
-                  style={{ minWidth, paddingTop: 0 }}
+                  className="group absolute flex flex-col items-center focus:outline-none"
+                  style={{
+                    left: `${leftPct}%`,
+                    top: 0,
+                    transform: "translateX(-50%)",
+                  }}
                   aria-label={`Day ${event.day}: ${event.label}`}
                   aria-current={isActive ? "true" : undefined}
                 >
-                  {/* Dot */}
-                  <div
-                    className={cn(
-                      "transition-all duration-300 rounded-full flex items-center justify-center",
-                      isActive ? "w-4 h-4" : "w-3 h-3"
-                    )}
-                    style={{
-                      backgroundColor: isActive
-                        ? color
-                        : isVisited
-                          ? color + "8C"
-                          : "transparent",
-                      borderWidth: isActive ? 0 : "2px",
-                      borderStyle: "solid",
-                      borderColor: isVisited ? color + "8C" : color + "50",
-                      ...(isActive
-                        ? {
-                            boxShadow: `0 0 0 2px var(--background, #0e0e12), 0 0 0 4px ${color}`,
-                          }
-                        : {}),
-                    }}
-                  />
+                {/* Dot */}
+                <div
+                  className={cn(
+                    "transition-all duration-300 rounded-full flex items-center justify-center",
+                    isActive ? "w-4 h-4" : "w-3 h-3"
+                  )}
+                  style={{
+                    backgroundColor: isActive
+                      ? color
+                      : isVisited
+                        ? color + "8C"
+                        : "transparent",
+                    borderWidth: isActive ? 0 : "2px",
+                    borderStyle: "solid",
+                    borderColor: isVisited ? color + "8C" : color + "50",
+                    ...(isActive
+                      ? {
+                          boxShadow: `0 0 0 2px var(--background, #0e0e12), 0 0 0 4px ${color}`,
+                        }
+                      : {}),
+                  }}
+                />
 
-                  {/* Day label */}
-                  <span
-                    className={cn(
-                      "mt-2 text-[10px] font-mono tabular-nums transition-colors",
-                      isActive
-                        ? "font-bold"
-                        : isVisited
-                          ? "text-muted"
-                          : "text-muted opacity-60"
-                    )}
-                    style={isActive ? { color } : {}}
-                  >
-                    Day {event.day}
-                  </span>
+                {/* Day label */}
+                <span
+                  className={cn(
+                    "mt-2 text-[10px] font-mono tabular-nums transition-colors whitespace-nowrap",
+                    isActive
+                      ? "font-bold"
+                      : isVisited
+                        ? "text-muted"
+                        : "text-muted opacity-60"
+                  )}
+                  style={isActive ? { color } : {}}
+                >
+                  Day {event.day}
+                </span>
 
-                  {/* Event label */}
-                  <span
-                    className={cn(
-                      "mt-0.5 max-w-[80px] text-center text-[9px] leading-tight transition-colors",
-                      isActive
-                        ? "font-semibold"
-                        : "text-muted opacity-50"
-                    )}
-                    style={isActive ? { color } : {}}
-                  >
-                    {event.label}
-                  </span>
-                </button>
-              );
-            })}
+                {/* Event label */}
+                <span
+                  className={cn(
+                    "mt-0.5 max-w-[80px] text-center text-[9px] leading-tight transition-colors whitespace-nowrap",
+                    isActive
+                      ? "font-semibold"
+                      : "text-muted opacity-50"
+                  )}
+                  style={isActive ? { color } : {}}
+                >
+                  {event.label}
+                </span>
+              </button>
+            );
+          })}
           </div>
         </div>
       </div>
@@ -439,7 +453,7 @@ export function GuidedJourney({
   const { phases, counters, events } = content;
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(content.autoplay ?? true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [visited, setVisited] = useState<Set<number>>(new Set([0]));
 
   const displayValues = useAnimatedCounters(events, activeIndex);

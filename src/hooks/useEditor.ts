@@ -102,6 +102,15 @@ export function useEditor(initialArtifact: Artifact) {
     [markUnsaved]
   );
 
+  // Replace multiple artifact fields at once (for document-level AI apply)
+  const mergeArtifact = useCallback(
+    (fields: Partial<Artifact>) => {
+      setArtifact((prev) => ({ ...prev, ...fields }));
+      markUnsaved();
+    },
+    [markUnsaved]
+  );
+
   return {
     artifact,
     selectedSectionId,
@@ -114,6 +123,7 @@ export function useEditor(initialArtifact: Artifact) {
     reorderSections,
     deleteSection,
     addSection,
+    mergeArtifact,
   };
 }
 

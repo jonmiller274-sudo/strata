@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import type { SaveStatus } from "@/hooks/useEditor";
@@ -10,6 +11,7 @@ interface TopBarProps {
   saveStatus: SaveStatus;
   isPublished: boolean;
   onPublishToggle: () => void;
+  documentAiSlot?: ReactNode;
 }
 
 export function TopBar({
@@ -18,6 +20,7 @@ export function TopBar({
   saveStatus,
   isPublished,
   onPublishToggle,
+  documentAiSlot,
 }: TopBarProps) {
   return (
     <div className="h-12 border-b border-white/10 flex items-center px-4 gap-4 shrink-0">
@@ -39,6 +42,9 @@ export function TopBar({
         {saveStatus === "saving" && "Saving..."}
         {saveStatus === "unsaved" && "Unsaved changes"}
       </span>
+
+      {/* Document-level AI command */}
+      {documentAiSlot}
 
       {/* Preview in new tab */}
       <a
