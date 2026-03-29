@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0f; color: #e0e0e0; font-family: -apple-system, system-ui, sans-serif; padding: 24px; }
+
+  .label { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .sketch-box { border: 1.5px dashed #333; border-radius: 8px; padding: 12px; margin: 4px 0; }
+  .sketch-box.active { border-color: #6366f1; background: rgba(99,102,241,0.05); }
+
+  /* Top bar */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    background: #111118; border: 1px solid #222; border-radius: 10px;
+    padding: 12px 20px; margin-bottom: 16px;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .topbar-title { font-size: 15px; font-weight: 600; }
+  .topbar-subtitle { font-size: 12px; color: #666; }
+  .topbar-actions { display: flex; gap: 8px; }
+  .btn { padding: 6px 14px; border-radius: 6px; font-size: 12px; border: none; cursor: pointer; }
+  .btn-ghost { background: transparent; border: 1px solid #333; color: #aaa; }
+  .btn-primary { background: #6366f1; color: white; }
+  .back-arrow { color: #666; font-size: 18px; }
+
+  /* Main layout */
+  .editor-layout {
+    display: grid; grid-template-columns: 340px 1fr;
+    gap: 16px; height: 580px;
+  }
+
+  /* Left panel - Editor */
+  .editor-panel {
+    background: #111118; border: 1px solid #222; border-radius: 10px;
+    padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px;
+  }
+  .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .panel-title { font-size: 14px; font-weight: 600; }
+
+  /* Section list */
+  .section-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 8px; background: #16161e;
+    border: 1px solid #222; cursor: pointer; font-size: 13px;
+  }
+  .section-item.active { border-color: #6366f1; background: rgba(99,102,241,0.08); }
+  .section-item .grip { color: #444; font-size: 14px; }
+  .section-item .type-badge {
+    font-size: 9px; background: #222; color: #888;
+    padding: 2px 6px; border-radius: 4px; margin-left: auto;
+  }
+  .section-item.active .type-badge { background: rgba(99,102,241,0.2); color: #818cf8; }
+
+  /* Edit form */
+  .edit-form {
+    background: #16161e; border: 1px solid #6366f1; border-radius: 8px;
+    padding: 14px; display: flex; flex-direction: column; gap: 10px;
+  }
+  .form-field { display: flex; flex-direction: column; gap: 4px; }
+  .form-label { font-size: 11px; color: #888; font-weight: 500; }
+  .form-input {
+    background: #0a0a0f; border: 1px solid #333; border-radius: 6px;
+    padding: 8px 10px; color: #ccc; font-size: 12px;
+  }
+  .form-textarea {
+    background: #0a0a0f; border: 1px solid #333; border-radius: 6px;
+    padding: 8px 10px; color: #ccc; font-size: 12px; height: 60px;
+  }
+
+  .add-section-btn {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 10px; border: 1.5px dashed #333; border-radius: 8px;
+    color: #666; font-size: 12px; cursor: pointer; margin-top: 4px;
+  }
+
+  /* Right panel - Live preview */
+  .preview-panel {
+    background: #0d0d14; border: 1px solid #222; border-radius: 10px;
+    overflow: hidden; position: relative;
+  }
+  .preview-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 16px; background: #111118; border-bottom: 1px solid #222;
+  }
+  .preview-label { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+  .preview-toggle { display: flex; gap: 4px; }
+  .toggle-btn {
+    padding: 4px 10px; border-radius: 4px; font-size: 10px;
+    background: transparent; color: #666; border: 1px solid #333; cursor: pointer;
+  }
+  .toggle-btn.active { background: #222; color: #ccc; border-color: #444; }
+
+  .preview-content { padding: 24px; overflow-y: auto; height: calc(100% - 40px); }
+
+  /* Fake rendered sections in preview */
+  .preview-section { margin-bottom: 24px; }
+  .preview-section h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; color: #e0e0e0; }
+  .preview-section p { font-size: 12px; color: #888; line-height: 1.6; }
+  .preview-section.highlighted {
+    outline: 2px solid #6366f1; outline-offset: 8px; border-radius: 4px;
+  }
+
+  .preview-cards {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 8px;
+  }
+  .preview-card {
+    background: #16161e; border: 1px solid #222; border-radius: 6px;
+    padding: 10px; font-size: 11px; color: #888;
+  }
+  .preview-card .card-title { font-size: 12px; color: #ccc; font-weight: 500; margin-bottom: 4px; }
+
+  .preview-metric-row { display: flex; gap: 12px; margin-top: 8px; }
+  .preview-metric {
+    background: #16161e; border: 1px solid #222; border-radius: 6px;
+    padding: 10px 14px; flex: 1; text-align: center;
+  }
+  .preview-metric .value { font-size: 20px; font-weight: 700; color: #818cf8; }
+  .preview-metric .mlabel { font-size: 10px; color: #666; margin-top: 2px; }
+
+  .preview-timeline { display: flex; align-items: center; gap: 0; margin-top: 10px; }
+  .timeline-step {
+    flex: 1; text-align: center; padding: 8px 4px; font-size: 10px; color: #888;
+    border-top: 2px solid #333; position: relative;
+  }
+  .timeline-step::before {
+    content: ''; width: 8px; height: 8px; background: #333; border-radius: 50%;
+    position: absolute; top: -5px; left: 50%; transform: translateX(-50%);
+  }
+  .timeline-step.done::before { background: #6366f1; }
+  .timeline-step.done { border-color: #6366f1; color: #ccc; }
+
+  /* Settings drawer hint */
+  .settings-btn { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #666; cursor: pointer; }
+  .gear-icon { font-size: 14px; }
+
+  /* Annotation callouts */
+  .callout {
+    position: absolute; font-size: 11px; color: #f59e0b;
+    background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3);
+    padding: 4px 8px; border-radius: 4px; white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="back-arrow">←</span>
+    <div>
+      <div class="topbar-title">Nexar PLG Go-to-Market</div>
+      <div class="topbar-subtitle">9 sections · Beats layout · Last edited 2 min ago</div>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn btn-ghost settings-btn"><span class="gear-icon">⚙</span> Settings</button>
+    <button class="btn btn-ghost">Preview ↗</button>
+    <button class="btn btn-primary">Save & Publish</button>
+  </div>
+</div>
+
+<!-- Main Layout -->
+<div class="editor-layout">
+
+  <!-- LEFT: Editor Panel -->
+  <div class="editor-panel">
+    <div class="panel-header">
+      <span class="panel-title">Sections</span>
+      <span style="font-size:11px; color:#666;">Drag to reorder</span>
+    </div>
+
+    <!-- Section list -->
+    <div class="section-item">
+      <span class="grip">⠿</span>
+      The Moment
+      <span class="type-badge">RICH TEXT</span>
+    </div>
+
+    <div class="section-item active">
+      <span class="grip">⠿</span>
+      Three Unlock Layers
+      <span class="type-badge">CARDS</span>
+    </div>
+
+    <!-- Expanded edit form for active section -->
+    <div class="edit-form">
+      <div class="form-field">
+        <span class="form-label">Section Title</span>
+        <div class="form-input">Three Unlock Layers</div>
+      </div>
+      <div class="form-field">
+        <span class="form-label">Subtitle</span>
+        <div class="form-input">A free tool becomes a paid platform in three moves</div>
+      </div>
+      <div class="form-field">
+        <span class="form-label">Columns</span>
+        <div style="display:flex; gap:6px;">
+          <span class="toggle-btn">2</span>
+          <span class="toggle-btn active">3</span>
+          <span class="toggle-btn">4</span>
+        </div>
+      </div>
+      <div style="font-size:11px; color:#888; padding:6px 0 2px;">
+        3 cards — click a card below to edit
+      </div>
+      <div class="section-item" style="padding:8px 10px; font-size:12px;">
+        🔓 Free Safety Scores → Card 1
+      </div>
+      <div class="section-item" style="padding:8px 10px; font-size:12px;">
+        📊 Premium Benchmarks → Card 2
+      </div>
+      <div class="section-item" style="padding:8px 10px; font-size:12px;">
+        🏢 Enterprise Platform → Card 3
+      </div>
+    </div>
+
+    <div class="section-item">
+      <span class="grip">⠿</span>
+      Market Traction
+      <span class="type-badge">METRICS</span>
+    </div>
+
+    <div class="section-item">
+      <span class="grip">⠿</span>
+      GTM Timeline
+      <span class="type-badge">TIMELINE</span>
+    </div>
+
+    <div class="section-item">
+      <span class="grip">⠿</span>
+      Pricing Tiers
+      <span class="type-badge">TIER TABLE</span>
+    </div>
+
+    <div style="font-size:11px; color:#555; text-align:center;">+4 more below ↓</div>
+
+    <div class="add-section-btn">
+      + Add Section
+    </div>
+  </div>
+
+  <!-- RIGHT: Live Preview -->
+  <div class="preview-panel">
+    <div class="preview-header">
+      <span class="preview-label">Live Preview</span>
+      <div class="preview-toggle">
+        <span class="toggle-btn active">Beats</span>
+        <span class="toggle-btn">Continuous</span>
+        <span class="toggle-btn">Mobile</span>
+      </div>
+    </div>
+
+    <div class="preview-content">
+      <!-- Section 1: Rich Text (dimmed) -->
+      <div class="preview-section" style="opacity: 0.4;">
+        <h3>The Moment</h3>
+        <p>Autonomous vehicles are entering public roads. Every insurer, regulator, and fleet operator needs one thing: a trusted, standardized way to measure AV risk...</p>
+      </div>
+
+      <!-- Section 2: Cards (highlighted - being edited) -->
+      <div class="preview-section highlighted">
+        <h3>Three Unlock Layers</h3>
+        <p style="margin-bottom: 8px;">A free tool becomes a paid platform in three moves</p>
+        <div class="preview-cards">
+          <div class="preview-card">
+            <div class="card-title">🔓 Free Safety Scores</div>
+            Give away what others gate. Public BADAS scores for every AV model...
+          </div>
+          <div class="preview-card">
+            <div class="card-title">📊 Premium Benchmarks</div>
+            Detailed scenario breakdowns, fleet comparison tools...
+          </div>
+          <div class="preview-card">
+            <div class="card-title">🏢 Enterprise Platform</div>
+            API access, custom risk models, regulatory filing support...
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Metrics (dimmed) -->
+      <div class="preview-section" style="opacity: 0.4;">
+        <h3>Market Traction</h3>
+        <div class="preview-metric-row">
+          <div class="preview-metric">
+            <div class="value">47</div>
+            <div class="mlabel">AV Models Scored</div>
+          </div>
+          <div class="preview-metric">
+            <div class="value">$2.3T</div>
+            <div class="mlabel">Addressable Market</div>
+          </div>
+          <div class="preview-metric">
+            <div class="value">12</div>
+            <div class="mlabel">Enterprise LOIs</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Timeline (dimmed) -->
+      <div class="preview-section" style="opacity: 0.4;">
+        <h3>GTM Timeline</h3>
+        <div class="preview-timeline">
+          <div class="timeline-step done">Q1 '26<br/><span style="font-size:9px;">Launch</span></div>
+          <div class="timeline-step done">Q2 '26<br/><span style="font-size:9px;">Premium</span></div>
+          <div class="timeline-step">Q3 '26<br/><span style="font-size:9px;">Enterprise</span></div>
+          <div class="timeline-step">Q4 '26<br/><span style="font-size:9px;">Scale</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Legend -->
+<div style="margin-top: 20px; display: flex; gap: 24px; justify-content: center;">
+  <div style="font-size: 11px; color: #555;">
+    <span style="color: #6366f1;">■</span> Active section (editing) — highlighted in both panels
+  </div>
+  <div style="font-size: 11px; color: #555;">
+    <span style="color: #444;">■</span> Other sections — dimmed in preview, clickable in list
+  </div>
+  <div style="font-size: 11px; color: #555;">
+    ⚙ Settings — layout mode, nav style, palette, title/subtitle
+  </div>
+</div>
+
+</body>
+</html>
