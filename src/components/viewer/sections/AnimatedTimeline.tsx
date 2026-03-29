@@ -102,6 +102,41 @@ export function AnimatedTimeline({
           />
         ))}
       </div>
+
+      {section.content.evidence && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: steps.length * 0.15 }}
+          viewport={{ once: true, margin: "-50px" }}
+          className="mt-8 border-l-4 pl-5 py-3"
+          style={{
+            borderColor:
+              section.content.evidence.border_color ||
+              "var(--palette-accent4, var(--color-danger))",
+          }}
+        >
+          <p className="text-sm italic text-muted leading-relaxed">
+            {section.content.evidence.text}
+          </p>
+        </motion.div>
+      )}
+
+      {section.content.pivot && (
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{
+            duration: 0.5,
+            delay: steps.length * 0.15 + (section.content.evidence ? 0.2 : 0),
+          }}
+          viewport={{ once: true, margin: "-50px" }}
+          className="mt-8 text-2xl md:text-3xl font-bold"
+          style={{ color: "var(--palette-accent1, var(--color-accent))" }}
+        >
+          {section.content.pivot}
+        </motion.p>
+      )}
     </div>
   );
 }

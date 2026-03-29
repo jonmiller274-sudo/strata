@@ -3,6 +3,142 @@
 import { motion } from "framer-motion";
 import type { DataVizSection } from "@/types/artifact";
 
+// ===== Staircase Chart =====
+// Ascending horizontal bars — each step is wider and taller than the previous,
+// creating a staircase-up-right visual for showing value tiers or growth stages.
+
+interface StaircaseItem {
+  label: string;
+  amount: string;
+  description?: string;
+  color?: string;
+}
+
+function StaircaseChart({ data }: { data: Array<Record<string, string | number>> }) {
+  const items = data as unknown as StaircaseItem[];
+  const count = items.length;
+
+  // Widen each step linearly from ~40% to 100%
+  const minWidthPct = 40;
+  const widthStep = count > 1 ? (100 - minWidthPct) / (count - 1) : 0;
+
+  // Heights: start at 60px, add 15px per step
+  const baseHeight = 60;
+  const heightStep = 15;
+
+  return (
+    <div className="space-y-3">
+      {items.map((item, index) => {
+        const widthPct = minWidthPct + index * widthStep;
+        const heightPx = baseHeight + index * heightStep;
+        const color = item.color ?? "var(--color-accent)";
+
+        return (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, x: -24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.45, delay: index * 0.15, ease: "easeOut" }}
+            viewport={{ once: true }}
+            className="flex flex-col gap-1"
+          >
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: `${widthPct}%` }}
+              transition={{ duration: 0.55, delay: index * 0.15 + 0.05, ease: "easeOut" }}
+              viewport={{ once: true }}
+              className="relative flex items-center justify-between rounded-lg px-4"
+              style={{
+                backgroundColor: color,
+                opacity: 0.85,
+                height: `${heightPx}px`,
+                minWidth: "120px",
+              }}
+            >
+              <span className="text-sm font-semibold text-white leading-tight pr-2">
+                {item.label}
+              </span>
+              <span className="text-sm font-bold text-white whitespace-nowrap">
+                {item.amount}
+              </span>
+            </motion.div>
+            {item.description && (
+              <p className="text-xs text-muted leading-snug pl-1">
+                {item.description}
+              </p>
+            )}
+          </motion.div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ===== Layers Chart =====
+// Stacked horizontal bars, each wider than the previous, illustrating value
+// compounding as each layer is added on top of the previous.
+
+interface LayersItem {
+  label: string;
+  price: string;
+  color?: string;
+}
+
+function renderCalloutText(text: string) {
+  // Split on **...** and alternate between plain and bold segments
+  const parts = text.split(/\*\*(.*?)\*\*/g);
+  return parts.map((part, i) =>
+    i % 2 === 1 ? (
+      <strong key={i} className="font-semibold">
+        {part}
+      </strong>
+    ) : (
+      <span key={i}>{part}</span>
+    )
+  );
+}
+
+function LayersChart({ data }: { data: Array<Record<string, string | number>> }) {
+  const items = data as unknown as LayersItem[];
+  const count = items.length;
+
+  // Widen each layer linearly from ~30% to 100%
+  const minWidthPct = 30;
+  const widthStep = count > 1 ? (100 - minWidthPct) / (count - 1) : 0;
+
+  return (
+    <div className="space-y-2">
+      {items.map((item, index) => {
+        const widthPct = minWidthPct + index * widthStep;
+        const color = item.color ?? "var(--color-accent)";
+
+        return (
+          <motion.div
+            key={index}
+            initial={{ width: 0, opacity: 0 }}
+            whileInView={{ width: `${widthPct}%`, opacity: 1 }}
+            transition={{ duration: 0.55, delay: index * 0.15, ease: "easeOut" }}
+            viewport={{ once: true }}
+            className="flex items-center justify-between rounded-lg px-4"
+            style={{
+              backgroundColor: color,
+              height: "48px",
+              minWidth: "80px",
+            }}
+          >
+            <span className="text-sm font-medium text-white truncate pr-2">
+              {item.label}
+            </span>
+            <span className="text-sm font-bold text-white whitespace-nowrap">
+              {item.price}
+            </span>
+          </motion.div>
+        );
+      })}
+    </div>
+  );
+}
+
 function BarChart({
   data,
   xKey,
@@ -122,6 +258,12 @@ export function DataVisualization({
         {content.chart_type === "funnel" && (
           <FunnelChart data={content.data} xKey={xKey} yKey={yKey} />
         )}
+        {content.chart_type === "staircase" && (
+          <StaircaseChart data={content.data} />
+        )}
+        {content.chart_type === "layers" && (
+          <LayersChart data={content.data} />
+        )}
         {(content.chart_type === "line" ||
           content.chart_type === "pie" ||
           content.chart_type === "custom-svg") && (
@@ -130,6 +272,20 @@ export function DataVisualization({
           </div>
         )}
       </div>
+
+      {content.callout && (
+        <div
+          className="mt-4 border-l-4 pl-4 py-3 rounded-r-lg"
+          style={{
+            borderColor: "var(--palette-accent3, var(--color-warning, #f0b429))",
+            backgroundColor: "var(--palette-accent3-subtle, rgba(240,180,41,0.08))",
+          }}
+        >
+          <p className="text-sm text-foreground/80 leading-relaxed">
+            {renderCalloutText(content.callout)}
+          </p>
+        </div>
+      )}
 
       {content.description && (
         <p className="mt-4 text-sm text-muted leading-relaxed">

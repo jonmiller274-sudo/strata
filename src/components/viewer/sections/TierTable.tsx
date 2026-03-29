@@ -2,8 +2,138 @@
 
 import { motion } from "framer-motion";
 import { Check, X } from "lucide-react";
-import type { TierTableSection, TierColumn } from "@/types/artifact";
+import type { TierTableSection, TierColumn, TierFeature } from "@/types/artifact";
 import { cn } from "@/lib/utils/cn";
+
+// Render a feature name that may contain **bold** markdown segments
+function FeatureName({ text }: { text: string }) {
+  // Split on **...** markers
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return (
+    <>
+      {parts.map((part, i) => {
+        if (part.startsWith("**") && part.endsWith("**")) {
+          return <strong key={i}>{part.slice(2, -2)}</strong>;
+        }
+        return <span key={i}>{part}</span>;
+      })}
+    </>
+  );
+}
+
+// Column accent colors for comparison mode
+const COMPARISON_ACCENT = [
+  "var(--palette-accent4, var(--color-danger))",
+  "var(--palette-accent1, var(--color-accent))",
+];
+
+function ComparisonColumn({
+  column,
+  index,
+}: {
+  column: TierColumn;
+  index: number;
+}) {
+  const accentColor = COMPARISON_ACCENT[index] ?? COMPARISON_ACCENT[1];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: index * 0.15 }}
+      viewport={{ once: true, margin: "-50px" }}
+      className="flex flex-col rounded-2xl border border-border bg-card overflow-hidden"
+    >
+      {/* Colored top accent bar */}
+      <div className="h-1.5 w-full" style={{ backgroundColor: accentColor }} />
+
+      <div className="p-6 flex flex-col flex-1">
+        <h3
+          className="text-xl font-bold"
+          style={{ color: accentColor }}
+        >
+          {column.name}
+        </h3>
+        {column.description && (
+          <p className="mt-1 text-sm text-muted">{column.description}</p>
+        )}
+
+        <ul className="mt-6 flex-1 space-y-3">
+          {column.features.map((feature: TierFeature) => {
+            const included =
+              typeof feature.included === "boolean"
+                ? feature.included
+                : true; // string values treated as present
+
+            return (
+              <li key={feature.name} className="flex items-start gap-3 text-sm">
+                {included ? (
+                  <Check
+                    className="mt-0.5 h-4 w-4 shrink-0"
+                    style={{ color: "var(--color-success, #10b981)" }}
+                  />
+                ) : (
+                  <X
+                    className="mt-0.5 h-4 w-4 shrink-0"
+                    style={{ color: "var(--palette-accent4, var(--color-danger))" }}
+                  />
+                )}
+                <span
+                  className={cn(
+                    included ? "font-medium text-foreground/90" : "text-muted-foreground"
+                  )}
+                >
+                  <FeatureName text={feature.name} />
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </motion.div>
+  );
+}
+
+function ComparisonView({ section }: { section: TierTableSection }) {
+  const { columns, kicker } = section.content;
+
+  return (
+    <div>
+      <h2 className="text-2xl font-bold tracking-tight">{section.title}</h2>
+      {section.subtitle && (
+        <p className="mt-2 text-muted">{section.subtitle}</p>
+      )}
+
+      <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
+        {columns.map((column, index) => (
+          <ComparisonColumn key={column.name} column={column} index={index} />
+        ))}
+      </div>
+
+      {kicker && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          viewport={{ once: true, margin: "-50px" }}
+          className="mt-8 rounded-2xl p-6 text-center"
+          style={{
+            background:
+              "linear-gradient(135deg, color-mix(in srgb, var(--palette-accent4, var(--color-danger)) 12%, transparent), color-mix(in srgb, var(--palette-accent1, var(--color-accent)) 12%, transparent))",
+            border: "1px solid color-mix(in srgb, var(--palette-accent1, var(--color-accent)) 25%, transparent)",
+          }}
+        >
+          <p
+            className="text-lg font-bold italic"
+            style={{ color: "var(--palette-accent1, var(--color-accent))" }}
+          >
+            {kicker}
+          </p>
+        </motion.div>
+      )}
+    </div>
+  );
+}
 
 function TierCard({
   column,
@@ -97,6 +227,10 @@ export function TierTable({
 }: {
   section: TierTableSection;
 }) {
+  if (section.content.mode === "comparison") {
+    return <ComparisonView section={section} />;
+  }
+
   return (
     <div>
       <h2 className="text-2xl font-bold tracking-tight">{section.title}</h2>
