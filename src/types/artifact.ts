@@ -2,18 +2,23 @@
 // Each artifact is a structured document composed of ordered sections.
 // Sections are typed — each type has its own content shape.
 
+export type PlanTier = "free" | "pro" | "team" | "enterprise";
+
 export interface Artifact {
   id: string;
   slug: string;
   title: string;
   subtitle?: string;
   author_name?: string;
+  author_id?: string;
+  plan_tier: PlanTier;
   theme: "dark" | "light";
   layout_mode?: "continuous" | "beats";
   nav_style?: "sidebar" | "progress-bar";
   branding?: ArtifactBranding;
   sections: Section[];
   is_published: boolean;
+  archived_at?: string;
   created_at: string;
   updated_at: string;
 }

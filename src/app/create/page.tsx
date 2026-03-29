@@ -17,6 +17,9 @@ import { cn } from "@/lib/utils/cn";
 import type { Artifact, Section, TemplateType } from "@/types/artifact";
 import { TEMPLATE_LABELS, TEMPLATE_DESCRIPTIONS } from "@/types/artifact";
 import { ArtifactViewer } from "@/components/viewer/ArtifactViewer";
+import { AuthModal } from "@/components/auth/AuthModal";
+import { UpgradePrompt } from "@/components/auth/UpgradePrompt";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 type Step = "template" | "content" | "preview";
 
@@ -29,6 +32,7 @@ const TEMPLATES: TemplateType[] = [
 
 export default function CreatePage() {
   const router = useRouter();
+  const { user } = useAuth();
   const [step, setStep] = useState<Step>("template");
   const [templateType, setTemplateType] = useState<TemplateType | null>(null);
   const [content, setContent] = useState("");
@@ -40,6 +44,9 @@ export default function CreatePage() {
   } | null>(null);
   const [isStructuring, setIsStructuring] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
+  const [artifactUsage, setArtifactUsage] = useState({ current: 0, limit: 2 });
   const [error, setError] = useState<string | null>(null);
 
   async function handleStructure() {
@@ -77,16 +84,34 @@ export default function CreatePage() {
   async function handlePublish() {
     if (!structuredData) return;
 
+    // Gate: must be signed in to publish
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
+
     setIsPublishing(true);
     setError(null);
 
     try {
-      const { createArtifact } = await import("@/lib/artifacts/actions");
+      // Check free tier limit before publishing
+      const { canPublishArtifact, createArtifact } = await import(
+        "@/lib/artifacts/actions"
+      );
+      const usage = await canPublishArtifact(user.id);
+      if (!usage.allowed) {
+        setArtifactUsage({ current: usage.current, limit: usage.limit });
+        setShowUpgradePrompt(true);
+        setIsPublishing(false);
+        return;
+      }
+
       const result = await createArtifact({
         title: title || structuredData.title,
         subtitle: structuredData.subtitle,
         theme: "dark",
         sections: structuredData.sections,
+        author_id: user.id,
       });
 
       if ("error" in result) {
@@ -112,6 +137,7 @@ export default function CreatePage() {
         title: title || structuredData.title,
         subtitle: structuredData.subtitle,
         theme: "dark",
+        plan_tier: "free",
         sections: structuredData.sections,
         is_published: false,
         created_at: new Date().toISOString(),
@@ -357,6 +383,21 @@ export default function CreatePage() {
           </div>
         )}
       </div>
+
+      {/* Auth modal — shown when user tries to publish without signing in */}
+      <AuthModal
+        open={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        redirectTo="/create"
+      />
+
+      {/* Upgrade prompt — shown when free tier limit is reached */}
+      <UpgradePrompt
+        open={showUpgradePrompt}
+        onClose={() => setShowUpgradePrompt(false)}
+        currentCount={artifactUsage.current}
+        limit={artifactUsage.limit}
+      />
     </div>
   );
 }

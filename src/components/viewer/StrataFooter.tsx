@@ -1,6 +1,16 @@
 import { Layers } from "lucide-react";
+import type { PlanTier } from "@/types/artifact";
 
-export function StrataFooter() {
+interface StrataFooterProps {
+  planTier?: PlanTier;
+}
+
+export function StrataFooter({ planTier = "free" }: StrataFooterProps) {
+  // Paid plans: no watermark footer at all
+  if (planTier !== "free") {
+    return null;
+  }
+
   return (
     <footer
       className="border-t border-border bg-footer-bg px-6 py-8 flex items-end"

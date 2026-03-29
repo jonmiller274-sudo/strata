@@ -172,7 +172,7 @@ export function ArtifactViewer({ artifact }: { artifact: Artifact }) {
             );
           })}
 
-          <StrataFooter />
+          <StrataFooter planTier={artifact.plan_tier} />
         </main>
       </div>
     );
@@ -225,7 +225,7 @@ export function ArtifactViewer({ artifact }: { artifact: Artifact }) {
           </div>
         </div>
 
-        <StrataFooter />
+        <StrataFooter planTier={artifact.plan_tier} />
       </main>
     </div>
   );

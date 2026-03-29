@@ -15,8 +15,11 @@ import {
   Activity,
   GitBranch,
   Type,
+  User,
 } from "lucide-react";
 import Link from "next/link";
+import { useAuth } from "@/components/auth/AuthProvider";
+import { AuthModal } from "@/components/auth/AuthModal";
 
 const sectionTypes = [
   {
@@ -93,7 +96,19 @@ const stagger = {
 
 export default function HomePage() {
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const { user } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    // Check if redirected here for signin
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("signin") === "true") {
+      setShowAuthModal(true);
+      // Clean up URL
+      window.history.replaceState({}, "", "/");
+    }
+  }, []);
 
   if (!mounted) {
     return (
@@ -117,6 +132,22 @@ export default function HomePage() {
             >
               See demo
             </Link>
+            {user ? (
+              <Link
+                href="/dashboard"
+                className="flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-card-hover transition-colors"
+              >
+                <User className="h-4 w-4" />
+                Dashboard
+              </Link>
+            ) : (
+              <button
+                onClick={() => setShowAuthModal(true)}
+                className="text-sm text-muted hover:text-foreground transition-colors"
+              >
+                Sign in
+              </button>
+            )}
             <Link
               href="/create"
               className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-hover"
@@ -367,6 +398,12 @@ export default function HomePage() {
           </p>
         </div>
       </footer>
+
+      <AuthModal
+        open={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        redirectTo="/dashboard"
+      />
     </div>
   );
 }

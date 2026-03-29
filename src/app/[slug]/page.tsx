@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArtifactViewer } from "@/components/viewer/ArtifactViewer";
 import { getArtifactBySlug, getArtifactForEdit } from "@/lib/artifacts/actions";
+import { createClient } from "@/lib/supabase/server";
 
 // Force dynamic rendering — never serve cached/stale data.
 // Without this, Next.js may cache the route output (Full Route Cache)
@@ -40,11 +41,21 @@ export default async function ArtifactPage({ params, searchParams }: Props) {
   const { slug } = await params;
   const { preview } = await searchParams;
 
-  // TODO: Gate ?preview=true behind auth (author_id or signed token) before public launch.
-  // Currently anyone who knows a slug can view unpublished drafts.
-  const artifact = preview === "true"
-    ? await getArtifactForEdit(slug)
-    : await getArtifactBySlug(slug);
+  let artifact;
+
+  if (preview === "true") {
+    // Preview of unpublished draft — requires auth + ownership
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    const draft = await getArtifactForEdit(slug);
+
+    if (!draft || !user || draft.author_id !== user.id) {
+      notFound();
+    }
+    artifact = draft;
+  } else {
+    artifact = await getArtifactBySlug(slug);
+  }
 
   if (!artifact) {
     notFound();

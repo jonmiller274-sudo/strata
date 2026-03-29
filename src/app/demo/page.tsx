@@ -19,6 +19,7 @@ const DEMO_ARTIFACT: Artifact = {
   title: "Strata",
   subtitle: "Where strategy gets built before it becomes a slide deck, a video, or a PDF.",
   author_name: "Strata Team",
+  plan_tier: "free",
   theme: "dark",
   is_published: true,
   created_at: new Date().toISOString(),
