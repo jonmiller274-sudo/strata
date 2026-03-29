@@ -8,6 +8,7 @@ import { TierTable } from "./sections/TierTable";
 import { MetricDashboard } from "./sections/MetricDashboard";
 import { DataVisualization } from "./sections/DataVisualization";
 import { HubMockup } from "./sections/HubMockup";
+import { GuidedJourney } from "./sections/GuidedJourney";
 
 const SECTION_COMPONENTS: Record<
   Section["type"],
@@ -24,6 +25,7 @@ const SECTION_COMPONENTS: Record<
   }>,
   "data-viz": DataVisualization as React.ComponentType<{ section: never }>,
   "hub-mockup": HubMockup as React.ComponentType<{ section: never }>,
+  "guided-journey": GuidedJourney as React.ComponentType<{ section: never }>,
 };
 
 export function SectionRenderer({ section }: { section: Section }) {

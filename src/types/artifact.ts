@@ -9,6 +9,8 @@ export interface Artifact {
   subtitle?: string;
   author_name?: string;
   theme: "dark" | "light";
+  layout_mode?: "continuous" | "beats";
+  nav_style?: "sidebar" | "progress-bar";
   branding?: ArtifactBranding;
   sections: Section[];
   is_published: boolean;
@@ -19,6 +21,13 @@ export interface Artifact {
 export interface ArtifactBranding {
   primary_color?: string;
   logo_url?: string;
+  palette?: {
+    accent1?: string;
+    accent2?: string;
+    accent3?: string;
+    accent4?: string;
+    accent5?: string;
+  };
 }
 
 // ===== Section Types =====
@@ -30,7 +39,8 @@ export type SectionType =
   | "tier-table"
   | "metric-dashboard"
   | "data-viz"
-  | "hub-mockup";
+  | "hub-mockup"
+  | "guided-journey";
 
 export type Section =
   | RichTextSection
@@ -39,7 +49,8 @@ export type Section =
   | TierTableSection
   | MetricDashboardSection
   | DataVizSection
-  | HubMockupSection;
+  | HubMockupSection
+  | GuidedJourneySection;
 
 // Base fields shared by all sections
 interface SectionBase {
@@ -57,6 +68,10 @@ export interface RichTextSection extends SectionBase {
     callout?: {
       type: "insight" | "warning" | "quote";
       text: string;
+    };
+    tag?: {
+      label: string;
+      color?: string; // hex
     };
   };
 }
@@ -89,6 +104,11 @@ export interface TimelineSection extends SectionBase {
   content: {
     orientation?: "vertical" | "horizontal";
     steps: TimelineStep[];
+    evidence?: {
+      text: string;
+      border_color?: string; // hex, defaults to coral/danger
+    };
+    pivot?: string; // Bold closing question/statement
   };
 }
 
@@ -105,8 +125,10 @@ export interface TimelineStep {
 export interface TierTableSection extends SectionBase {
   type: "tier-table";
   content: {
+    mode?: "pricing" | "comparison"; // defaults to "pricing"
     highlight_column?: number; // 0-indexed, which column to highlight
     columns: TierColumn[];
+    kicker?: string; // Closing statement (comparison mode)
   };
 }
 
@@ -151,11 +173,12 @@ export interface MetricCard {
 export interface DataVizSection extends SectionBase {
   type: "data-viz";
   content: {
-    chart_type: "bar" | "line" | "pie" | "funnel" | "custom-svg";
+    chart_type: "bar" | "line" | "pie" | "funnel" | "custom-svg" | "staircase" | "layers";
     data: Array<Record<string, string | number>>;
     x_key?: string;
     y_key?: string;
     description?: string;
+    callout?: string; // Text box below chart (used by layers)
   };
 }
 
@@ -182,6 +205,53 @@ export interface HubConnection {
   from: string; // node id
   to: string; // node id
   label?: string;
+}
+
+// ===== 8. Guided Journey (Interactive Timeline + Counters) =====
+export interface GuidedJourneySection extends SectionBase {
+  type: "guided-journey";
+  content: {
+    phases: JourneyPhase[];
+    counters: JourneyCounter[];
+    events: JourneyEvent[];
+    autoplay?: boolean;
+    interval_ms?: number; // default 3000
+  };
+}
+
+export interface JourneyPhase {
+  id: string;
+  name: string;
+  color: string; // hex
+  day_range: string; // "Days 0–14"
+}
+
+export interface JourneyCounter {
+  id: string;
+  label: string;
+  sublabel?: string;
+  icon?: string; // Lucide icon name
+  prefix?: string; // "$"
+  suffix?: string;
+  start_value: number;
+  color?: string; // hex
+}
+
+export interface JourneyEvent {
+  id: string;
+  day: number;
+  label: string;
+  title: string;
+  description: string;
+  phase_id: string;
+  personas?: string[];
+  product?: string;
+  trigger?: {
+    label: string;
+    text: string;
+  };
+  spend_delta?: string; // "+$120"
+  counter_values: Record<string, number>; // counter_id → value
 }
 
 // ===== Template Types =====
