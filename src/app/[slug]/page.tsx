@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Link from "next/link";
-import { Pencil } from "lucide-react";
 import { ArtifactViewer } from "@/components/viewer/ArtifactViewer";
 import { getArtifactBySlug, getArtifactForEdit } from "@/lib/artifacts/actions";
+
+// Force dynamic rendering — never serve cached/stale data.
+// Without this, Next.js may cache the route output (Full Route Cache)
+// or Supabase fetch results (Data Cache), causing the viewer to show
+// old content after edits even though the DB has been updated.
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -46,16 +50,5 @@ export default async function ArtifactPage({ params, searchParams }: Props) {
     notFound();
   }
 
-  return (
-    <div className="relative">
-      <Link
-        href={`/edit/${slug}`}
-        className="fixed top-4 right-4 z-50 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur text-sm text-foreground hover:bg-white/20 transition-colors border border-white/10"
-      >
-        <Pencil className="w-3.5 h-3.5" />
-        Edit
-      </Link>
-      <ArtifactViewer artifact={artifact} />
-    </div>
-  );
+  return <ArtifactViewer artifact={artifact} />;
 }

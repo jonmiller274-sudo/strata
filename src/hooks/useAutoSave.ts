@@ -25,14 +25,14 @@ export function useAutoSave(
 
     setSaveStatus("saving");
 
-    // Only send columns that exist in the Supabase artifacts table.
-    // layout_mode, nav_style, branding columns don't exist yet — adding
-    // them here would cause the update to fail silently.
     const result = await updateArtifact(latest.slug, {
       title: latest.title,
       subtitle: latest.subtitle,
       author_name: latest.author_name,
       theme: latest.theme,
+      layout_mode: latest.layout_mode,
+      nav_style: latest.nav_style,
+      branding: latest.branding,
       sections: latest.sections,
       is_published: latest.is_published,
     });
