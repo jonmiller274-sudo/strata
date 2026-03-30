@@ -5,16 +5,22 @@ import { createClient } from "@/lib/supabase/server";
 
 interface Props {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ key?: string }>;
 }
 
-export default async function EditPage({ params }: Props) {
+export default async function EditPage({ params, searchParams }: Props) {
   const { slug } = await params;
+  const { key } = await searchParams;
 
-  // Auth check: must be signed in
+  // Allow edit key bypass (temporary until OAuth is fixed)
+  const editKey = process.env.STRATA_EDIT_KEY?.trim();
+  const hasValidKey = editKey && key === editKey;
+
+  // Auth check: must be signed in OR have valid edit key
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user) {
+  if (!user && !hasValidKey) {
     redirect(`/?signin=true`);
   }
 
@@ -24,10 +30,10 @@ export default async function EditPage({ params }: Props) {
     notFound();
   }
 
-  // Ownership check: must be the author
+  // Ownership check: must be the author (skip if using edit key)
   // Allow editing if author_id is null (pre-auth artifacts) and user is the admin
   // Once all artifacts have author_id, remove the null check
-  if (artifact.author_id && artifact.author_id !== user.id) {
+  if (!hasValidKey && artifact.author_id && artifact.author_id !== user?.id) {
     notFound();
   }
 

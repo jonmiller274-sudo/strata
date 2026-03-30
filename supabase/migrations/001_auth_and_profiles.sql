@@ -41,10 +41,10 @@ CREATE TABLE IF NOT EXISTS profiles (
 -- ============================================
 -- 3. Auto-create profile on user signup
 -- ============================================
-CREATE OR REPLACE FUNCTION handle_new_user()
+CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO profiles (id, email, full_name, avatar_url)
+  INSERT INTO public.profiles (id, email, full_name, avatar_url)
   VALUES (
     NEW.id,
     NEW.email,
@@ -53,7 +53,7 @@ BEGIN
   );
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
 
 -- Drop existing trigger if any, then create
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
