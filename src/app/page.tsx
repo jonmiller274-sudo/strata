@@ -16,6 +16,11 @@ import {
   GitBranch,
   Type,
   User,
+  PenLine,
+  Compass,
+  Wand2,
+  PanelLeft,
+  Maximize2,
 } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -25,27 +30,32 @@ const sectionTypes = [
   {
     icon: Type,
     name: "Rich Text",
-    description: "Progressive disclosure — summary by default, evidence on expand",
+    description:
+      "Progressive disclosure — summary by default, evidence on expand",
   },
   {
     icon: LayoutGrid,
     name: "Card Grids",
-    description: "Personas, case studies, competitor profiles — click to expand",
+    description:
+      "Personas, case studies, competitor profiles — click to explore",
   },
   {
     icon: Clock,
     name: "Timelines",
-    description: "Animated step-through journeys, roadmaps, and 30/60/90 plans",
+    description:
+      "Animated step-through journeys, roadmaps, and 30/60/90 plans",
   },
   {
     icon: Table2,
     name: "Tier Tables",
-    description: "Pricing, feature matrices, and plan comparisons",
+    description:
+      "Pricing, feature matrices, and plan comparisons — side by side",
   },
   {
     icon: Activity,
     name: "Metric Dashboards",
-    description: "KPI cards with animated counters that count up on scroll",
+    description:
+      "KPI cards with animated counters that come alive on scroll",
   },
   {
     icon: BarChart3,
@@ -55,7 +65,14 @@ const sectionTypes = [
   {
     icon: GitBranch,
     name: "Hub Diagrams",
-    description: "Interconnected nodes showing how products and teams connect",
+    description:
+      "Interconnected nodes showing how products and teams connect",
+  },
+  {
+    icon: Compass,
+    name: "Guided Journeys",
+    description:
+      "Multi-phase interactive walkthroughs with animated counters and autoplay",
   },
 ];
 
@@ -72,14 +89,42 @@ const steps = [
     step: "02",
     title: "AI structures it",
     description:
-      "Pick a template. AI maps your content to the right section types in seconds.",
+      "Pick a template. AI maps your content to interactive sections — timelines, card grids, metric dashboards — in seconds.",
+  },
+  {
+    icon: PenLine,
+    step: "03",
+    title: "Refine with AI",
+    description:
+      "Edit in a two-panel editor. Rewrite any section with AI, drag to reorder, toggle between layouts. Auto-saves as you go.",
   },
   {
     icon: Share2,
-    step: "03",
+    step: "04",
     title: "Share a link",
     description:
-      "Publish a shareable URL. No login to view. Works on any device.",
+      "Publish a shareable URL. Self-navigating, interactive, and polished. No login to view. Works on any device.",
+  },
+];
+
+const editorFeatures = [
+  {
+    icon: Wand2,
+    title: "Rewrite any section with AI",
+    description:
+      '\u201CMake it more concise.\u201D \u201CMore persuasive.\u201D \u201CSimplify the language.\u201D One click, instant rewrite — or type your own instructions.',
+  },
+  {
+    icon: PanelLeft,
+    title: "See changes as you make them",
+    description:
+      "Edit on the left, live preview on the right. Drag sections to reorder. Auto-saves every change.",
+  },
+  {
+    icon: Maximize2,
+    title: "Present it full-screen",
+    description:
+      "Switch to a full-screen, keyboard-navigable layout. Each section becomes a beat — like a presentation, but interactive and alive.",
   },
 ];
 
@@ -111,9 +156,7 @@ export default function HomePage() {
   }, []);
 
   if (!mounted) {
-    return (
-      <div className="min-h-screen bg-background" />
-    );
+    return <div className="min-h-screen bg-background" />;
   }
 
   return (
@@ -131,6 +174,12 @@ export default function HomePage() {
               className="hidden sm:inline-flex text-sm text-muted hover:text-foreground transition-colors"
             >
               See demo
+            </Link>
+            <Link
+              href="#pricing"
+              className="hidden sm:inline-flex text-sm text-muted hover:text-foreground transition-colors"
+            >
+              Pricing
             </Link>
             {user ? (
               <Link
@@ -152,7 +201,7 @@ export default function HomePage() {
               href="/create"
               className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-hover"
             >
-              Create artifact
+              Start creating
             </Link>
           </div>
         </div>
@@ -178,7 +227,7 @@ export default function HomePage() {
             className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-1.5 text-xs font-medium text-muted"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
-            Now in early access
+            Free to start — no credit card required
           </motion.div>
 
           <motion.h1
@@ -197,8 +246,8 @@ export default function HomePage() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-muted sm:text-xl"
           >
-            Turn strategic content into interactive, shareable artifacts — in
-            minutes, not days. No slides. No coding. Just a link.
+            Turn strategic content into something interactive, shareable, and
+            alive — in minutes, not days. No slides. No coding. Just a link.
           </motion.p>
 
           <motion.div
@@ -210,7 +259,7 @@ export default function HomePage() {
               href="/create"
               className="group inline-flex items-center gap-2 rounded-xl bg-accent px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent/20 transition-all hover:bg-accent-hover hover:shadow-xl hover:shadow-accent/30"
             >
-              Create an artifact
+              Start creating
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
             <Link
@@ -220,14 +269,6 @@ export default function HomePage() {
               See it in action
             </Link>
           </motion.div>
-
-          <motion.p
-            variants={fadeInUp}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-6 text-xs text-muted-foreground"
-          >
-            Free during early access. No account required.
-          </motion.p>
         </motion.div>
       </section>
 
@@ -241,12 +282,14 @@ export default function HomePage() {
             transition={{ duration: 0.5 }}
             className="text-lg leading-relaxed text-muted sm:text-xl"
           >
-            Executives are building interactive strategy documents with AI coding
-            tools. The results are stunning. But then the format debate
-            starts:{" "}
+            Your strategy is multi-dimensional — personas, timelines,
+            competitive landscapes, pricing models. But your only options are{" "}
             <span className="text-foreground font-medium">
-              &ldquo;Make it a video.&rdquo; &ldquo;Convert it to PDF.&rdquo;
-              &ldquo;Keep it interactive.&rdquo;
+              compressing it into slides
+            </span>{" "}
+            or{" "}
+            <span className="text-foreground font-medium">
+              spending a day building something custom.
             </span>
           </motion.p>
           <motion.p
@@ -256,7 +299,9 @@ export default function HomePage() {
             transition={{ duration: 0.5, delay: 0.15 }}
             className="mt-4 text-lg font-medium text-foreground sm:text-xl"
           >
-            Strata ends the debate. Build once, deliver everywhere.
+            Strata gives you a third option. Paste your content, let AI
+            structure it, and share something interactive, polished, and alive —
+            in minutes.
           </motion.p>
         </div>
       </section>
@@ -275,11 +320,11 @@ export default function HomePage() {
               How it works
             </h2>
             <p className="mt-3 text-muted">
-              From raw content to shareable artifact in three steps.
+              From raw content to something shareable in four steps.
             </p>
           </motion.div>
 
-          <div className="mt-16 grid gap-8 sm:grid-cols-3">
+          <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((item, i) => (
               <motion.div
                 key={item.step}
@@ -318,11 +363,11 @@ export default function HomePage() {
             className="text-center"
           >
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              7 opinionated building blocks
+              8 interactive building blocks
             </h2>
             <p className="mt-3 text-muted">
-              Every strategic artifact is composed from these section types —
-              designed for depth, not decoration.
+              Mix and match to build something interactive, polished, and
+              executive-ready — designed for depth, not decoration.
             </p>
           </motion.div>
 
@@ -351,8 +396,83 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Editor features */}
+      <section className="py-24 px-6 border-t border-border/50">
+        <div className="mx-auto max-w-5xl">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5 }}
+            className="text-center"
+          >
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+              Refine until it&apos;s exactly right
+            </h2>
+            <p className="mt-3 text-muted">
+              AI gives you the starting point. The editor gives you full
+              control.
+            </p>
+          </motion.div>
+
+          <div className="mt-16 grid gap-8 sm:grid-cols-3">
+            {editorFeatures.map((feature, i) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.5, delay: i * 0.12 }}
+                className="relative rounded-2xl border border-border bg-card p-8"
+              >
+                <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl bg-accent/10">
+                  <feature.icon className="h-5 w-5 text-accent" />
+                </div>
+                <h3 className="text-lg font-semibold">{feature.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  {feature.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing mention */}
+      <section id="pricing" className="py-24 px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.5 }}
+          className="mx-auto max-w-2xl text-center"
+        >
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            Free to start. Pro when you&apos;re ready.
+          </h2>
+          <p className="mt-6 text-lg leading-relaxed text-muted">
+            Create and share up to 2 interactive strategy briefs — free,
+            forever. When you need more, Pro plans start at{" "}
+            <span className="text-foreground font-medium">
+              $49/mo for founding members
+            </span>
+            .
+          </p>
+          <p className="mt-3 text-sm text-muted-foreground">
+            No credit card required. No trial countdown.
+          </p>
+          <Link
+            href="/pricing"
+            className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent-hover transition-colors"
+          >
+            See all plans
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </motion.div>
+      </section>
+
       {/* CTA */}
-      <section className="py-32 px-6">
+      <section className="py-32 px-6 border-t border-border/50">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -361,25 +481,25 @@ export default function HomePage() {
           className="mx-auto max-w-2xl text-center"
         >
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            See it in action
+            Your strategy deserves more than slides
           </h2>
           <p className="mt-4 text-lg text-muted">
-            This demo artifact was built entirely with Strata — using the same
-            tools you&apos;ll use. It pitches Strata, using Strata.
+            See what interactive, self-navigating strategy looks like — then
+            build your own in minutes.
           </p>
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link
-              href="/demo"
+              href="/create"
               className="group inline-flex items-center gap-2 rounded-xl bg-accent px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent/20 transition-all hover:bg-accent-hover hover:shadow-xl hover:shadow-accent/30"
             >
-              View the demo artifact
+              Start creating
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
             <Link
-              href="/create"
+              href="/demo"
               className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-7 py-3.5 text-sm font-semibold text-foreground transition-colors hover:bg-card-hover"
             >
-              Create your own
+              See the demo
             </Link>
           </div>
         </motion.div>
@@ -387,15 +507,44 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="border-t border-border/50 bg-footer-bg py-12 px-6">
-        <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 sm:flex-row sm:justify-between">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 sm:flex-row sm:justify-between">
           <div className="flex items-center gap-2">
             <Layers className="h-4 w-4 text-accent" />
             <span className="text-sm font-semibold">Strata</span>
           </div>
-          <p className="text-xs text-footer-text text-center">
+          <p className="text-xs text-footer-text text-center sm:text-left">
             Where strategy gets built before it becomes a slide deck, a video,
             or a PDF.
           </p>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/pricing"
+              className="text-xs text-footer-text hover:text-foreground transition-colors"
+            >
+              Pricing
+            </Link>
+            <Link
+              href="/demo"
+              className="text-xs text-footer-text hover:text-foreground transition-colors"
+            >
+              Demo
+            </Link>
+            {user ? (
+              <Link
+                href="/dashboard"
+                className="text-xs text-footer-text hover:text-foreground transition-colors"
+              >
+                Dashboard
+              </Link>
+            ) : (
+              <button
+                onClick={() => setShowAuthModal(true)}
+                className="text-xs text-footer-text hover:text-foreground transition-colors"
+              >
+                Sign in
+              </button>
+            )}
+          </div>
         </div>
       </footer>
 
