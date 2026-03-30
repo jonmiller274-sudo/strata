@@ -285,7 +285,7 @@ function TimelineTrack({
                     top: 0,
                     transform: "translateX(-50%)",
                   }}
-                  aria-label={`Day ${event.day}: ${event.label}`}
+                  aria-label={`${event.label}: ${event.title}`}
                   aria-current={isActive ? "true" : undefined}
                 >
                 {/* Dot */}
@@ -311,33 +311,49 @@ function TimelineTrack({
                   }}
                 />
 
-                {/* Day label */}
-                <span
-                  className={cn(
-                    "mt-2 text-[10px] font-mono tabular-nums transition-colors whitespace-nowrap",
-                    isActive
-                      ? "font-bold"
-                      : isVisited
-                        ? "text-muted"
-                        : "text-muted opacity-60"
-                  )}
-                  style={isActive ? { color } : {}}
-                >
-                  Day {event.day}
-                </span>
-
-                {/* Event label */}
-                <span
-                  className={cn(
-                    "mt-0.5 max-w-[80px] text-center text-[9px] leading-tight transition-colors whitespace-nowrap",
-                    isActive
-                      ? "font-semibold"
-                      : "text-muted opacity-50"
-                  )}
-                  style={isActive ? { color } : {}}
-                >
-                  {event.label}
-                </span>
+                {/* Day / label */}
+                {/^(Mo|Day|Week|Month|Year|Q\d)/i.test(event.label) ? (
+                  <span
+                    className={cn(
+                      "mt-2 text-[10px] font-mono tabular-nums transition-colors whitespace-nowrap",
+                      isActive
+                        ? "font-bold"
+                        : isVisited
+                          ? "text-muted"
+                          : "text-muted opacity-60"
+                    )}
+                    style={isActive ? { color } : {}}
+                  >
+                    {event.label}
+                  </span>
+                ) : (
+                  <>
+                    <span
+                      className={cn(
+                        "mt-2 text-[10px] font-mono tabular-nums transition-colors whitespace-nowrap",
+                        isActive
+                          ? "font-bold"
+                          : isVisited
+                            ? "text-muted"
+                            : "text-muted opacity-60"
+                      )}
+                      style={isActive ? { color } : {}}
+                    >
+                      Day {event.day}
+                    </span>
+                    <span
+                      className={cn(
+                        "mt-0.5 max-w-[80px] text-center text-[9px] leading-tight transition-colors whitespace-nowrap",
+                        isActive
+                          ? "font-semibold"
+                          : "text-muted opacity-50"
+                      )}
+                      style={isActive ? { color } : {}}
+                    >
+                      {event.label}
+                    </span>
+                  </>
+                )}
               </button>
             );
           })}
@@ -375,7 +391,9 @@ function DetailPanel({
           className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold"
           style={{ backgroundColor: color + "22", color }}
         >
-          Day {event.day}
+          {/^(Mo|Day|Week|Month|Year|Q\d)/i.test(event.label)
+            ? event.label
+            : `Day ${event.day}`}
         </span>
 
         {/* Persona badges */}
