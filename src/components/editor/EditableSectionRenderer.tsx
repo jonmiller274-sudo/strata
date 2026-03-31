@@ -13,6 +13,8 @@ import { SectionRenderer } from "@/components/viewer/SectionRenderer";
 import { InlineEditor } from "./InlineEditor";
 import { ItemManager } from "./ItemManager";
 import { EditableGuidedJourney } from "./EditableGuidedJourney";
+import { EditableDataViz } from "./EditableDataViz";
+import { EditableHubMockup } from "./EditableHubMockup";
 
 interface EditableSectionRendererProps {
   section: Section;
@@ -34,6 +36,8 @@ export function EditableSectionRenderer({
     "timeline",
     "tier-table",
     "guided-journey",
+    "data-viz",
+    "hub-mockup",
   ].includes(section.type);
 
   if (!hasCustomRenderer) {
@@ -88,6 +92,10 @@ function EditableContent({
       return <EditableTierTable section={section} onFieldChange={onFieldChange} />;
     case "guided-journey":
       return <EditableGuidedJourney section={section} onFieldChange={onFieldChange} />;
+    case "data-viz":
+      return <EditableDataViz section={section} onFieldChange={onFieldChange} />;
+    case "hub-mockup":
+      return <EditableHubMockup section={section} onFieldChange={onFieldChange} />;
     default:
       return <SectionRenderer section={section} />;
   }
