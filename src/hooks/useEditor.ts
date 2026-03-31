@@ -44,7 +44,7 @@ export function useEditor(initialArtifact: Artifact) {
   // Update a specific text field within a section's content.
   // path format: "title", "subtitle", "content.summary", "content.cards.0.title"
   const updateSectionField = useCallback(
-    (sectionId: string, path: string, value: string) => {
+    (sectionId: string, path: string, value: unknown) => {
       setArtifact((prev) => ({
         ...prev,
         sections: prev.sections.map((s) => {

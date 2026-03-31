@@ -13,7 +13,7 @@ import { InlineEditor } from "./InlineEditor";
 
 interface EditableSectionRendererProps {
   section: Section;
-  onFieldChange: (path: string, value: string) => void;
+  onFieldChange: (path: string, value: unknown) => void;
 }
 
 export function EditableSectionRenderer({
@@ -69,7 +69,7 @@ function EditableContent({
   onFieldChange,
 }: {
   section: Section;
-  onFieldChange: (path: string, value: string) => void;
+  onFieldChange: (path: string, value: unknown) => void;
 }) {
   switch (section.type) {
     case "rich-text":
@@ -92,7 +92,7 @@ function EditableRichText({
   onFieldChange,
 }: {
   section: RichTextSection;
-  onFieldChange: (path: string, value: string) => void;
+  onFieldChange: (path: string, value: unknown) => void;
 }) {
   return (
     <div className="space-y-4">
@@ -135,7 +135,7 @@ function EditableCardGrid({
   onFieldChange,
 }: {
   section: ExpandableCardGridSection;
-  onFieldChange: (path: string, value: string) => void;
+  onFieldChange: (path: string, value: unknown) => void;
 }) {
   const cols = section.content.columns ?? 3;
   return (
@@ -180,7 +180,7 @@ function EditableMetricDashboard({
   onFieldChange,
 }: {
   section: MetricDashboardSection;
-  onFieldChange: (path: string, value: string) => void;
+  onFieldChange: (path: string, value: unknown) => void;
 }) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -217,7 +217,7 @@ function EditableTimeline({
   onFieldChange,
 }: {
   section: TimelineSection;
-  onFieldChange: (path: string, value: string) => void;
+  onFieldChange: (path: string, value: unknown) => void;
 }) {
   return (
     <div className="space-y-4">
@@ -276,7 +276,7 @@ function EditableTierTable({
   onFieldChange,
 }: {
   section: TierTableSection;
-  onFieldChange: (path: string, value: string) => void;
+  onFieldChange: (path: string, value: unknown) => void;
 }) {
   return (
     <div
