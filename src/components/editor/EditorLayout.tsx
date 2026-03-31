@@ -1,29 +1,41 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 import type { Artifact, Section } from "@/types/artifact";
 import { useEditor } from "@/hooks/useEditor";
 import { useAutoSave } from "@/hooks/useAutoSave";
+import { useAiChat, type ChatSuggestion } from "@/hooks/useAiChat";
 import { TopBar } from "./TopBar";
 import { SortableSectionList } from "./SortableSectionList";
 import { EditableSectionRenderer } from "./EditableSectionRenderer";
-import { AiCommand } from "./AiCommand";
+import { AiChatPanel } from "./AiChatPanel";
 import { AddSection } from "./AddSection";
 import { InlineEditor } from "./InlineEditor";
 import { DocumentSettings } from "./DocumentSettings";
-import { DocumentAiCommand, type DocumentAiSuggestion } from "./DocumentAiCommand";
+import { ArrowLeft, List, Sparkles, SlidersHorizontal } from "lucide-react";
+import Link from "next/link";
+
+type SidebarTab = "sections" | "ai" | "settings";
+
+const TABS: { id: SidebarTab; label: string; icon: typeof List }[] = [
+  { id: "sections", label: "Sections", icon: List },
+  { id: "ai", label: "AI", icon: Sparkles },
+  { id: "settings", label: "Settings", icon: SlidersHorizontal },
+];
+
+interface PendingSuggestion {
+  messageId: string;
+  type: "section" | "document";
+  sectionData?: Section;
+  documentData?: { title: string; subtitle?: string; sections: Section[] };
+}
 
 export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact }) {
   const editor = useEditor(initialArtifact);
-  const [aiLoadingSectionId, setAiLoadingSectionId] = useState<string | null>(null);
-  const [aiSuggestion, setAiSuggestion] = useState<{ sectionId: string; section: Section } | null>(null);
-  const [showAiOriginal, setShowAiOriginal] = useState(false);
   const autoSave = useAutoSave(editor.artifact, editor.saveStatus, editor.setSaveStatus);
-
-  // Document-level AI state
-  const [docAiSuggestion, setDocAiSuggestion] = useState<DocumentAiSuggestion | null>(null);
-  const [showDocAiOriginal, setShowDocAiOriginal] = useState(false);
-  const originalArtifactRef = useRef<Artifact | null>(null);
+  const chat = useAiChat();
+  const [activeTab, setActiveTab] = useState<SidebarTab>("sections");
+  const [pendingSuggestion, setPendingSuggestion] = useState<PendingSuggestion | null>(null);
 
   useEffect(() => {
     if (!editor.selectedSectionId) return;
@@ -32,6 +44,14 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
       el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }, [editor.selectedSectionId]);
+
+  useEffect(() => {
+    if (editor.selectedSectionId) {
+      chat.setScopeAndSection("section", editor.selectedSectionId);
+    } else {
+      chat.setScopeAndSection("document", null);
+    }
+  }, [editor.selectedSectionId, chat.setScopeAndSection]);
 
   const paletteStyle: React.CSSProperties = editor.artifact.branding?.palette
     ? ({
@@ -43,103 +63,202 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
       } as React.CSSProperties)
     : {};
 
+  const selectedSection = editor.selectedSectionId
+    ? editor.artifact.sections.find((s) => s.id === editor.selectedSectionId) ?? null
+    : null;
+
+  const handleSendMessage = useCallback(
+    async (content: string) => {
+      chat.addUserMessage(content);
+      chat.setIsLoading(true);
+
+      const existingMessages = chat.messages.map((m) => ({
+        role: m.role,
+        content: m.content,
+      }));
+      const apiMessages = [...existingMessages, { role: "user" as const, content }];
+
+      const context =
+        editor.selectedSectionId && selectedSection
+          ? { scope: "section" as const, section: selectedSection }
+          : {
+              scope: "document" as const,
+              artifact: {
+                title: editor.artifact.title,
+                subtitle: editor.artifact.subtitle,
+                sections: editor.artifact.sections,
+              },
+            };
+
+      try {
+        const res = await fetch("/api/ai/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ messages: apiMessages, context }),
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || `Request failed (${res.status})`);
+        }
+
+        const data = await res.json();
+
+        if (data.suggestion) {
+          const suggestion: ChatSuggestion = {
+            type: data.suggestion.type,
+            sectionId: editor.selectedSectionId ?? undefined,
+            data: data.suggestion.data,
+            status: "pending",
+          };
+          const msg = chat.addAssistantMessage(data.message, suggestion);
+
+          if (suggestion.type === "section") {
+            setPendingSuggestion({
+              messageId: msg.id,
+              type: "section",
+              sectionData: data.suggestion.data as Section,
+            });
+          } else {
+            setPendingSuggestion({
+              messageId: msg.id,
+              type: "document",
+              documentData: data.suggestion.data as PendingSuggestion["documentData"],
+            });
+          }
+        } else {
+          chat.addAssistantMessage(data.message);
+        }
+      } catch (err) {
+        const errorMsg = err instanceof Error ? err.message : "Unknown error";
+        chat.addAssistantMessage(`Sorry, something went wrong: ${errorMsg}`);
+      } finally {
+        chat.setIsLoading(false);
+      }
+    },
+    [chat, editor, selectedSection]
+  );
+
+  const handleApplySuggestion = useCallback(
+    (messageId: string) => {
+      if (!pendingSuggestion || pendingSuggestion.messageId !== messageId) return;
+
+      if (pendingSuggestion.type === "section" && pendingSuggestion.sectionData) {
+        const sectionData = pendingSuggestion.sectionData;
+        editor.updateSection(sectionData.id, () => sectionData);
+      } else if (pendingSuggestion.type === "document" && pendingSuggestion.documentData) {
+        editor.mergeArtifact(pendingSuggestion.documentData);
+      }
+
+      chat.updateSuggestionStatus(messageId, "applied");
+      setPendingSuggestion(null);
+    },
+    [pendingSuggestion, editor, chat]
+  );
+
+  const handleDiscardSuggestion = useCallback(
+    (messageId: string) => {
+      chat.updateSuggestionStatus(messageId, "discarded");
+      if (pendingSuggestion?.messageId === messageId) {
+        setPendingSuggestion(null);
+      }
+    },
+    [pendingSuggestion, chat]
+  );
+
+  const handleClearHistory = useCallback(() => {
+    chat.clearHistory();
+    setPendingSuggestion(null);
+  }, [chat]);
+
   return (
     <div className="h-screen flex flex-col bg-background text-foreground" style={paletteStyle}>
       <TopBar
         slug={editor.artifact.slug}
-        title={docAiSuggestion && !showDocAiOriginal ? docAiSuggestion.title : editor.artifact.title}
         saveStatus={editor.saveStatus}
         isPublished={editor.artifact.is_published}
         onPublishToggle={async () => {
           editor.updateArtifactField("is_published", !editor.artifact.is_published);
-          // Save immediately — don't wait for debounce
           await autoSave.save();
         }}
-        documentAiSlot={
-          <DocumentAiCommand
-            artifact={editor.artifact}
-            onSuggestion={(suggestion) => {
-              originalArtifactRef.current = { ...editor.artifact };
-              setDocAiSuggestion(suggestion);
-              setShowDocAiOriginal(false);
-            }}
-            onApply={(suggestion) => {
-              editor.mergeArtifact({
-                title: suggestion.title,
-                subtitle: suggestion.subtitle,
-                sections: suggestion.sections,
-              });
-              setDocAiSuggestion(null);
-              setShowDocAiOriginal(false);
-              originalArtifactRef.current = null;
-            }}
-            onToggleOriginal={() => setShowDocAiOriginal((prev) => !prev)}
-            onClearSuggestion={() => {
-              setDocAiSuggestion(null);
-              setShowDocAiOriginal(false);
-              originalArtifactRef.current = null;
-            }}
-          />
-        }
       />
       <div className="flex-1 flex overflow-hidden">
-        <div className="w-[300px] border-r border-white/10 overflow-y-auto flex flex-col">
-          {/* Left panel header */}
-          <div className="p-4 border-b border-white/10">
-            <div className="flex justify-between items-center">
-              <h2 className="text-sm font-semibold">Sections</h2>
-              <DocumentSettings
-                artifact={editor.artifact}
-                onUpdate={editor.updateArtifactField}
-              />
+        <div className="w-[360px] border-r border-white/10 flex flex-col shrink-0">
+          <div className="px-4 py-3 border-b border-white/10">
+            <div className="flex items-center gap-2 mb-1">
+              <Link
+                href={`/${editor.artifact.slug}`}
+                className="text-muted-foreground hover:text-foreground transition-colors shrink-0"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </Link>
+              <div className="flex-1 min-w-0 text-sm font-semibold">
+                <InlineEditor
+                  value={editor.artifact.title}
+                  onChange={(v) => editor.updateArtifactField("title", v)}
+                />
+              </div>
             </div>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              {editor.artifact.sections.length} sections
+            <p className="text-xs text-muted-foreground pl-6">
+              {editor.artifact.sections.length} section{editor.artifact.sections.length !== 1 ? "s" : ""}
             </p>
           </div>
 
-          {/* Section list */}
-          <div className="flex-1 overflow-y-auto p-2">
-            <SortableSectionList
-              sections={editor.artifact.sections}
-              selectedSectionId={editor.selectedSectionId}
-              onSelect={editor.setSelectedSectionId}
-              onDelete={editor.deleteSection}
-              onReorder={editor.reorderSections}
-            />
+          <div className="flex border-b border-white/10">
+            {TABS.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 text-xs font-medium transition-colors ${
+                  activeTab === tab.id
+                    ? "text-foreground border-b-2 border-accent"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <tab.icon className="w-3.5 h-3.5" />
+                {tab.label}
+              </button>
+            ))}
           </div>
 
-          {/* AI Command for selected section */}
-          {editor.selectedSectionId && (() => {
-            const selectedSection = editor.artifact.sections.find(
-              (s) => s.id === editor.selectedSectionId
-            );
-            if (!selectedSection) return null;
-            return (
-              <div className="px-2 pb-4">
-                <AiCommand
-                  key={editor.selectedSectionId}
-                  section={selectedSection}
-                  onApply={(rewritten) =>
-                    editor.updateSection(editor.selectedSectionId!, () => rewritten)
-                  }
-                  onLoadingChange={(loading) =>
-                    setAiLoadingSectionId(loading ? editor.selectedSectionId : null)
-                  }
-                  onSuggestion={(suggestion) =>
-                    setAiSuggestion({ sectionId: editor.selectedSectionId!, section: suggestion })
-                  }
-                  onToggleOriginal={() => setShowAiOriginal(!showAiOriginal)}
-                  onClearSuggestion={() => {
-                    setAiSuggestion(null);
-                    setShowAiOriginal(false);
-                  }}
+          <div className="flex-1 overflow-hidden flex flex-col">
+            {activeTab === "sections" && (
+              <div className="flex-1 overflow-y-auto p-2">
+                <SortableSectionList
+                  sections={editor.artifact.sections}
+                  selectedSectionId={editor.selectedSectionId}
+                  onSelect={editor.setSelectedSectionId}
+                  onDelete={editor.deleteSection}
+                  onReorder={editor.reorderSections}
                 />
               </div>
-            );
-          })()}
+            )}
 
-          {/* Add Section */}
+            {activeTab === "ai" && (
+              <AiChatPanel
+                messages={chat.messages}
+                isLoading={chat.isLoading}
+                scope={chat.scope}
+                activeSectionId={chat.activeSectionId}
+                activeSectionTitle={selectedSection?.title ?? null}
+                activeSectionType={selectedSection?.type ?? null}
+                onSend={handleSendMessage}
+                onApplySuggestion={handleApplySuggestion}
+                onDiscardSuggestion={handleDiscardSuggestion}
+                onClearHistory={handleClearHistory}
+              />
+            )}
+
+            {activeTab === "settings" && (
+              <div className="flex-1 overflow-y-auto">
+                <DocumentSettings
+                  artifact={editor.artifact}
+                  onUpdate={editor.updateArtifactField}
+                />
+              </div>
+            )}
+          </div>
+
           <div className="p-2 border-t border-white/10">
             <AddSection
               documentTitle={editor.artifact.title}
@@ -148,13 +267,13 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
             />
           </div>
         </div>
+
         <div className="flex-1 overflow-y-auto" id="editor-preview">
           <div className="mx-auto max-w-4xl px-6 py-12">
-            {/* Document header in preview */}
             <header className="mb-12">
               <h1 className="text-3xl font-bold tracking-tight">
-                {docAiSuggestion && !showDocAiOriginal ? (
-                  docAiSuggestion.title
+                {pendingSuggestion?.type === "document" && pendingSuggestion.documentData ? (
+                  pendingSuggestion.documentData.title
                 ) : (
                   <InlineEditor
                     value={editor.artifact.title}
@@ -163,8 +282,8 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                 )}
               </h1>
               <p className="mt-2 text-lg text-muted">
-                {docAiSuggestion && !showDocAiOriginal ? (
-                  docAiSuggestion.subtitle || ""
+                {pendingSuggestion?.type === "document" && pendingSuggestion.documentData ? (
+                  pendingSuggestion.documentData.subtitle || ""
                 ) : (
                   <InlineEditor
                     value={editor.artifact.subtitle || ""}
@@ -174,20 +293,20 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                 )}
               </p>
             </header>
-            {/* Sections */}
             <div className="space-y-16">
               {editor.artifact.sections.map((section, index) => {
-                // Document-level AI suggestion takes precedence over section-level
                 const docSuggestionSection =
-                  docAiSuggestion && !showDocAiOriginal
-                    ? docAiSuggestion.sections[index]
+                  pendingSuggestion?.type === "document" && pendingSuggestion.documentData
+                    ? pendingSuggestion.documentData.sections[index]
                     : null;
 
-                const displaySection =
-                  docSuggestionSection ??
-                  (aiSuggestion?.sectionId === section.id && !showAiOriginal
-                    ? aiSuggestion.section
-                    : section);
+                const sectionSuggestion =
+                  pendingSuggestion?.type === "section" &&
+                  pendingSuggestion.sectionData?.id === section.id
+                    ? pendingSuggestion.sectionData
+                    : null;
+
+                const displaySection = docSuggestionSection ?? sectionSuggestion ?? section;
 
                 return (
                   <div
@@ -206,7 +325,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                         editor.updateSectionField(section.id, path, value)
                       }
                     />
-                    {aiLoadingSectionId === section.id && (
+                    {chat.isLoading && editor.selectedSectionId === section.id && (
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse rounded-lg" />
                     )}
                   </div>

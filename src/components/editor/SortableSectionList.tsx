@@ -20,6 +20,25 @@ import { useState } from "react";
 import type { Section, SectionType } from "@/types/artifact";
 import { GripVertical, Trash2 } from "lucide-react";
 
+function getItemCount(section: Section): string | null {
+  switch (section.type) {
+    case "expandable-cards":
+      return `${section.content.cards.length} cards`;
+    case "timeline":
+      return `${section.content.steps.length} steps`;
+    case "metric-dashboard":
+      return `${section.content.metrics.length} metrics`;
+    case "guided-journey":
+      return `${section.content.events.length} events`;
+    case "tier-table":
+      return `${section.content.columns.length} tiers`;
+    case "hub-mockup":
+      return `${section.content.nodes.length} nodes`;
+    default:
+      return null;
+  }
+}
+
 const SECTION_TYPE_LABELS: Record<SectionType, string> = {
   "rich-text": "Rich Text",
   "expandable-cards": "Cards",
@@ -78,9 +97,13 @@ function SortableItem({
         <GripVertical className="w-3.5 h-3.5" />
       </button>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium truncate">{section.title}</p>
+        <p className="text-sm font-medium line-clamp-2">{section.title}</p>
         <p className="text-xs opacity-60">
           {SECTION_TYPE_LABELS[section.type]}
+          {(() => {
+            const count = getItemCount(section);
+            return count ? <span className="ml-1.5 opacity-80">&middot; {count}</span> : null;
+          })()}
         </p>
       </div>
       <button

@@ -1,50 +1,29 @@
 "use client";
 
-import type { ReactNode } from "react";
-import { ArrowLeft, ExternalLink } from "lucide-react";
-import Link from "next/link";
+import { ExternalLink } from "lucide-react";
 import type { SaveStatus } from "@/hooks/useEditor";
 
 interface TopBarProps {
   slug: string;
-  title: string;
   saveStatus: SaveStatus;
   isPublished: boolean;
   onPublishToggle: () => void;
-  documentAiSlot?: ReactNode;
 }
 
 export function TopBar({
   slug,
-  title,
   saveStatus,
   isPublished,
   onPublishToggle,
-  documentAiSlot,
 }: TopBarProps) {
   return (
-    <div className="h-12 border-b border-white/10 flex items-center px-4 gap-4 shrink-0">
-      {/* Back to viewer */}
-      <Link
-        href={`/${slug}`}
-        className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        <span className="hidden sm:inline">Back</span>
-      </Link>
-
-      {/* Title */}
-      <span className="text-sm font-medium truncate flex-1">{title}</span>
-
+    <div className="h-10 border-b border-white/10 flex items-center justify-end px-4 gap-4 shrink-0">
       {/* Save status */}
       <span className="text-xs text-muted-foreground">
         {saveStatus === "saved" && "Saved"}
         {saveStatus === "saving" && "Saving..."}
         {saveStatus === "unsaved" && "Unsaved changes"}
       </span>
-
-      {/* Document-level AI command */}
-      {documentAiSlot}
 
       {/* Preview in new tab */}
       <a
