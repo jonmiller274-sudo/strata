@@ -7,10 +7,12 @@ import type {
   MetricDashboardSection,
   TimelineSection,
   TierTableSection,
+  GuidedJourneySection,
 } from "@/types/artifact";
 import { SectionRenderer } from "@/components/viewer/SectionRenderer";
 import { InlineEditor } from "./InlineEditor";
 import { ItemManager } from "./ItemManager";
+import { EditableGuidedJourney } from "./EditableGuidedJourney";
 
 interface EditableSectionRendererProps {
   section: Section;
@@ -31,6 +33,7 @@ export function EditableSectionRenderer({
     "metric-dashboard",
     "timeline",
     "tier-table",
+    "guided-journey",
   ].includes(section.type);
 
   if (!hasCustomRenderer) {
@@ -83,6 +86,8 @@ function EditableContent({
       return <EditableTimeline section={section} onFieldChange={onFieldChange} />;
     case "tier-table":
       return <EditableTierTable section={section} onFieldChange={onFieldChange} />;
+    case "guided-journey":
+      return <EditableGuidedJourney section={section} onFieldChange={onFieldChange} />;
     default:
       return <SectionRenderer section={section} />;
   }
