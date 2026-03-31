@@ -367,16 +367,62 @@ function EditableTierTable({
   section: TierTableSection;
   onFieldChange: (path: string, value: unknown) => void;
 }) {
+  const columns = section.content.columns;
+
+  const handleAddColumn = () => {
+    const newCol = {
+      name: "New Tier",
+      price: "$0",
+      price_period: "month",
+      description: "",
+      features: [],
+      is_highlighted: false,
+    };
+    onFieldChange("content.columns", [...columns, newCol]);
+  };
+
+  const handleRemoveColumn = (index: number) => {
+    onFieldChange("content.columns", columns.filter((_, i) => i !== index));
+  };
+
+  const handleReorderColumns = (from: number, to: number) => {
+    const updated = [...columns];
+    const [moved] = updated.splice(from, 1);
+    updated.splice(to, 0, moved);
+    onFieldChange("content.columns", updated);
+  };
+
+  const handleAddFeature = (colIndex: number) => {
+    const newFeature = { name: "New Feature", included: true };
+    const updatedFeatures = [...columns[colIndex].features, newFeature];
+    onFieldChange(`content.columns.${colIndex}.features`, updatedFeatures);
+  };
+
+  const handleRemoveFeature = (colIndex: number, featIndex: number) => {
+    const updatedFeatures = columns[colIndex].features.filter((_, i) => i !== featIndex);
+    onFieldChange(`content.columns.${colIndex}.features`, updatedFeatures);
+  };
+
+  const handleToggleIncluded = (colIndex: number, featIndex: number) => {
+    const current = columns[colIndex].features[featIndex].included;
+    onFieldChange(
+      `content.columns.${colIndex}.features.${featIndex}.included`,
+      typeof current === "boolean" ? !current : true
+    );
+  };
+
   return (
-    <div
-      className="grid gap-4"
-      style={{
-        gridTemplateColumns: `repeat(${Math.min(section.content.columns.length, 4)}, minmax(0, 1fr))`,
-      }}
-    >
-      {section.content.columns.map((col, i) => (
+    <ItemManager
+      items={columns}
+      getItemId={(_, i) => `col-${i}`}
+      onAdd={handleAddColumn}
+      onRemove={handleRemoveColumn}
+      onReorder={handleReorderColumns}
+      addLabel="Add tier"
+      minItems={1}
+      maxItems={5}
+      renderItem={(col, i) => (
         <div
-          key={col.name}
           className={`bg-white/5 rounded-lg p-4 border ${
             col.is_highlighted ? "border-accent/50" : "border-white/10"
           }`}
@@ -387,35 +433,52 @@ function EditableTierTable({
               onChange={(v) => onFieldChange(`content.columns.${i}.name`, v)}
             />
           </h4>
-          {col.price && (
-            <p className="text-2xl font-bold mb-1">
-              <InlineEditor
-                value={col.price}
-                onChange={(v) => onFieldChange(`content.columns.${i}.price`, v)}
-              />
-            </p>
-          )}
-          {col.description && (
-            <p className="text-sm text-muted-foreground mb-3">
-              <InlineEditor
-                value={col.description}
-                onChange={(v) => onFieldChange(`content.columns.${i}.description`, v)}
-              />
-            </p>
-          )}
+          <p className="text-2xl font-bold mb-1">
+            <InlineEditor
+              value={col.price || ""}
+              onChange={(v) => onFieldChange(`content.columns.${i}.price`, v)}
+              placeholder="$0"
+            />
+          </p>
+          <p className="text-sm text-muted-foreground mb-3">
+            <InlineEditor
+              value={col.description || ""}
+              onChange={(v) => onFieldChange(`content.columns.${i}.description`, v)}
+              placeholder="Add description..."
+            />
+          </p>
           <ul className="space-y-1">
             {col.features.map((feat, j) => (
-              <li key={feat.name} className="text-sm flex items-center gap-2">
-                <span className="text-xs">{feat.included ? "+" : "-"}</span>
-                <InlineEditor
-                  value={feat.name}
-                  onChange={(v) => onFieldChange(`content.columns.${i}.features.${j}.name`, v)}
-                />
+              <li key={`${feat.name}-${j}`} className="group/feat text-sm flex items-center gap-2">
+                <button
+                  onClick={() => handleToggleIncluded(i, j)}
+                  className="text-xs w-4 text-center hover:text-accent transition-colors"
+                >
+                  {feat.included ? "+" : "−"}
+                </button>
+                <span className="flex-1">
+                  <InlineEditor
+                    value={feat.name}
+                    onChange={(v) => onFieldChange(`content.columns.${i}.features.${j}.name`, v)}
+                  />
+                </span>
+                <button
+                  onClick={() => handleRemoveFeature(i, j)}
+                  className="opacity-0 group-hover/feat:opacity-50 hover:!opacity-100 hover:text-red-400 transition-opacity text-xs"
+                >
+                  ×
+                </button>
               </li>
             ))}
           </ul>
+          <button
+            onClick={() => handleAddFeature(i)}
+            className="text-xs text-muted-foreground hover:text-foreground mt-2 transition-colors"
+          >
+            + Add feature
+          </button>
         </div>
-      ))}
-    </div>
+      )}
+    />
   );
 }
