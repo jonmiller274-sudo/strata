@@ -246,33 +246,66 @@ function EditableTimeline({
   section: TimelineSection;
   onFieldChange: (path: string, value: unknown) => void;
 }) {
+  const steps = section.content.steps;
+
+  const handleAdd = () => {
+    const newStep = {
+      id: crypto.randomUUID(),
+      label: "New Step",
+      title: "Step Title",
+      description: "Click to edit",
+      status: "upcoming" as const,
+    };
+    onFieldChange("content.steps", [...steps, newStep]);
+  };
+
+  const handleRemove = (index: number) => {
+    onFieldChange("content.steps", steps.filter((_, i) => i !== index));
+  };
+
+  const handleReorder = (from: number, to: number) => {
+    const updated = [...steps];
+    const [moved] = updated.splice(from, 1);
+    updated.splice(to, 0, moved);
+    onFieldChange("content.steps", updated);
+  };
+
   return (
     <div className="space-y-4">
-      {section.content.steps.map((step, i) => (
-        <div key={step.id} className="flex gap-4 items-start">
-          <div className="w-20 shrink-0 text-xs font-mono text-muted-foreground pt-1">
-            <InlineEditor
-              value={step.label}
-              onChange={(v) => onFieldChange(`content.steps.${i}.label`, v)}
-            />
-          </div>
-          <div className="flex-1 bg-white/5 rounded-lg p-4 border border-white/10">
-            <h4 className="font-semibold mb-1">
+      <ItemManager
+        items={steps}
+        getItemId={(step) => step.id}
+        onAdd={handleAdd}
+        onRemove={handleRemove}
+        onReorder={handleReorder}
+        addLabel="Add step"
+        minItems={1}
+        renderItem={(step, i) => (
+          <div className="flex gap-4 items-start">
+            <div className="w-20 shrink-0 text-xs font-mono text-muted-foreground pt-1">
               <InlineEditor
-                value={step.title}
-                onChange={(v) => onFieldChange(`content.steps.${i}.title`, v)}
-              />
-            </h4>
-            <div className="text-sm text-foreground/70">
-              <InlineEditor
-                value={step.description}
-                onChange={(v) => onFieldChange(`content.steps.${i}.description`, v)}
-                multiline
+                value={step.label}
+                onChange={(v) => onFieldChange(`content.steps.${i}.label`, v)}
               />
             </div>
+            <div className="flex-1 bg-white/5 rounded-lg p-4 border border-white/10">
+              <h4 className="font-semibold mb-1">
+                <InlineEditor
+                  value={step.title}
+                  onChange={(v) => onFieldChange(`content.steps.${i}.title`, v)}
+                />
+              </h4>
+              <div className="text-sm text-foreground/70">
+                <InlineEditor
+                  value={step.description}
+                  onChange={(v) => onFieldChange(`content.steps.${i}.description`, v)}
+                  multiline
+                />
+              </div>
+            </div>
           </div>
-        </div>
-      ))}
+        )}
+      />
 
       {/* Evidence */}
       {section.content.evidence && (
