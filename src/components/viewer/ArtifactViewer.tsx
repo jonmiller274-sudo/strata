@@ -111,6 +111,7 @@ export function ArtifactViewer({ artifact }: { artifact: Artifact }) {
             items={sidebarItems}
             title={artifact.title}
             subtitle={artifact.subtitle}
+            logoUrl={artifact.branding?.logo_url}
           />
         )}
 
@@ -196,6 +197,7 @@ export function ArtifactViewer({ artifact }: { artifact: Artifact }) {
           items={sidebarItems}
           title={artifact.title}
           subtitle={artifact.subtitle}
+          logoUrl={artifact.branding?.logo_url}
         />
       )}
 
