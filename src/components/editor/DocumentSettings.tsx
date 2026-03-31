@@ -1,8 +1,11 @@
 "use client";
 
 import type { Artifact } from "@/types/artifact";
-import { Settings, X } from "lucide-react";
-import { useState } from "react";
+import { RotateCcw } from "lucide-react";
+import { LogoUpload } from "./LogoUpload";
+
+const DEFAULT_PRIMARY = "#6366f1";
+const DEFAULT_SECONDARY = "#f59e0b";
 
 interface DocumentSettingsProps {
   artifact: Artifact;
@@ -10,27 +13,113 @@ interface DocumentSettingsProps {
 }
 
 export function DocumentSettings({ artifact, onUpdate }: DocumentSettingsProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const primary =
+    artifact.branding?.primary_color ??
+    artifact.branding?.palette?.accent1 ??
+    DEFAULT_PRIMARY;
 
-  if (!isOpen) {
-    return (
-      <button
-        onClick={() => setIsOpen(true)}
-        className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-      >
-        <Settings className="w-3.5 h-3.5" />
-        Settings
-      </button>
-    );
+  const secondary =
+    artifact.branding?.secondary_color ??
+    artifact.branding?.palette?.accent3 ??
+    DEFAULT_SECONDARY;
+
+  function handlePrimaryChange(color: string) {
+    onUpdate("branding", {
+      ...artifact.branding,
+      primary_color: color,
+      palette: {
+        ...artifact.branding?.palette,
+        accent1: color,
+        accent2: color,
+      },
+    });
+  }
+
+  function handleSecondaryChange(color: string) {
+    onUpdate("branding", {
+      ...artifact.branding,
+      secondary_color: color,
+      palette: {
+        ...artifact.branding?.palette,
+        accent3: color,
+      },
+    });
+  }
+
+  function handleResetColors() {
+    onUpdate("branding", {
+      ...artifact.branding,
+      primary_color: DEFAULT_PRIMARY,
+      secondary_color: DEFAULT_SECONDARY,
+      palette: {
+        ...artifact.branding?.palette,
+        accent1: DEFAULT_PRIMARY,
+        accent2: DEFAULT_PRIMARY,
+        accent3: DEFAULT_SECONDARY,
+      },
+    });
+  }
+
+  function handleLogoUpload(url: string) {
+    onUpdate("branding", { ...artifact.branding, logo_url: url });
+  }
+
+  function handleLogoRemove() {
+    const { logo_url: _removed, ...rest } = artifact.branding ?? {};
+    onUpdate("branding", Object.keys(rest).length > 0 ? rest : undefined);
   }
 
   return (
     <div className="p-3 bg-white/5 rounded-lg border border-white/10">
-      <div className="flex justify-between items-center mb-3">
-        <p className="text-xs font-medium">Document Settings</p>
-        <button onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-foreground">
-          <X className="w-3.5 h-3.5" />
-        </button>
+      <p className="text-xs font-medium mb-3">Document Settings</p>
+
+      {/* Brand section */}
+      <div className="mb-4">
+        <label className="text-xs text-muted-foreground block mb-2">Brand</label>
+
+        {/* Logo upload */}
+        <div className="mb-3">
+          <LogoUpload
+            logoUrl={artifact.branding?.logo_url}
+            artifactId={artifact.id}
+            onUpload={handleLogoUpload}
+            onRemove={handleLogoRemove}
+          />
+        </div>
+
+        {/* Color pickers */}
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <input
+              type="color"
+              value={primary}
+              onChange={(e) => handlePrimaryChange(e.target.value)}
+              className="w-8 h-8 rounded cursor-pointer border border-white/20"
+              title="Primary color"
+            />
+            <span className="text-xs text-muted-foreground">Primary</span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <input
+              type="color"
+              value={secondary}
+              onChange={(e) => handleSecondaryChange(e.target.value)}
+              className="w-8 h-8 rounded cursor-pointer border border-white/20"
+              title="Secondary color"
+            />
+            <span className="text-xs text-muted-foreground">Secondary</span>
+          </div>
+
+          <button
+            onClick={handleResetColors}
+            className="ml-auto flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            title="Reset to default colors"
+          >
+            <RotateCcw className="w-3 h-3" />
+            Reset
+          </button>
+        </div>
       </div>
 
       {/* Layout mode */}
@@ -74,7 +163,7 @@ export function DocumentSettings({ artifact, onUpdate }: DocumentSettingsProps) 
       </div>
 
       {/* Theme */}
-      <div className="mb-3">
+      <div>
         <label className="text-xs text-muted-foreground block mb-1">Theme</label>
         <div className="flex gap-2">
           {(["dark", "light"] as const).map((theme) => (
@@ -90,30 +179,6 @@ export function DocumentSettings({ artifact, onUpdate }: DocumentSettingsProps) 
               {theme === "dark" ? "Dark" : "Light"}
             </button>
           ))}
-        </div>
-      </div>
-
-      {/* Palette colors */}
-      <div>
-        <label className="text-xs text-muted-foreground block mb-1">Accent Colors</label>
-        <div className="flex gap-2">
-          {([1, 2, 3, 4, 5] as const).map((n) => {
-            const key = `accent${n}` as keyof NonNullable<NonNullable<Artifact["branding"]>["palette"]>;
-            const color = artifact.branding?.palette?.[key] ?? "#6366f1";
-            return (
-              <input
-                key={n}
-                type="color"
-                value={color}
-                onChange={(e) => {
-                  const palette = { ...artifact.branding?.palette, [key]: e.target.value };
-                  onUpdate("branding", { ...artifact.branding, palette });
-                }}
-                className="w-8 h-8 rounded cursor-pointer border border-white/20"
-                title={`Accent ${n}`}
-              />
-            );
-          })}
         </div>
       </div>
     </div>

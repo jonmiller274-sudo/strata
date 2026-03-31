@@ -13,9 +13,10 @@ interface SidebarNavProps {
   items: SidebarItem[];
   title: string;
   subtitle?: string;
+  logoUrl?: string;
 }
 
-export function SidebarNav({ items, title, subtitle }: SidebarNavProps) {
+export function SidebarNav({ items, title, subtitle, logoUrl }: SidebarNavProps) {
   const [activeId, setActiveId] = useState<string>(items[0]?.id ?? "");
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -90,6 +91,12 @@ export function SidebarNav({ items, title, subtitle }: SidebarNavProps) {
       >
         {/* Title area */}
         <div className="border-b border-border px-6 py-6">
+          {logoUrl && (
+            <div className="mb-3">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={logoUrl} alt="" className="h-8 w-auto object-contain" />
+            </div>
+          )}
           <h2 className="text-sm font-semibold tracking-wide text-foreground">
             {title}
           </h2>

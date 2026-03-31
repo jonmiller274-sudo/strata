@@ -25,6 +25,7 @@ export interface Artifact {
 
 export interface ArtifactBranding {
   primary_color?: string;
+  secondary_color?: string;
   logo_url?: string;
   palette?: {
     accent1?: string;
