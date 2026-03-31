@@ -209,10 +209,40 @@ function EditableMetricDashboard({
   section: MetricDashboardSection;
   onFieldChange: (path: string, value: unknown) => void;
 }) {
+  const metrics = section.content.metrics;
+
+  const handleAdd = () => {
+    const newMetric = {
+      id: crypto.randomUUID(),
+      label: "New Metric",
+      value: "0",
+      description: "Click to edit",
+    };
+    onFieldChange("content.metrics", [...metrics, newMetric]);
+  };
+
+  const handleRemove = (index: number) => {
+    onFieldChange("content.metrics", metrics.filter((_, i) => i !== index));
+  };
+
+  const handleReorder = (from: number, to: number) => {
+    const updated = [...metrics];
+    const [moved] = updated.splice(from, 1);
+    updated.splice(to, 0, moved);
+    onFieldChange("content.metrics", updated);
+  };
+
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-      {section.content.metrics.map((metric, i) => (
-        <div key={metric.id} className="bg-white/5 rounded-lg p-4 border border-white/10">
+    <ItemManager
+      items={metrics}
+      getItemId={(metric) => metric.id}
+      onAdd={handleAdd}
+      onRemove={handleRemove}
+      onReorder={handleReorder}
+      addLabel="Add metric"
+      minItems={1}
+      renderItem={(metric, i) => (
+        <div className="bg-white/5 rounded-lg p-4 border border-white/10">
           <p className="text-sm text-muted-foreground mb-1">
             <InlineEditor
               value={metric.label}
@@ -225,17 +255,16 @@ function EditableMetricDashboard({
               onChange={(v) => onFieldChange(`content.metrics.${i}.value`, v)}
             />
           </p>
-          {metric.description && (
-            <p className="text-xs text-muted-foreground mt-1">
-              <InlineEditor
-                value={metric.description}
-                onChange={(v) => onFieldChange(`content.metrics.${i}.description`, v)}
-              />
-            </p>
-          )}
+          <p className="text-xs text-muted-foreground mt-1">
+            <InlineEditor
+              value={metric.description || ""}
+              onChange={(v) => onFieldChange(`content.metrics.${i}.description`, v)}
+              placeholder="Add description..."
+            />
+          </p>
         </div>
-      ))}
-    </div>
+      )}
+    />
   );
 }
 
