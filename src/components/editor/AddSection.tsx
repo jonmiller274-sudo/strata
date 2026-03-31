@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { Section, SectionType } from "@/types/artifact";
 import { Plus, Loader2, X } from "lucide-react";
+import { SectionTypePreview } from "./SectionTypePreview";
 
 const SECTION_TYPES: { type: SectionType; label: string; description: string }[] = [
   { type: "rich-text", label: "Rich Text", description: "Text with expandable details" },
@@ -132,15 +133,18 @@ export function AddSection({ documentTitle, documentSubtitle, onAdd }: AddSectio
             className="w-full bg-white/10 rounded px-2 py-1.5 text-sm outline-none placeholder:text-muted-foreground/50 focus:ring-1 focus:ring-accent/50 mb-3"
           />
           <p className="text-xs text-muted-foreground mb-2">Or pick a type:</p>
-          <div className="grid grid-cols-2 gap-1.5">
+          <div className="grid grid-cols-2 gap-2">
             {SECTION_TYPES.map((st) => (
               <button
                 key={st.type}
                 onClick={() => handlePickType(st.type)}
-                className="text-left px-2 py-1.5 rounded text-xs bg-white/5 hover:bg-white/10 transition-colors"
+                className="text-left rounded-lg border border-white/10 hover:border-accent/30 hover:scale-[1.02] transition-all overflow-hidden"
               >
-                <span className="font-medium">{st.label}</span>
-                <span className="block text-muted-foreground text-[10px]">{st.description}</span>
+                <SectionTypePreview type={st.type} />
+                <div className="px-2 py-1.5">
+                  <span className="text-xs font-medium block">{st.label}</span>
+                  <span className="text-[10px] text-muted-foreground">{st.description}</span>
+                </div>
               </button>
             ))}
           </div>

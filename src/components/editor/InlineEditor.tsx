@@ -55,7 +55,7 @@ export function InlineEditor({
           e.stopPropagation();
           setIsEditing(true);
         }}
-        className={`cursor-text rounded transition-all hover:ring-1 hover:ring-white/20 hover:bg-white/5 ${
+        className={`cursor-text rounded transition-all hover:ring-1 hover:ring-blue-500/30 hover:bg-blue-500/5 ${
           !value ? "text-muted-foreground italic" : ""
         } ${className}`}
       >

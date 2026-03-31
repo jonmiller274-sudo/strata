@@ -12,6 +12,7 @@ import { AiChatPanel } from "./AiChatPanel";
 import { AddSection } from "./AddSection";
 import { InlineEditor } from "./InlineEditor";
 import { DocumentSettings } from "./DocumentSettings";
+import { FirstEditHint } from "./FirstEditHint";
 import { ArrowLeft, List, Sparkles, SlidersHorizontal } from "lucide-react";
 import Link from "next/link";
 
@@ -271,7 +272,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
         <div className="flex-1 overflow-y-auto" id="editor-preview">
           <div className="mx-auto max-w-4xl px-6 py-12">
             <header className="mb-12">
-              <h1 className="text-3xl font-bold tracking-tight">
+              <div className="relative"><FirstEditHint /><h1 className="text-3xl font-bold tracking-tight">
                 {pendingSuggestion?.type === "document" && pendingSuggestion.documentData ? (
                   pendingSuggestion.documentData.title
                 ) : (
@@ -280,7 +281,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                     onChange={(v) => editor.updateArtifactField("title", v)}
                   />
                 )}
-              </h1>
+              </h1></div>
               <p className="mt-2 text-lg text-muted">
                 {pendingSuggestion?.type === "document" && pendingSuggestion.documentData ? (
                   pendingSuggestion.documentData.subtitle || ""
