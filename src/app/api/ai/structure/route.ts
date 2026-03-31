@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getOpenAIClient } from "@/lib/ai/client";
+import { generateJSON } from "@/lib/ai/generate";
 import { buildStructurePrompt } from "@/lib/ai/prompts/structure";
 import type { TemplateType } from "@/types/artifact";
-
-// Using json_object mode — guarantees valid JSON output.
-// The system prompt defines the schema; the content field varies by section type
-// which makes strict json_schema mode impractical.
 
 export async function POST(req: NextRequest) {
   try {
@@ -29,52 +25,22 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const client = getOpenAIClient();
     const systemPrompt = buildStructurePrompt(templateType);
+    const userMessage = `Here is the raw content to structure into an interactive ${templateType.replace(/-/g, " ")} artifact:\n\n${content}`;
 
-    const response = await client.chat.completions.create({
-      model: "gpt-4.1-mini",
-      max_tokens: 8000,
+    const result = await generateJSON("structure", systemPrompt, userMessage, {
+      maxTokens: 8000,
       temperature: 0.7,
-      messages: [
-        { role: "system", content: systemPrompt },
-        {
-          role: "user",
-          content: `Here is the raw content to structure into an interactive ${templateType.replace(/-/g, " ")} artifact:\n\n${content}`,
-        },
-      ],
-      response_format: { type: "json_object" },
     });
 
-    const message = response.choices[0]?.message;
-    if (!message?.content) {
-      return NextResponse.json(
-        { error: "No response from AI" },
-        { status: 500 }
-      );
-    }
-
-    // Structured Outputs guarantees valid JSON — parse directly
-    const artifact = JSON.parse(message.content);
-
-    // Log usage for cost tracking
-    const usage = response.usage;
-    if (usage) {
-      const inputCost = (usage.prompt_tokens / 1_000_000) * 0.4;
-      const outputCost = (usage.completion_tokens / 1_000_000) * 1.6;
-      console.log(
-        `[AI Structure] model=gpt-4.1-mini input=${usage.prompt_tokens} output=${usage.completion_tokens} cost=$${(inputCost + outputCost).toFixed(4)}`
-      );
-    }
+    const artifact = JSON.parse(result.content);
 
     return NextResponse.json({
       artifact,
-      usage: usage
-        ? {
-            input_tokens: usage.prompt_tokens,
-            output_tokens: usage.completion_tokens,
-          }
-        : undefined,
+      usage: {
+        input_tokens: result.usage.inputTokens,
+        output_tokens: result.usage.outputTokens,
+      },
     });
   } catch (error) {
     console.error("[AI Structure] Error:", error);

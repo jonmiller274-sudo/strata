@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getOpenAIClient } from "@/lib/ai/client";
+import { generateJSON } from "@/lib/ai/generate";
 import { buildDocumentRewritePrompt } from "@/lib/ai/prompts/rewrite-document";
 import type { Artifact, Section } from "@/types/artifact";
 
@@ -33,41 +33,22 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const client = getOpenAIClient();
     const systemPrompt = buildDocumentRewritePrompt();
-
-    // Build the payload — send title, subtitle, and all sections
     const documentPayload = {
       title: artifact.title,
       subtitle: artifact.subtitle || "",
       sections: artifact.sections,
     };
+    const userMessage = `Here is the full document:\n\n${JSON.stringify(documentPayload, null, 2)}\n\nInstruction: ${instruction}`;
 
-    const response = await client.chat.completions.create({
-      model: "gpt-4.1-mini",
-      max_tokens: 16000,
+    const result = await generateJSON("rewrite-document", systemPrompt, userMessage, {
+      maxTokens: 16000,
       temperature: 0.7,
-      messages: [
-        { role: "system", content: systemPrompt },
-        {
-          role: "user",
-          content: `Here is the full document:\n\n${JSON.stringify(documentPayload, null, 2)}\n\nInstruction: ${instruction}`,
-        },
-      ],
-      response_format: { type: "json_object" },
     });
-
-    const message = response.choices[0]?.message;
-    if (!message?.content) {
-      return NextResponse.json(
-        { error: "No response from AI" },
-        { status: 500 }
-      );
-    }
 
     let rewritten: RewriteDocumentResponse;
     try {
-      rewritten = JSON.parse(message.content) as RewriteDocumentResponse;
+      rewritten = JSON.parse(result.content) as RewriteDocumentResponse;
     } catch {
       return NextResponse.json(
         { error: "AI returned invalid JSON" },
@@ -99,26 +80,14 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Log cost
-    const usage = response.usage;
-    if (usage) {
-      const inputCost = (usage.prompt_tokens / 1_000_000) * 0.4;
-      const outputCost = (usage.completion_tokens / 1_000_000) * 1.6;
-      console.log(
-        `[AI Document Rewrite] model=gpt-4.1-mini input=${usage.prompt_tokens} output=${usage.completion_tokens} cost=$${(inputCost + outputCost).toFixed(4)}`
-      );
-    }
-
     return NextResponse.json({
       title: rewritten.title,
       subtitle: rewritten.subtitle,
       sections: rewritten.sections,
-      usage: usage
-        ? {
-            input_tokens: usage.prompt_tokens,
-            output_tokens: usage.completion_tokens,
-          }
-        : undefined,
+      usage: {
+        input_tokens: result.usage.inputTokens,
+        output_tokens: result.usage.outputTokens,
+      },
     });
   } catch (error) {
     console.error("[AI Document Rewrite] Error:", error);

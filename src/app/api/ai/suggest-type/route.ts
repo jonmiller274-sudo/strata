@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getOpenAIClient } from "@/lib/ai/client";
+import { generateJSON } from "@/lib/ai/generate";
 import type { SectionType } from "@/types/artifact";
 
 const VALID_TYPES: SectionType[] = [
@@ -24,16 +24,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const client = getOpenAIClient();
-
-    const response = await client.chat.completions.create({
-      model: "gpt-4.1-mini",
-      max_tokens: 100,
-      temperature: 0,
-      messages: [
-        {
-          role: "system",
-          content: `You classify section descriptions into section types for a strategy document builder.
+    const systemPrompt = `You classify section descriptions into section types for a strategy document builder.
 
 Valid types: ${VALID_TYPES.join(", ")}
 
@@ -47,24 +38,16 @@ Type descriptions:
 - hub-mockup: Hub-and-spoke diagrams showing connections
 - guided-journey: Interactive day-by-day journey with counters
 
-Return ONLY a JSON object: { "type": "<type>", "confidence": <0-1> }`,
-        },
-        { role: "user", content: description },
-      ],
-      response_format: { type: "json_object" },
+Return ONLY a JSON object: { "type": "<type>", "confidence": <0-1> }`;
+
+    const result = await generateJSON("suggest-type", systemPrompt, description, {
+      maxTokens: 100,
+      temperature: 0,
     });
 
-    const message = response.choices[0]?.message;
-    if (!message?.content) {
-      return NextResponse.json(
-        { error: "No response from AI" },
-        { status: 500 }
-      );
-    }
-
-    let result: { type: string; confidence: number };
+    let parsed: { type: string; confidence: number };
     try {
-      result = JSON.parse(message.content);
+      parsed = JSON.parse(result.content);
     } catch {
       return NextResponse.json(
         { error: "AI returned invalid JSON" },
@@ -73,12 +56,12 @@ Return ONLY a JSON object: { "type": "<type>", "confidence": <0-1> }`,
     }
 
     // Validate the type is one we recognize
-    if (!VALID_TYPES.includes(result.type as SectionType)) {
-      result.type = "rich-text"; // Safe fallback
-      result.confidence = 0;
+    if (!VALID_TYPES.includes(parsed.type as SectionType)) {
+      parsed.type = "rich-text"; // Safe fallback
+      parsed.confidence = 0;
     }
 
-    return NextResponse.json(result);
+    return NextResponse.json(parsed);
   } catch (error) {
     console.error("[AI Suggest Type] Error:", error);
     const message = error instanceof Error ? error.message : "Unknown error";
