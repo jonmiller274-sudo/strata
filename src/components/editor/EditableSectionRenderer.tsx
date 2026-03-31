@@ -10,6 +10,7 @@ import type {
 } from "@/types/artifact";
 import { SectionRenderer } from "@/components/viewer/SectionRenderer";
 import { InlineEditor } from "./InlineEditor";
+import { ItemManager } from "./ItemManager";
 
 interface EditableSectionRendererProps {
   section: Section;
@@ -137,16 +138,41 @@ function EditableCardGrid({
   section: ExpandableCardGridSection;
   onFieldChange: (path: string, value: unknown) => void;
 }) {
-  const cols = section.content.columns ?? 3;
+  const cards = section.content.cards;
+
+  const handleAdd = () => {
+    const newCard = {
+      id: crypto.randomUUID(),
+      title: "New Card",
+      summary: "Click to edit",
+      detail: "",
+      tags: [],
+    };
+    onFieldChange("content.cards", [...cards, newCard]);
+  };
+
+  const handleRemove = (index: number) => {
+    onFieldChange("content.cards", cards.filter((_, i) => i !== index));
+  };
+
+  const handleReorder = (from: number, to: number) => {
+    const updated = [...cards];
+    const [moved] = updated.splice(from, 1);
+    updated.splice(to, 0, moved);
+    onFieldChange("content.cards", updated);
+  };
+
   return (
-    <div
-      className="grid grid-cols-1 gap-4"
-      style={{
-        gridTemplateColumns: `repeat(${Math.min(cols, 4)}, minmax(0, 1fr))`,
-      }}
-    >
-      {section.content.cards.map((card, i) => (
-        <div key={card.id} className="bg-white/5 rounded-lg p-4 border border-white/10">
+    <ItemManager
+      items={cards}
+      getItemId={(card) => card.id}
+      onAdd={handleAdd}
+      onRemove={handleRemove}
+      onReorder={handleReorder}
+      addLabel="Add card"
+      minItems={1}
+      renderItem={(card, i) => (
+        <div className="bg-white/5 rounded-lg p-4 border border-white/10">
           <h3 className="font-semibold mb-2">
             <InlineEditor
               value={card.title}
@@ -160,18 +186,19 @@ function EditableCardGrid({
               multiline
             />
           </div>
-          {card.detail && (
+          {card.detail !== undefined && (
             <div className="text-sm text-foreground/50 mt-2 border-t border-white/10 pt-2">
               <InlineEditor
-                value={card.detail}
+                value={card.detail || ""}
                 onChange={(v) => onFieldChange(`content.cards.${i}.detail`, v)}
                 multiline
+                placeholder="Add detail..."
               />
             </div>
           )}
         </div>
-      ))}
-    </div>
+      )}
+    />
   );
 }
 
