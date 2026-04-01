@@ -98,7 +98,7 @@ function SortableItem({
       </button>
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium line-clamp-2">{section.title}</p>
-        <p className="text-xs opacity-60">
+        <p className="text-xs opacity-80">
           {SECTION_TYPE_LABELS[section.type]}
           {(() => {
             const count = getItemCount(section);
