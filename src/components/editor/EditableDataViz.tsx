@@ -24,7 +24,16 @@ export function EditableDataViz({
 }: EditableDataVizProps) {
   const data = section.content.data;
   const xKey = section.content.x_key || "label";
-  const yKey = section.content.y_key || "value";
+
+  // Different chart types use different field names for the value column.
+  // Staircase uses "amount", Layers uses "price", all others use y_key or "value".
+  function getYKey(chartType: string, storedYKey?: string): string {
+    if (chartType === "staircase") return "amount";
+    if (chartType === "layers") return "price";
+    return storedYKey || "value";
+  }
+
+  const yKey = getYKey(section.content.chart_type, section.content.y_key);
 
   const handleAddDataPoint = () => {
     const newPoint: Record<string, string | number> = {
