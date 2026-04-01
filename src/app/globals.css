@@ -162,7 +162,7 @@ body {
 }
 
 .beat-section {
-  min-height: 100vh;
+  min-height: 80vh;
   scroll-snap-align: start;
   display: flex;
   flex-direction: column;
