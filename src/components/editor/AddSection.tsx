@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { Section, SectionType } from "@/types/artifact";
-import { Plus, Loader2, X } from "lucide-react";
+import { Loader2, ArrowLeft } from "lucide-react";
 import { SectionTypePreview } from "./SectionTypePreview";
 
 const SECTION_TYPES: { type: SectionType; label: string; description: string }[] = [
@@ -16,27 +16,28 @@ const SECTION_TYPES: { type: SectionType; label: string; description: string }[]
   { type: "guided-journey", label: "Journey", description: "Interactive guided journey" },
 ];
 
-type AddSectionStep = "closed" | "describe" | "confirm" | "generating" | "review";
+type AddSectionStep = "describe" | "confirm" | "generating" | "review";
 
 interface AddSectionProps {
   documentTitle: string;
   documentSubtitle?: string;
   onAdd: (section: Section) => void;
+  onCancel: () => void;
 }
 
-export function AddSection({ documentTitle, documentSubtitle, onAdd }: AddSectionProps) {
-  const [step, setStep] = useState<AddSectionStep>("closed");
+export function AddSection({ documentTitle, documentSubtitle, onAdd, onCancel }: AddSectionProps) {
+  const [step, setStep] = useState<AddSectionStep>("describe");
   const [description, setDescription] = useState("");
   const [suggestedType, setSuggestedType] = useState<SectionType | null>(null);
   const [generatedSection, setGeneratedSection] = useState<Section | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const reset = () => {
-    setStep("closed");
     setDescription("");
     setSuggestedType(null);
     setGeneratedSection(null);
     setError(null);
+    onCancel();
   };
 
   // Step 1 → Step 2: Describe and get type suggestion
@@ -97,28 +98,19 @@ export function AddSection({ documentTitle, documentSubtitle, onAdd }: AddSectio
     }
   };
 
-  // Closed state — just the button
-  if (step === "closed") {
-    return (
-      <button
-        onClick={() => setStep("describe")}
-        className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-dashed border-white/20 text-sm text-muted-foreground hover:border-white/40 hover:text-foreground transition-colors"
-      >
-        <Plus className="w-4 h-4" />
-        Add Section
-      </button>
-    );
-  }
-
   return (
-    <div className="p-3 bg-white/5 rounded-lg border border-white/10">
-      {/* Close button */}
-      <div className="flex justify-between items-center mb-3">
-        <p className="text-xs font-medium">Add Section</p>
-        <button onClick={reset} className="text-muted-foreground hover:text-foreground">
-          <X className="w-3.5 h-3.5" />
+    <div className="flex flex-col h-full overflow-hidden">
+      {/* Back button header */}
+      <div className="px-4 py-3 border-b border-white/10">
+        <button
+          onClick={reset}
+          className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <ArrowLeft className="w-3 h-3" /> Back to sections
         </button>
       </div>
+
+      <div className="flex-1 overflow-y-auto p-4">
 
       {/* Step 1: Describe */}
       {step === "describe" && (
@@ -223,6 +215,7 @@ export function AddSection({ documentTitle, documentSubtitle, onAdd }: AddSectio
       )}
 
       {error && <p className="text-xs text-red-400 mt-2">{error}</p>}
+      </div>
     </div>
   );
 }

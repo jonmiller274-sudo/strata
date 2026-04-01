@@ -13,7 +13,7 @@ import { AddSection } from "./AddSection";
 import { InlineEditor } from "./InlineEditor";
 import { DocumentSettings } from "./DocumentSettings";
 import { FirstEditHint } from "./FirstEditHint";
-import { ArrowLeft, List, Sparkles, SlidersHorizontal } from "lucide-react";
+import { ArrowLeft, List, Plus, Sparkles, SlidersHorizontal } from "lucide-react";
 import Link from "next/link";
 
 type SidebarTab = "sections" | "ai" | "settings";
@@ -36,6 +36,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
   const autoSave = useAutoSave(editor.artifact, editor.saveStatus, editor.setSaveStatus);
   const chat = useAiChat();
   const [activeTab, setActiveTab] = useState<SidebarTab>("sections");
+  const [showAddSection, setShowAddSection] = useState(false);
   const [pendingSuggestion, setPendingSuggestion] = useState<PendingSuggestion | null>(null);
 
   useEffect(() => {
@@ -223,17 +224,38 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
           </div>
 
           <div className="flex-1 overflow-hidden flex flex-col">
-            {activeTab === "sections" && (
-              <div className="flex-1 overflow-y-auto p-2">
-                <SortableSectionList
-                  sections={editor.artifact.sections}
-                  selectedSectionId={editor.selectedSectionId}
-                  onSelect={editor.setSelectedSectionId}
-                  onDelete={editor.deleteSection}
-                  onReorder={editor.reorderSections}
-                />
-              </div>
-            )}
+            {activeTab === "sections" && showAddSection ? (
+              <AddSection
+                documentTitle={editor.artifact.title}
+                documentSubtitle={editor.artifact.subtitle}
+                onAdd={(section) => {
+                  editor.addSection(section);
+                  setShowAddSection(false);
+                }}
+                onCancel={() => setShowAddSection(false)}
+              />
+            ) : activeTab === "sections" ? (
+              <>
+                <div className="flex-1 overflow-y-auto p-2">
+                  <SortableSectionList
+                    sections={editor.artifact.sections}
+                    selectedSectionId={editor.selectedSectionId}
+                    onSelect={editor.setSelectedSectionId}
+                    onDelete={editor.deleteSection}
+                    onReorder={editor.reorderSections}
+                  />
+                </div>
+                <div className="p-2 border-t border-white/10">
+                  <button
+                    onClick={() => setShowAddSection(true)}
+                    className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-dashed border-white/20 text-sm text-muted-foreground hover:border-white/40 hover:text-foreground transition-colors"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add Section
+                  </button>
+                </div>
+              </>
+            ) : null}
 
             {activeTab === "ai" && (
               <AiChatPanel
@@ -258,14 +280,6 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                 />
               </div>
             )}
-          </div>
-
-          <div className="p-2 border-t border-white/10">
-            <AddSection
-              documentTitle={editor.artifact.title}
-              documentSubtitle={editor.artifact.subtitle}
-              onAdd={(section) => editor.addSection(section)}
-            />
           </div>
         </div>
 
