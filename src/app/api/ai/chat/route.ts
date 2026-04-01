@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAnthropicClient } from "@/lib/ai/anthropic-client";
+import { createClient } from "@/lib/supabase/server";
 import type { Section } from "@/types/artifact";
 
 // Uses Sonnet 4 for editing — same model as rewrite endpoints
@@ -75,6 +76,13 @@ function buildContextMessage(context: ChatRequest["context"]): string {
 
 export async function POST(req: NextRequest) {
   try {
+    // Auth check
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+
     const body = (await req.json()) as ChatRequest;
     const { messages, context } = body;
 

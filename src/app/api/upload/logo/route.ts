@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 
 const ALLOWED_TYPES: Record<string, string> = {
   "image/png": "png",
@@ -12,6 +13,13 @@ const MAX_SIZE_BYTES = 500 * 1024; // 500KB
 
 export async function POST(request: NextRequest) {
   try {
+    // Auth check
+    const supabaseAuth = await createClient();
+    const { data: { user } } = await supabaseAuth.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+
     const formData = await request.formData();
     const file = formData.get("file");
     const artifactId = formData.get("artifactId");
@@ -81,6 +89,13 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
+    // Auth check
+    const supabaseAuth = await createClient();
+    const { data: { user } } = await supabaseAuth.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+
     const body = await request.json();
     const { artifactId } = body;
 
