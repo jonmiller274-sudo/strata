@@ -177,6 +177,10 @@ function CounterCard({
 
 // ─── Phase badge row ──────────────────────────────────────────────────────────
 
+function cleanPhaseName(name: string): string {
+  return name.replace(/^Phase\s+\d+:\s*/i, "");
+}
+
 function PhaseBadges({ phases }: { phases: JourneyPhase[] }) {
   return (
     <div className="flex flex-wrap gap-2">
@@ -189,7 +193,7 @@ function PhaseBadges({ phases }: { phases: JourneyPhase[] }) {
             color: phase.color,
           }}
         >
-          Phase {i + 1}: {phase.name}{" "}
+          Phase {i + 1}: {cleanPhaseName(phase.name)}{" "}
           <span className="ml-1 opacity-70">({phase.day_range})</span>
         </span>
       ))}
