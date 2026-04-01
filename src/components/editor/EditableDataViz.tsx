@@ -95,15 +95,15 @@ export function EditableDataViz({
               </div>
               <div className="w-24">
                 <input
-                  type="number"
-                  value={Number(point[yKey]) || 0}
+                  type="text"
+                  value={point[yKey] || ""}
                   onChange={(e) =>
                     onFieldChange(
                       `content.data.${i}.${yKey}`,
-                      parseFloat(e.target.value) || 0
+                      e.target.value
                     )
                   }
-                  className="w-full bg-white/10 rounded px-2 py-0.5 text-sm outline-none ring-1 ring-white/10 focus:ring-accent/50"
+                  className="w-20 bg-white/5 border border-white/10 rounded px-2 py-1 text-sm text-right"
                 />
               </div>
             </div>
