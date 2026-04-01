@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { Share2 } from "lucide-react";
 
 interface ProgressBarNavItem {
   id: string;
@@ -25,6 +26,7 @@ export function ProgressBarNav({
   const [visited, setVisited] = useState<Set<string>>(
     () => new Set([items[0]?.id ?? ""])
   );
+  const [copied, setCopied] = useState(false);
 
   // Track active beat via IntersectionObserver
   useEffect(() => {
@@ -108,6 +110,43 @@ export function ProgressBarNav({
             />
           );
         })}
+      </div>
+
+      {/* Share button — fixed top-right, below the progress bar */}
+      <div
+        className="fixed z-50"
+        style={{ top: "10px", right: "16px" }}
+      >
+        <button
+          onClick={() => {
+            navigator.clipboard.writeText(window.location.href);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+          }}
+          className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-white/10 transition-colors"
+          title="Copy link"
+          aria-label="Copy link to clipboard"
+        >
+          {copied ? (
+            <span
+              style={{
+                fontSize: "11px",
+                color: "var(--color-success, #22c55e)",
+                fontWeight: 500,
+              }}
+            >
+              Copied!
+            </span>
+          ) : (
+            <Share2
+              style={{
+                width: "14px",
+                height: "14px",
+                color: "var(--color-muted-foreground)",
+              }}
+            />
+          )}
+        </button>
       </div>
 
       {/* Wordmark — fixed top-left, below the progress bar */}
