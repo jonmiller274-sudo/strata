@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import type { Artifact, Section } from "@/types/artifact";
 import { useEditor } from "@/hooks/useEditor";
 import { useAutoSave } from "@/hooks/useAutoSave";
@@ -242,62 +243,73 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
           </div>
 
           <div className="flex-1 overflow-hidden flex flex-col">
-            {activeTab === "sections" && showAddSection ? (
-              <AddSection
-                documentTitle={editor.artifact.title}
-                documentSubtitle={editor.artifact.subtitle}
-                onAdd={(section) => {
-                  editor.addSection(section);
-                  setShowAddSection(false);
-                }}
-                onCancel={() => setShowAddSection(false)}
-              />
-            ) : activeTab === "sections" ? (
-              <>
-                <div className="flex-1 overflow-y-auto p-2">
-                  <SortableSectionList
-                    sections={editor.artifact.sections}
-                    selectedSectionId={editor.selectedSectionId}
-                    onSelect={editor.setSelectedSectionId}
-                    onDelete={editor.deleteSection}
-                    onReorder={editor.reorderSections}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className="flex-1 overflow-y-auto flex flex-col"
+              >
+                {activeTab === "sections" && showAddSection ? (
+                  <AddSection
+                    documentTitle={editor.artifact.title}
+                    documentSubtitle={editor.artifact.subtitle}
+                    onAdd={(section) => {
+                      editor.addSection(section);
+                      setShowAddSection(false);
+                    }}
+                    onCancel={() => setShowAddSection(false)}
                   />
-                </div>
-                <div className="p-2 border-t border-white/10">
-                  <button
-                    onClick={() => setShowAddSection(true)}
-                    className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-dashed border-white/20 text-sm text-muted-foreground hover:border-white/40 hover:text-foreground transition-colors"
-                  >
-                    <Plus className="w-4 h-4" />
-                    Add Section
-                  </button>
-                </div>
-              </>
-            ) : null}
+                ) : activeTab === "sections" ? (
+                  <>
+                    <div className="flex-1 overflow-y-auto p-2">
+                      <SortableSectionList
+                        sections={editor.artifact.sections}
+                        selectedSectionId={editor.selectedSectionId}
+                        onSelect={editor.setSelectedSectionId}
+                        onDelete={editor.deleteSection}
+                        onReorder={editor.reorderSections}
+                      />
+                    </div>
+                    <div className="p-2 border-t border-white/10">
+                      <button
+                        onClick={() => setShowAddSection(true)}
+                        className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-dashed border-white/20 text-sm text-muted-foreground hover:border-white/40 hover:text-foreground transition-colors"
+                      >
+                        <Plus className="w-4 h-4" />
+                        Add Section
+                      </button>
+                    </div>
+                  </>
+                ) : null}
 
-            {activeTab === "ai" && (
-              <AiChatPanel
-                messages={chat.messages}
-                isLoading={chat.isLoading}
-                scope={chat.scope}
-                activeSectionId={chat.activeSectionId}
-                activeSectionTitle={selectedSection?.title ?? null}
-                activeSectionType={selectedSection?.type ?? null}
-                onSend={handleSendMessage}
-                onApplySuggestion={handleApplySuggestion}
-                onDiscardSuggestion={handleDiscardSuggestion}
-                onClearHistory={handleClearHistory}
-              />
-            )}
+                {activeTab === "ai" && (
+                  <AiChatPanel
+                    messages={chat.messages}
+                    isLoading={chat.isLoading}
+                    scope={chat.scope}
+                    activeSectionId={chat.activeSectionId}
+                    activeSectionTitle={selectedSection?.title ?? null}
+                    activeSectionType={selectedSection?.type ?? null}
+                    onSend={handleSendMessage}
+                    onApplySuggestion={handleApplySuggestion}
+                    onDiscardSuggestion={handleDiscardSuggestion}
+                    onClearHistory={handleClearHistory}
+                  />
+                )}
 
-            {activeTab === "settings" && (
-              <div className="flex-1 overflow-y-auto">
-                <DocumentSettings
-                  artifact={editor.artifact}
-                  onUpdate={editor.updateArtifactField}
-                />
-              </div>
-            )}
+                {activeTab === "settings" && (
+                  <div className="flex-1 overflow-y-auto">
+                    <DocumentSettings
+                      artifact={editor.artifact}
+                      onUpdate={editor.updateArtifactField}
+                    />
+                  </div>
+                )}
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
 
