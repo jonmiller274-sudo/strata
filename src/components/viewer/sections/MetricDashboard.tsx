@@ -72,7 +72,7 @@ function MetricCardComponent({
       viewport={{ once: true, margin: "-50px" }}
       className="rounded-2xl border border-border bg-card p-6"
     >
-      <p className="text-sm font-medium text-muted">{metric.label}</p>
+      <p className="text-xs sm:text-sm font-medium text-muted line-clamp-2">{metric.label}</p>
 
       <div className="mt-2">
         <span

@@ -10,6 +10,7 @@ import type {
   GuidedJourneySection,
 } from "@/types/artifact";
 import { SectionRenderer } from "@/components/viewer/SectionRenderer";
+import { FormattedText } from "@/components/viewer/FormattedText";
 import { InlineEditor } from "./InlineEditor";
 import { ItemManager } from "./ItemManager";
 import { EditableGuidedJourney } from "./EditableGuidedJourney";
@@ -18,11 +19,13 @@ import { EditableHubMockup } from "./EditableHubMockup";
 
 interface EditableSectionRendererProps {
   section: Section;
+  isSelected?: boolean;
   onFieldChange: (path: string, value: unknown) => void;
 }
 
 export function EditableSectionRenderer({
   section,
+  isSelected = false,
   onFieldChange,
 }: EditableSectionRendererProps) {
   // Check if this section type has a custom editable renderer.
@@ -67,21 +70,23 @@ export function EditableSectionRenderer({
       )}
 
       {/* Section content */}
-      <EditableContent section={section} onFieldChange={onFieldChange} />
+      <EditableContent section={section} isSelected={isSelected} onFieldChange={onFieldChange} />
     </div>
   );
 }
 
 function EditableContent({
   section,
+  isSelected,
   onFieldChange,
 }: {
   section: Section;
+  isSelected: boolean;
   onFieldChange: (path: string, value: unknown) => void;
 }) {
   switch (section.type) {
     case "rich-text":
-      return <EditableRichText section={section} onFieldChange={onFieldChange} />;
+      return <EditableRichText section={section} isSelected={isSelected} onFieldChange={onFieldChange} />;
     case "expandable-cards":
       return <EditableCardGrid section={section} onFieldChange={onFieldChange} />;
     case "metric-dashboard":
@@ -103,44 +108,60 @@ function EditableContent({
 
 function EditableRichText({
   section,
+  isSelected,
   onFieldChange,
 }: {
   section: RichTextSection;
+  isSelected: boolean;
   onFieldChange: (path: string, value: unknown) => void;
 }) {
   return (
     <div className="space-y-4">
       {/* Summary */}
       <div className="text-foreground/90 leading-relaxed">
-        <InlineEditor
-          value={section.content.summary}
-          onChange={(v) => onFieldChange("content.summary", v)}
-          multiline
-        />
-        <p className="text-[10px] text-muted-foreground/60 mt-1">
-          Supports **bold** formatting
-        </p>
+        {isSelected ? (
+          <>
+            <InlineEditor
+              value={section.content.summary}
+              onChange={(v) => onFieldChange("content.summary", v)}
+              multiline
+            />
+            <p className="text-[10px] text-muted-foreground/60 mt-1">
+              Supports **bold** formatting
+            </p>
+          </>
+        ) : (
+          <FormattedText text={section.content.summary || ""} />
+        )}
       </div>
 
       {/* Detail (collapsible in viewer, always visible in editor) */}
       {section.content.detail && (
         <div className="text-foreground/70 leading-relaxed border-l-2 border-white/10 pl-4">
-          <InlineEditor
-            value={section.content.detail}
-            onChange={(v) => onFieldChange("content.detail", v)}
-            multiline
-          />
+          {isSelected ? (
+            <InlineEditor
+              value={section.content.detail}
+              onChange={(v) => onFieldChange("content.detail", v)}
+              multiline
+            />
+          ) : (
+            <FormattedText text={section.content.detail} />
+          )}
         </div>
       )}
 
       {/* Callout */}
       {section.content.callout && (
         <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-          <InlineEditor
-            value={section.content.callout.text}
-            onChange={(v) => onFieldChange("content.callout.text", v)}
-            multiline
-          />
+          {isSelected ? (
+            <InlineEditor
+              value={section.content.callout.text}
+              onChange={(v) => onFieldChange("content.callout.text", v)}
+              multiline
+            />
+          ) : (
+            <FormattedText text={section.content.callout.text} />
+          )}
         </div>
       )}
     </div>

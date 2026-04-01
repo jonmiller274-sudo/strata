@@ -368,6 +368,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                   >
                     <EditableSectionRenderer
                       section={displaySection}
+                      isSelected={editor.selectedSectionId === section.id}
                       onFieldChange={(path, value) =>
                         editor.updateSectionField(section.id, path, value)
                       }
