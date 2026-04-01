@@ -85,7 +85,7 @@ export function EditableHubMockup({
         </label>
         <ItemManager
           items={connections}
-          getItemId={(_, i) => `conn-${i}`}
+          getItemId={(conn, i) => `conn-${conn.from}-${conn.to}-${i}`}
           onAdd={() => {
             const newConn = {
               from: section.content.center.id,

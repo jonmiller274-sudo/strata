@@ -76,7 +76,7 @@ export function EditableDataViz({
         </div>
         <ItemManager
           items={data}
-          getItemId={(_, i) => `dp-${i}`}
+          getItemId={(point, i) => `dp-${point[xKey] ?? point[yKey] ?? i}`}
           onAdd={handleAddDataPoint}
           onRemove={handleRemoveDataPoint}
           onReorder={handleReorderDataPoints}

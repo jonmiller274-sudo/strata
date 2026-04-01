@@ -427,7 +427,7 @@ function EditableTierTable({
   return (
     <ItemManager
       items={columns}
-      getItemId={(_, i) => `col-${i}`}
+      getItemId={(col, i) => `col-${col.name || i}`}
       onAdd={handleAddColumn}
       onRemove={handleRemoveColumn}
       onReorder={handleReorderColumns}
