@@ -28,6 +28,14 @@ export async function generateMetadata({
     openGraph: {
       title: `${artifact.title} — Strata`,
       description: artifact.subtitle || "An interactive strategy artifact built with Strata.",
+      type: "article",
+      siteName: "Strata",
+      url: `https://sharestrata.com/${slug}`,
+    },
+    twitter: {
+      card: "summary",
+      title: `${artifact.title} — Strata`,
+      description: artifact.subtitle || "An interactive strategy artifact built with Strata.",
     },
   };
 }

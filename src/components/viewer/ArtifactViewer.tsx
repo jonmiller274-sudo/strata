@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 import type { Artifact } from "@/types/artifact";
 import { SidebarNav } from "./SidebarNav";
 import { ProgressBarNav } from "./ProgressBarNav";
@@ -20,6 +20,8 @@ export function ArtifactViewer({ artifact }: { artifact: Artifact }) {
   const beatRefs = useRef<(HTMLElement | null)[]>([]);
   // Ref for the scroll container itself — passed to ProgressBarNav
   const scrollContainerRef = useRef<HTMLElement | null>(null);
+  // Hide watermark when near bottom (prevents overlap with footer)
+  const [hideWatermark, setHideWatermark] = useState(false);
 
   // Keyboard navigation for beats mode
   const getActiveBeatIndex = useCallback(() => {
@@ -121,6 +123,11 @@ export function ArtifactViewer({ artifact }: { artifact: Artifact }) {
           ref={(el) => {
             scrollContainerRef.current = el;
           }}
+          onScroll={(e) => {
+            const el = e.currentTarget;
+            const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 150;
+            setHideWatermark(atBottom);
+          }}
         >
           {artifact.sections.map((section, index) => {
             const isLast = index === artifact.sections.length - 1;
@@ -182,7 +189,7 @@ export function ArtifactViewer({ artifact }: { artifact: Artifact }) {
             href="https://sharestrata.com?ref=artifact-watermark"
             target="_blank"
             rel="noopener noreferrer"
-            className="fixed bottom-4 left-2 sm:left-4 z-40 flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/30 backdrop-blur-sm opacity-70 hover:opacity-90 transition-opacity"
+            className={`fixed bottom-4 left-2 sm:left-4 z-40 flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/30 backdrop-blur-sm transition-opacity ${hideWatermark ? "opacity-0 pointer-events-none" : "opacity-70 hover:opacity-90"}`}
           >
             <Layers className="h-4 w-4" style={{ color: "var(--color-muted-foreground)" }} />
             <span className="text-xs font-medium" style={{ color: "var(--color-muted-foreground)" }}>

@@ -155,7 +155,7 @@ function CounterCard({
           <Icon className="h-3.5 w-3.5" />
         </div>
         {counter.sublabel && (
-          <span className="text-xs text-muted truncate">{counter.sublabel}</span>
+          <span className="text-xs text-muted line-clamp-2">{counter.sublabel}</span>
         )}
       </div>
 
@@ -585,7 +585,7 @@ export function GuidedJourney({
 
       {/* Counter cards */}
       {counters.length > 0 && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
           {counters.map((counter, i) => (
             <CounterCard
               key={counter.id}

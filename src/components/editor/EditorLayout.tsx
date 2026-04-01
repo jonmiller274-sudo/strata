@@ -359,7 +359,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                     id={`preview-${section.id}`}
                     className={`relative transition-opacity duration-200 rounded-xl ${
                       editor.selectedSectionId && editor.selectedSectionId !== section.id
-                        ? "opacity-50"
+                        ? "opacity-75"
                         : editor.selectedSectionId === section.id
                         ? "opacity-100 ring-1 ring-accent/50"
                         : "opacity-100"
