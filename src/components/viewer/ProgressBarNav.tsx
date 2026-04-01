@@ -128,7 +128,7 @@ export function ProgressBarNav({
           {title}
         </span>
         {subtitle && (
-          <>
+          <span className="hidden sm:inline">
             <span
               style={{
                 margin: "0 8px",
@@ -148,7 +148,7 @@ export function ProgressBarNav({
             >
               {subtitle}
             </span>
-          </>
+          </span>
         )}
       </div>
     </>
