@@ -229,4 +229,32 @@ Keep infrastructure boring. Ship in 4 weeks.
 
 ---
 
-*Last updated: 2026-03-28*
+## Post-Build Review Process (Mandatory for Major Features)
+
+After completing a major feature build (multi-commit, multi-file, or multi-session work), run both reviews in parallel before pushing or deploying:
+
+### 1. Codex CLI Review (bugs, security, code quality)
+Run via subagent from project root:
+```bash
+# Standard review against the base commit
+codex review --base <last-known-good-commit>
+
+# Adversarial security review (especially for auth, upload, API endpoints)
+codex review --base <last-known-good-commit> "Focus on security vulnerabilities, auth bypasses, injection risks, race conditions, file upload vulnerabilities, and edge cases that could cause data loss or break in production"
+```
+
+### 2. Committee Review (product, design, UX, architecture)
+Run via `superpowers:code-reviewer` subagent. The committee reviews all new code against the design doc from four lenses:
+- **Product Advisor** — Does implementation match the plan? Will users find and use features?
+- **Design Advisor** — Visual consistency, hover states, transitions, intuitive UX?
+- **Tech Advisor** — Code quality, error handling, state management, edge cases?
+- **Skeptic** — What's most likely to break? What will users complain about first?
+
+### 3. Synthesize and Act
+Combine findings from both reviews into a single report. Fix critical issues before pushing. Flag non-critical issues as follow-up tasks.
+
+**Only push and deploy after both reviews pass.**
+
+---
+
+*Last updated: 2026-03-31*
