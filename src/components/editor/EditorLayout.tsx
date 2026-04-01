@@ -13,7 +13,7 @@ import { AddSection } from "./AddSection";
 import { InlineEditor } from "./InlineEditor";
 import { DocumentSettings } from "./DocumentSettings";
 import { FirstEditHint } from "./FirstEditHint";
-import { ArrowLeft, List, Plus, Sparkles, SlidersHorizontal } from "lucide-react";
+import { ArrowLeft, List, Menu, Plus, Sparkles, SlidersHorizontal, X as XIcon } from "lucide-react";
 import Link from "next/link";
 
 type SidebarTab = "sections" | "ai" | "settings";
@@ -37,6 +37,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
   const chat = useAiChat();
   const [activeTab, setActiveTab] = useState<SidebarTab>("sections");
   const [showAddSection, setShowAddSection] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [pendingSuggestion, setPendingSuggestion] = useState<PendingSuggestion | null>(null);
 
   useEffect(() => {
@@ -178,17 +179,31 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
 
   return (
     <div className="h-screen flex flex-col bg-background text-foreground" style={paletteStyle}>
-      <TopBar
-        slug={editor.artifact.slug}
-        saveStatus={editor.saveStatus}
-        isPublished={editor.artifact.is_published}
-        onPublishToggle={async () => {
-          editor.updateArtifactField("is_published", !editor.artifact.is_published);
-          await autoSave.save();
-        }}
-      />
+      <div className="relative">
+        <TopBar
+          slug={editor.artifact.slug}
+          saveStatus={editor.saveStatus}
+          isPublished={editor.artifact.is_published}
+          onPublishToggle={async () => {
+            editor.updateArtifactField("is_published", !editor.artifact.is_published);
+            await autoSave.save();
+          }}
+        />
+        {/* Mobile sidebar toggle — visible below md breakpoint */}
+        <button
+          onClick={() => setSidebarOpen((v) => !v)}
+          className="md:hidden absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+          aria-label="Toggle sidebar"
+        >
+          {sidebarOpen ? <XIcon className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+        </button>
+      </div>
       <div className="flex-1 flex overflow-hidden">
-        <div className="w-[360px] border-r border-white/10 flex flex-col shrink-0">
+        <div
+          className={`w-[280px] lg:w-[360px] border-r border-white/10 flex flex-col shrink-0 ${
+            sidebarOpen ? "flex" : "hidden"
+          } md:flex`}
+        >
           <div className="px-4 py-3 border-b border-white/10">
             <div className="flex items-center gap-2 mb-1">
               <Link
