@@ -182,10 +182,10 @@ export function ArtifactViewer({ artifact }: { artifact: Artifact }) {
             href="https://sharestrata.com?ref=artifact"
             target="_blank"
             rel="noopener noreferrer"
-            className="fixed bottom-4 left-4 z-40 flex items-center gap-1.5 opacity-50 hover:opacity-80 transition-opacity"
+            className="fixed bottom-4 left-4 z-40 flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/20 backdrop-blur-sm opacity-60 hover:opacity-90 transition-opacity"
           >
             <Layers className="h-4 w-4" style={{ color: "var(--color-muted-foreground)" }} />
-            <span className="text-[11px] font-medium" style={{ color: "var(--color-muted-foreground)" }}>
+            <span className="text-xs font-medium" style={{ color: "var(--color-muted-foreground)" }}>
               Strata
             </span>
           </a>
