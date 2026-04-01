@@ -118,10 +118,18 @@ export function ProgressBarNav({
         style={{ top: "10px", right: "16px" }}
       >
         <button
-          onClick={() => {
-            navigator.clipboard.writeText(window.location.href);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
+          onClick={async () => {
+            try {
+              if (navigator.share) {
+                await navigator.share({ url: window.location.href });
+              } else {
+                await navigator.clipboard.writeText(window.location.href);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+              }
+            } catch {
+              // User cancelled share or clipboard failed — do nothing
+            }
           }}
           className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-white/10 transition-colors"
           title="Copy link"
