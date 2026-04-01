@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Lightbulb, AlertTriangle, Quote } from "lucide-react";
 import type { RichTextSection } from "@/types/artifact";
 import { cn } from "@/lib/utils/cn";
+import { FormattedText } from "../FormattedText";
 
 const CALLOUT_STYLES = {
   insight: {
@@ -56,7 +57,7 @@ export function RichTextCollapsible({
 
       {/* Summary — always visible */}
       <div className="mt-6 text-lg leading-relaxed text-foreground/90 whitespace-pre-line">
-        {content.summary}
+        <FormattedText text={content.summary} />
       </div>
 
       {/* Callout */}
@@ -80,7 +81,7 @@ export function RichTextCollapsible({
             );
           })()}
           <p className="text-sm leading-relaxed text-foreground/80">
-            {content.callout.text}
+            <FormattedText text={content.callout.text} />
           </p>
         </div>
       )}
@@ -111,7 +112,7 @@ export function RichTextCollapsible({
                 className="overflow-hidden"
               >
                 <div className="mt-4 rounded-xl bg-surface p-6 text-foreground/80 leading-relaxed whitespace-pre-line">
-                  {content.detail}
+                  <FormattedText text={content.detail!} />
                 </div>
               </motion.div>
             )}

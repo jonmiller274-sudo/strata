@@ -4,22 +4,7 @@ import { motion } from "framer-motion";
 import { Check, X } from "lucide-react";
 import type { TierTableSection, TierColumn, TierFeature } from "@/types/artifact";
 import { cn } from "@/lib/utils/cn";
-
-// Render a feature name that may contain **bold** markdown segments
-function FeatureName({ text }: { text: string }) {
-  // Split on **...** markers
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
-  return (
-    <>
-      {parts.map((part, i) => {
-        if (part.startsWith("**") && part.endsWith("**")) {
-          return <strong key={i}>{part.slice(2, -2)}</strong>;
-        }
-        return <span key={i}>{part}</span>;
-      })}
-    </>
-  );
-}
+import { FormattedText } from "../FormattedText";
 
 // Column accent colors for comparison mode
 const COMPARISON_ACCENT = [
@@ -83,7 +68,7 @@ function ComparisonColumn({
                     included ? "font-medium text-foreground/90" : "text-muted-foreground"
                   )}
                 >
-                  <FeatureName text={feature.name} />
+                  <FormattedText text={feature.name} />
                 </span>
               </li>
             );
