@@ -117,6 +117,9 @@ function EditableRichText({
           onChange={(v) => onFieldChange("content.summary", v)}
           multiline
         />
+        <p className="text-[10px] text-muted-foreground/60 mt-1">
+          Supports **bold** formatting
+        </p>
       </div>
 
       {/* Detail (collapsible in viewer, always visible in editor) */}
