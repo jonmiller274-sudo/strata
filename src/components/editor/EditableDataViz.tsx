@@ -81,7 +81,7 @@ export function EditableDataViz({
       <div>
         <div className="flex items-center gap-3 mb-2 text-xs text-muted-foreground uppercase tracking-wider">
           <span className="flex-1 pl-8">{xKey}</span>
-          <span className="w-24">{yKey}</span>
+          <span className="w-36">{yKey}</span>
         </div>
         <ItemManager
           items={data}
@@ -102,7 +102,7 @@ export function EditableDataViz({
                   placeholder="Label"
                 />
               </div>
-              <div className="w-24">
+              <div className="w-36">
                 <input
                   type="text"
                   value={point[yKey] || ""}
@@ -112,7 +112,7 @@ export function EditableDataViz({
                       e.target.value
                     )
                   }
-                  className="w-20 bg-white/5 border border-white/10 rounded px-2 py-1 text-sm text-right"
+                  className="w-full bg-white/5 border border-white/10 rounded px-2 py-1 text-sm text-right"
                 />
               </div>
             </div>
