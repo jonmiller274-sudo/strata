@@ -6,7 +6,7 @@ import { SidebarNav } from "./SidebarNav";
 import { ProgressBarNav } from "./ProgressBarNav";
 import { SectionRenderer } from "./SectionRenderer";
 import { StrataFooter } from "./StrataFooter";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Layers } from "lucide-react";
 
 export function ArtifactViewer({ artifact }: { artifact: Artifact }) {
   const isBeatMode = artifact.layout_mode === "beats";
@@ -175,6 +175,21 @@ export function ArtifactViewer({ artifact }: { artifact: Artifact }) {
 
           <StrataFooter planTier={artifact.plan_tier} />
         </main>
+
+        {/* Persistent watermark — free tier only */}
+        {(!artifact.plan_tier || artifact.plan_tier === "free") && (
+          <a
+            href="https://sharestrata.com?ref=artifact"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="fixed bottom-4 left-4 z-40 flex items-center gap-1.5 opacity-50 hover:opacity-80 transition-opacity"
+          >
+            <Layers className="h-4 w-4" style={{ color: "var(--color-muted-foreground)" }} />
+            <span className="text-[11px] font-medium" style={{ color: "var(--color-muted-foreground)" }}>
+              Strata
+            </span>
+          </a>
+        )}
       </div>
     );
   }

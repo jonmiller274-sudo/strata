@@ -17,12 +17,19 @@ export function StrataFooter({ planTier = "free" }: StrataFooterProps) {
       style={{ scrollSnapAlign: "end", minHeight: "30vh" }}
     >
       <div className="mx-auto flex max-w-4xl w-full items-center justify-between">
-        <div className="flex items-center gap-2 text-footer-text">
+        <a
+          href="https://sharestrata.com?ref=artifact"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 text-footer-text hover:text-foreground transition-colors"
+        >
           <Layers className="h-4 w-4" />
           <span className="text-sm">Made with Strata</span>
-        </div>
+        </a>
         <a
-          href="/create"
+          href="https://sharestrata.com?ref=artifact"
+          target="_blank"
+          rel="noopener noreferrer"
           className="text-sm text-accent hover:text-accent-hover transition-colors"
         >
           Create your own &rarr;
