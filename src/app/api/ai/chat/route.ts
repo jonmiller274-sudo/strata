@@ -100,10 +100,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Inject current content context into the first user message
+    // Inject current content context into the LAST user message so the AI
+    // always has fresh document state, not just the state from the first turn.
     const contextSuffix = buildContextMessage(context);
+    const lastUserIndex = messages.reduce(
+      (last, m, i) => (m.role === "user" ? i : last),
+      -1
+    );
     const apiMessages = messages.map((m, i) => {
-      if (i === 0 && m.role === "user") {
+      if (i === lastUserIndex && m.role === "user") {
         return { ...m, content: m.content + contextSuffix };
       }
       return m;
