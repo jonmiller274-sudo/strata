@@ -137,16 +137,16 @@ function PhasesEditor({
       addLabel="Add phase"
       minItems={1}
       renderItem={(phase, i) => (
-        <div className="flex items-center gap-3 bg-white/5 rounded-lg p-3 border border-white/10">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 bg-white/5 rounded-lg p-3 border border-white/10">
           <input
             type="color"
             value={phase.color}
             onChange={(e) =>
               onFieldChange(`content.phases.${i}.color`, e.target.value)
             }
-            className="w-6 h-6 rounded cursor-pointer border-0 bg-transparent"
+            className="w-6 h-6 rounded cursor-pointer border-0 bg-transparent shrink-0"
           />
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-[120px]">
             <InlineEditor
               value={phase.name}
               onChange={(v) =>
@@ -154,7 +154,7 @@ function PhasesEditor({
               }
             />
           </div>
-          <div className="text-xs text-muted-foreground shrink-0">
+          <div className="text-xs text-muted-foreground w-full sm:w-auto">
             <InlineEditor
               value={phase.day_range}
               onChange={(v) =>
@@ -221,9 +221,10 @@ function EventsEditor({
         const phase = phases.find((p) => p.id === event.phase_id);
         return (
           <div className="bg-white/5 rounded-lg p-3 border border-white/10 space-y-2">
-            <div className="flex items-center gap-3">
+            {/* Row 1: Day + Title + Phase — stacks vertically below lg */}
+            <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-3">
               {/* Day number */}
-              <div className="w-14 shrink-0">
+              <div className="w-full lg:w-14 lg:shrink-0">
                 <label className="text-[10px] text-muted-foreground uppercase tracking-wider block mb-1">
                   Day
                 </label>
@@ -236,11 +237,11 @@ function EventsEditor({
                       parseInt(e.target.value) || 0
                     )
                   }
-                  className="w-full bg-white/10 rounded px-1.5 py-0.5 text-sm outline-none ring-1 ring-white/10 focus:ring-accent/50"
+                  className="w-full lg:w-14 bg-white/10 rounded px-1.5 py-0.5 text-sm outline-none ring-1 ring-white/10 focus:ring-accent/50"
                 />
               </div>
               {/* Title */}
-              <div className="flex-1 min-w-0">
+              <div className="w-full lg:flex-1 lg:min-w-0">
                 <label className="text-[10px] text-muted-foreground uppercase tracking-wider block mb-1">
                   Title
                 </label>
@@ -252,7 +253,7 @@ function EventsEditor({
                 />
               </div>
               {/* Phase dropdown */}
-              <div className="shrink-0">
+              <div className="w-full lg:shrink-0">
                 <label className="text-[10px] text-muted-foreground uppercase tracking-wider block mb-1">
                   Phase
                 </label>
@@ -264,7 +265,7 @@ function EventsEditor({
                       e.target.value
                     )
                   }
-                  className="block bg-white/10 rounded px-1.5 py-0.5 text-sm outline-none ring-1 ring-white/10 focus:ring-accent/50"
+                  className="block w-full lg:w-auto bg-white/10 rounded px-1.5 py-0.5 text-sm outline-none ring-1 ring-white/10 focus:ring-accent/50"
                   style={{
                     borderLeft: phase
                       ? `3px solid ${phase.color}`
@@ -279,9 +280,9 @@ function EventsEditor({
                 </select>
               </div>
             </div>
-            {/* Label */}
-            <div className="flex gap-3">
-              <div className="w-14 shrink-0">
+            {/* Row 2: Label + Description */}
+            <div className="flex flex-col lg:flex-row gap-2 lg:gap-3">
+              <div className="w-full lg:w-14 lg:shrink-0">
                 <label className="text-[10px] text-muted-foreground uppercase tracking-wider block mb-1">
                   Label
                 </label>
@@ -293,7 +294,7 @@ function EventsEditor({
                   className="text-xs"
                 />
               </div>
-              <div className="flex-1">
+              <div className="w-full lg:flex-1">
                 <label className="text-[10px] text-muted-foreground uppercase tracking-wider block mb-1">
                   Description
                 </label>
@@ -307,10 +308,10 @@ function EventsEditor({
                 />
               </div>
             </div>
-            {/* Optional tags */}
-            <div className="flex gap-3 text-xs">
+            {/* Row 3: Optional tags — wrap on small screens */}
+            <div className="flex flex-wrap gap-3 text-xs">
               {event.product !== undefined && (
-                <div>
+                <div className="min-w-[100px]">
                   <label className="text-[10px] text-muted-foreground uppercase tracking-wider block mb-1">
                     Product
                   </label>
@@ -325,7 +326,7 @@ function EventsEditor({
                 </div>
               )}
               {event.spend_delta !== undefined && (
-                <div>
+                <div className="min-w-[80px]">
                   <label className="text-[10px] text-muted-foreground uppercase tracking-wider block mb-1">
                     Spend
                   </label>
