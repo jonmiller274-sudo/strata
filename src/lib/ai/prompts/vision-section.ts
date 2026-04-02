@@ -32,7 +32,7 @@ ${SECTION_SCHEMA}
 - KPI cards, dashboards, stats/numbers → "metric-dashboard"
 - Roadmaps, timelines, step-by-step processes → "timeline"
 - Charts, graphs, data visualizations → "data-viz"
-- Product architectures, system diagrams, hub-and-spoke → "hub-mockup"
+- Product architectures, system diagrams, hub-and-spoke → "hub-mockup" (use "layers" format for hierarchical/layered diagrams)
 - Lists of items with details (personas, case studies, features) → "expandable-cards"
 - Paragraphs, executive summaries, key insights → "rich-text"
 

@@ -74,6 +74,7 @@ interface SectionBase {
   id: string;
   title: string;
   subtitle?: string;
+  image_url?: string; // Optional reference image (uploaded screenshot)
 }
 
 // ===== 1. Rich Text with Collapsible Detail =====
@@ -200,6 +201,11 @@ export interface DataVizSection extends SectionBase {
 }
 
 // ===== 7. Hub/Product Mockup =====
+export interface HubMockupLayer {
+  label: string; // "Company", "Platform", "Products", etc.
+  nodes: HubNode[];
+}
+
 export interface HubMockupSection extends SectionBase {
   type: "hub-mockup";
   content: {
@@ -207,6 +213,7 @@ export interface HubMockupSection extends SectionBase {
     nodes: HubNode[];
     connections?: HubConnection[];
     description?: string;
+    layers?: HubMockupLayer[]; // When present, render as layered hierarchy instead of flat grid
   };
 }
 

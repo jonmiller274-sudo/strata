@@ -77,60 +77,65 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
       const controller = new AbortController();
       abortControllerRef.current = controller;
 
-      // Convert to base64
-      const reader = new FileReader();
-      reader.onload = async () => {
-        const dataUrl = reader.result as string;
-        setPendingImagePreview(dataUrl);
+      // Show preview while uploading
+      const previewUrl = URL.createObjectURL(file);
+      setPendingImagePreview(previewUrl);
 
-        // Strip data URL prefix to get raw base64
-        const base64 = dataUrl.split(",")[1];
-        const mimeType = file.type as "image/png" | "image/jpeg" | "image/webp";
+      // Generate a section ID upfront so we can use it for the storage path
+      const sectionId = `section-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 
-        try {
-          // Pass edit key if present (for key-based auth bypass)
-          const urlKey = new URLSearchParams(window.location.search).get("key");
-          const apiUrl = urlKey
-            ? `/api/ai/vision-to-section?key=${encodeURIComponent(urlKey)}`
-            : "/api/ai/vision-to-section";
-          const res = await fetch(apiUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              imageBase64: base64,
-              mimeType,
-              context: {
-                title: editor.artifact.title,
-                existingSectionTypes: editor.artifact.sections.map((s) => s.type),
-              },
-            }),
-            signal: AbortSignal.any([controller.signal, AbortSignal.timeout(30_000)]),
-          });
+      try {
+        // Upload image to Supabase Storage via our API route
+        const urlKey = new URLSearchParams(window.location.search).get("key");
+        const apiUrl = urlKey
+          ? `/api/upload/image?key=${encodeURIComponent(urlKey)}`
+          : "/api/upload/image";
 
-          if (!res.ok) {
-            const errData = await res.json().catch(() => ({}));
-            throw new Error(errData.error || `Request failed (${res.status})`);
-          }
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("artifactId", editor.artifact.id);
+        formData.append("sectionId", sectionId);
 
-          const data = await res.json();
-          editor.addSection(data.section as Section, insertIndex);
-        } catch (err) {
-          if (err instanceof DOMException && err.name === "AbortError") {
-            // User cancelled — silently ignore
-          } else if (err instanceof DOMException && err.name === "TimeoutError") {
-            setImageError("Image processing timed out. Try a simpler image.");
-          } else {
-            const msg = err instanceof Error ? err.message : "Failed to process image";
-            setImageError(msg);
-          }
-        } finally {
-          abortControllerRef.current = null;
-          setIsProcessingImage(false);
-          setPendingImageIndex(null);
-          setPendingImagePreview(null);
+        const res = await fetch(apiUrl, {
+          method: "POST",
+          body: formData,
+          signal: controller.signal,
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || `Upload failed (${res.status})`);
         }
-      };
-      reader.readAsDataURL(file);
+
+        const { url: imageUrl } = await res.json();
+
+        // Create a rich-text section with the image URL and empty content
+        const newSection: Section = {
+          id: sectionId,
+          type: "rich-text",
+          title: file.name.replace(/\.[^.]+$/, "").replace(/[-_]/g, " "),
+          subtitle: "",
+          image_url: imageUrl,
+          content: {
+            summary: "",
+          },
+        };
+
+        editor.addSection(newSection, insertIndex);
+      } catch (err) {
+        if (err instanceof DOMException && err.name === "AbortError") {
+          // User cancelled — silently ignore
+        } else {
+          const msg = err instanceof Error ? err.message : "Failed to upload image";
+          setImageError(msg);
+        }
+      } finally {
+        URL.revokeObjectURL(previewUrl);
+        abortControllerRef.current = null;
+        setIsProcessingImage(false);
+        setPendingImageIndex(null);
+        setPendingImagePreview(null);
+      }
     },
     [editor, isProcessingImage]
   );
@@ -571,7 +576,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                         )}
                         <div className="relative flex flex-col items-center gap-3 text-center">
                           <Loader2 className="w-6 h-6 text-accent animate-spin" />
-                          <p className="text-sm text-muted-foreground">Creating section from image...</p>
+                          <p className="text-sm text-muted-foreground">Uploading image...</p>
                           <button
                             onClick={() => {
                               abortControllerRef.current?.abort();
@@ -609,6 +614,9 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                         onFieldChange={(path, value) =>
                           editor.updateSectionField(section.id, path, value)
                         }
+                        onReplaceSection={(updated) =>
+                          editor.updateSection(section.id, () => updated)
+                        }
                       />
                       {chat.isLoading && editor.selectedSectionId === section.id && (
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse rounded-lg" />
@@ -641,7 +649,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                   )}
                   <div className="relative flex flex-col items-center gap-3 text-center">
                     <Loader2 className="w-6 h-6 text-accent animate-spin" />
-                    <p className="text-sm text-muted-foreground">Creating section from image...</p>
+                    <p className="text-sm text-muted-foreground">Uploading image...</p>
                     <button
                       onClick={() => {
                         setIsProcessingImage(false);

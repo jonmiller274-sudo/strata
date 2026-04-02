@@ -23,6 +23,15 @@ export function ArtifactViewer({ artifact }: { artifact: Artifact }) {
   // Hide watermark when near bottom (prevents overlap with footer)
   const [hideWatermark, setHideWatermark] = useState(false);
 
+  // Reset scroll to top on mount (prevents browser restoring mid-page position)
+  useEffect(() => {
+    if (!isBeatMode) return;
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.scrollTo(0, 0);
+    }
+  }, [isBeatMode]);
+
   // Keyboard navigation for beats mode
   const getActiveBeatIndex = useCallback(() => {
     // Find the beat that occupies the most of the viewport

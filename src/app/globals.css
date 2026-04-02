@@ -167,7 +167,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 80px 80px 60px;
+  padding: 100px 80px 60px;
   position: relative;
 }
 

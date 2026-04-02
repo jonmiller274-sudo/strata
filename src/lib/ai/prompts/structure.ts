@@ -89,6 +89,19 @@ Note: only set numeric_value for numbers under 10000 that should animate. For fo
 }
 
 7. "hub-mockup" content:
+
+For HIERARCHICAL diagrams (org charts, architecture layers, flow-down structures), use "layers":
+{
+  "center": { "id": "top-id", "label": "Top Node", "description": "Root element" },
+  "nodes": [],
+  "layers": [
+    { "label": "Level Name", "nodes": [{ "id": "n1", "label": "Node", "description": "Desc" }] },
+    { "label": "Next Level", "nodes": [{ "id": "n2", "label": "Node 2", "description": "Desc" }] }
+  ],
+  "description": "Overall description"
+}
+
+For FLAT hub-and-spoke diagrams (one center with surrounding items), use the classic format:
 {
   "center": { "id": "center-id", "label": "Central Hub", "description": "Core element", "color": "#6366f1" },
   "nodes": [
@@ -99,6 +112,8 @@ Note: only set numeric_value for numbers under 10000 that should animate. For fo
   ],
   "description": "Overall description"
 }
+
+IMPORTANT: If the image shows a TOP-DOWN HIERARCHY (Company > Division > Product > etc.), ALWAYS use "layers". Each hierarchy level = one layer. Order top to bottom.
 `;
 
 const TEMPLATE_GUIDANCE: Record<TemplateType, string> = {

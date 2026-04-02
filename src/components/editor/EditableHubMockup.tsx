@@ -1,6 +1,6 @@
 "use client";
 
-import type { HubMockupSection } from "@/types/artifact";
+import type { HubMockupSection, HubNode } from "@/types/artifact";
 import { InlineEditor } from "./InlineEditor";
 import { ItemManager } from "./ItemManager";
 
@@ -13,6 +13,34 @@ export function EditableHubMockup({
   section,
   onFieldChange,
 }: EditableHubMockupProps) {
+  const layers = section.content.layers;
+
+  // Layered mode: show layer editor
+  if (layers && layers.length > 0) {
+    return (
+      <div className="space-y-5">
+        <LayersEditor
+          layers={layers}
+          onFieldChange={onFieldChange}
+        />
+
+        {/* Description */}
+        <div>
+          <label className="text-xs text-muted-foreground uppercase tracking-wider mb-1 block">
+            Description
+          </label>
+          <InlineEditor
+            value={section.content.description || ""}
+            onChange={(v) => onFieldChange("content.description", v)}
+            multiline
+            placeholder="Add description..."
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // Legacy flat mode: center + nodes + connections
   const nodes = section.content.nodes;
   const connections = section.content.connections || [];
   const allNodes = [section.content.center, ...nodes];
@@ -50,7 +78,6 @@ export function EditableHubMockup({
           }}
           onRemove={(index) => {
             const removedId = nodes[index].id;
-            // Also remove connections referencing this node
             const updatedConnections = connections.filter(
               (c) => c.from !== removedId && c.to !== removedId
             );
@@ -128,7 +155,7 @@ export function EditableHubMockup({
                   </option>
                 ))}
               </select>
-              <span className="text-xs text-muted-foreground">→</span>
+              <span className="text-xs text-muted-foreground">&rarr;</span>
               <select
                 value={conn.to}
                 onChange={(e) =>
@@ -173,6 +200,108 @@ export function EditableHubMockup({
         />
       </div>
     </div>
+  );
+}
+
+/** Layers editor — edit layer labels and nodes within each layer */
+function LayersEditor({
+  layers,
+  onFieldChange,
+}: {
+  layers: HubMockupSection["content"]["layers"];
+  onFieldChange: (path: string, value: unknown) => void;
+}) {
+  if (!layers) return null;
+
+  return (
+    <ItemManager
+      items={layers}
+      getItemId={(layer, i) => `layer-${layer.label}-${i}`}
+      onAdd={() => {
+        const newLayer = {
+          label: "New Layer",
+          nodes: [
+            {
+              id: crypto.randomUUID(),
+              label: "New Node",
+              description: "Click to edit",
+            },
+          ],
+        };
+        onFieldChange("content.layers", [...layers, newLayer]);
+      }}
+      onRemove={(index) => {
+        onFieldChange(
+          "content.layers",
+          layers.filter((_, i) => i !== index)
+        );
+      }}
+      onReorder={(from, to) => {
+        const updated = [...layers];
+        const [moved] = updated.splice(from, 1);
+        updated.splice(to, 0, moved);
+        onFieldChange("content.layers", updated);
+      }}
+      addLabel="Add layer"
+      minItems={1}
+      renderItem={(layer, layerIndex) => (
+        <div className="space-y-2">
+          {/* Layer label */}
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-muted-foreground/60 font-mono">
+              L{layerIndex + 1}
+            </span>
+            <div className="flex-1">
+              <InlineEditor
+                value={layer.label}
+                onChange={(v) =>
+                  onFieldChange(`content.layers.${layerIndex}.label`, v)
+                }
+                className="text-xs font-semibold uppercase tracking-wider text-accent"
+              />
+            </div>
+          </div>
+
+          {/* Nodes in this layer */}
+          <ItemManager
+            items={layer.nodes}
+            getItemId={(node) => node.id}
+            onAdd={() => {
+              const newNode: HubNode = {
+                id: crypto.randomUUID(),
+                label: "New Node",
+                description: "Click to edit",
+              };
+              onFieldChange(`content.layers.${layerIndex}.nodes`, [
+                ...layer.nodes,
+                newNode,
+              ]);
+            }}
+            onRemove={(index) => {
+              onFieldChange(
+                `content.layers.${layerIndex}.nodes`,
+                layer.nodes.filter((_, i) => i !== index)
+              );
+            }}
+            onReorder={(from, to) => {
+              const updated = [...layer.nodes];
+              const [moved] = updated.splice(from, 1);
+              updated.splice(to, 0, moved);
+              onFieldChange(`content.layers.${layerIndex}.nodes`, updated);
+            }}
+            addLabel="Add node"
+            minItems={1}
+            renderItem={(node, i) => (
+              <NodeEditor
+                prefix={`content.layers.${layerIndex}.nodes.${i}`}
+                node={node}
+                onFieldChange={onFieldChange}
+              />
+            )}
+          />
+        </div>
+      )}
+    />
   );
 }
 

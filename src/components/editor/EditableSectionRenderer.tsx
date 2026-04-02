@@ -1,5 +1,7 @@
 "use client";
 
+import { useState, useCallback } from "react";
+import { ImageIcon, Sparkles, Loader2, X as XIcon } from "lucide-react";
 import type {
   Section,
   RichTextSection,
@@ -21,12 +23,14 @@ interface EditableSectionRendererProps {
   section: Section;
   isSelected?: boolean;
   onFieldChange: (path: string, value: unknown) => void;
+  onReplaceSection?: (updated: Section) => void;
 }
 
 export function EditableSectionRenderer({
   section,
   isSelected = false,
   onFieldChange,
+  onReplaceSection,
 }: EditableSectionRendererProps) {
   // Check if this section type has a custom editable renderer.
   // Custom renderers handle their own layout, so we add editable title/subtitle.
@@ -51,11 +55,26 @@ export function EditableSectionRenderer({
   return (
     <div>
       {/* Section type badge */}
-      <div className="mb-3">
+      <div className="mb-3 flex items-center gap-2">
         <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium tracking-wide uppercase bg-accent/10 text-accent/80 border border-accent/20">
           {SECTION_TYPE_LABELS[section.type]}
         </span>
+        {section.image_url && (
+          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-medium tracking-wide uppercase bg-blue-500/10 text-blue-400/80 border border-blue-500/20">
+            <ImageIcon className="w-3 h-3" />
+            Image
+          </span>
+        )}
       </div>
+
+      {/* Image preview + actions (when section has an uploaded image) */}
+      {section.image_url && (
+        <SectionImagePreview
+          section={section}
+          onFieldChange={onFieldChange}
+          onReplaceSection={onReplaceSection}
+        />
+      )}
 
       {/* Editable title */}
       <h2 className="text-2xl font-bold tracking-tight mb-2">
@@ -78,6 +97,128 @@ export function EditableSectionRenderer({
 
       {/* Section content */}
       <EditableContent section={section} isSelected={isSelected} onFieldChange={onFieldChange} />
+    </div>
+  );
+}
+
+/** Image preview with Extract Structure and Remove buttons */
+function SectionImagePreview({
+  section,
+  onFieldChange,
+  onReplaceSection,
+}: {
+  section: Section;
+  onFieldChange: (path: string, value: unknown) => void;
+  onReplaceSection?: (updated: Section) => void;
+}) {
+  const [isExtracting, setIsExtracting] = useState(false);
+  const [extractError, setExtractError] = useState<string | null>(null);
+
+  const handleExtractStructure = useCallback(async () => {
+    if (!section.image_url || isExtracting || !onReplaceSection) return;
+
+    setIsExtracting(true);
+    setExtractError(null);
+
+    try {
+      // Fetch the image and convert to base64
+      const imgRes = await fetch(section.image_url);
+      const blob = await imgRes.blob();
+      const base64 = await new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const dataUrl = reader.result as string;
+          resolve(dataUrl.split(",")[1]);
+        };
+        reader.readAsDataURL(blob);
+      });
+
+      const mimeType = blob.type as "image/png" | "image/jpeg" | "image/webp";
+
+      // Call the vision API
+      const urlKey = new URLSearchParams(window.location.search).get("key");
+      const apiUrl = urlKey
+        ? `/api/ai/vision-to-section?key=${encodeURIComponent(urlKey)}`
+        : "/api/ai/vision-to-section";
+
+      const res = await fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          imageBase64: base64,
+          mimeType,
+          context: { title: section.title },
+        }),
+        signal: AbortSignal.timeout(30_000),
+      });
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || `Request failed (${res.status})`);
+      }
+
+      const data = await res.json();
+      const aiSection = data.section as Section;
+
+      // Replace the section content but keep original id, image_url, and title if AI didn't improve it
+      onReplaceSection({
+        ...aiSection,
+        id: section.id,
+        image_url: section.image_url,
+        title: aiSection.title || section.title,
+        subtitle: aiSection.subtitle || section.subtitle,
+      });
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "TimeoutError") {
+        setExtractError("Timed out. Try a simpler image.");
+      } else {
+        setExtractError(err instanceof Error ? err.message : "Failed to extract structure");
+      }
+    } finally {
+      setIsExtracting(false);
+    }
+  }, [section, isExtracting, onReplaceSection]);
+
+  // Check if this section has meaningful content (not just the image)
+  const hasContent =
+    section.type !== "rich-text" ||
+    !!(section as RichTextSection).content.summary?.trim();
+
+  return (
+    <div className="mb-4 rounded-lg border border-white/10 overflow-hidden">
+      <img
+        src={section.image_url}
+        alt={section.title || "Section image"}
+        className="w-full"
+      />
+      <div className="flex items-center gap-2 p-2 bg-white/5">
+        {!hasContent && onReplaceSection && (
+          <button
+            onClick={handleExtractStructure}
+            disabled={isExtracting}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-accent/10 text-accent hover:bg-accent/20 transition-colors disabled:opacity-50"
+          >
+            {isExtracting ? (
+              <Loader2 className="w-3 h-3 animate-spin" />
+            ) : (
+              <Sparkles className="w-3 h-3" />
+            )}
+            {isExtracting ? "Extracting..." : "Extract structure"}
+          </button>
+        )}
+        <button
+          onClick={() => onFieldChange("image_url", undefined)}
+          className="flex items-center gap-1 px-2 py-1.5 rounded-md text-xs text-muted-foreground hover:text-red-400 transition-colors ml-auto"
+        >
+          <XIcon className="w-3 h-3" />
+          Remove image
+        </button>
+      </div>
+      {extractError && (
+        <div className="px-3 py-2 text-xs text-red-400 bg-red-500/5 border-t border-red-500/10">
+          {extractError}
+        </div>
+      )}
     </div>
   );
 }
