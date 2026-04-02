@@ -58,6 +58,31 @@ export function HubMockup({
   section: HubMockupSection;
 }) {
   const { center, nodes, connections } = section.content;
+  const imageUrl = (section.content as Record<string, unknown>).image_url as string | undefined;
+
+  // If an image_url is provided, render the image directly instead of the node layout
+  if (imageUrl) {
+    return (
+      <div>
+        <h2 className="text-2xl font-bold tracking-tight">{section.title}</h2>
+        {section.subtitle && (
+          <p className="mt-2 text-muted">{section.subtitle}</p>
+        )}
+        <div className="mt-8 flex justify-center">
+          <img
+            src={imageUrl}
+            alt={section.title}
+            className="w-full max-w-3xl rounded-xl"
+          />
+        </div>
+        {section.content.description && (
+          <p className="mt-6 text-sm text-muted leading-relaxed">
+            {section.content.description}
+          </p>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div>

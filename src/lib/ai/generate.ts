@@ -9,7 +9,8 @@ type AITask =
   | "rewrite-document"
   | "suggest-type"
   | "journey-generate"
-  | "journey-refine";
+  | "journey-refine"
+  | "vision-section";
 
 type Provider = "anthropic" | "openai";
 
@@ -56,6 +57,13 @@ const MODEL_ROUTING: Record<AITask, ModelConfig> = {
     outputPricePer1M: 75,
   },
   "journey-refine": {
+    provider: "anthropic",
+    model: "claude-sonnet-4-20250514",
+    inputPricePer1M: 3,
+    outputPricePer1M: 15,
+  },
+  // Vision — image-to-section extraction
+  "vision-section": {
     provider: "anthropic",
     model: "claude-sonnet-4-20250514",
     inputPricePer1M: 3,
@@ -168,6 +176,65 @@ async function callOpenAI(
 
   return {
     content: message.content,
+    usage: { inputTokens, outputTokens, model: config.model, cost },
+  };
+}
+
+// --- Anthropic Vision ---
+
+export type ImageMediaType = "image/png" | "image/jpeg" | "image/webp";
+
+export async function generateVision(
+  task: AITask,
+  systemPrompt: string,
+  userMessage: string,
+  imageBase64: string,
+  mimeType: ImageMediaType,
+  options: { maxTokens: number; temperature: number }
+): Promise<{ content: string; usage: AIUsage }> {
+  const config = MODEL_ROUTING[task];
+  const client = getAnthropicClient();
+
+  const response = await client.messages.create({
+    model: config.model,
+    max_tokens: options.maxTokens,
+    temperature: options.temperature,
+    system: systemPrompt,
+    messages: [
+      {
+        role: "user",
+        content: [
+          {
+            type: "image",
+            source: {
+              type: "base64",
+              media_type: mimeType,
+              data: imageBase64,
+            },
+          },
+          { type: "text", text: userMessage },
+        ],
+      },
+    ],
+  });
+
+  const textBlock = response.content.find((block) => block.type === "text");
+  if (!textBlock || textBlock.type !== "text") {
+    throw new Error("No text response from Anthropic vision");
+  }
+
+  const inputTokens = response.usage.input_tokens;
+  const outputTokens = response.usage.output_tokens;
+  const cost =
+    (inputTokens / 1_000_000) * config.inputPricePer1M +
+    (outputTokens / 1_000_000) * config.outputPricePer1M;
+
+  console.log(
+    `[AI ${task}] model=${config.model} input=${inputTokens} output=${outputTokens} cost=$${cost.toFixed(4)}`
+  );
+
+  return {
+    content: textBlock.text,
     usage: { inputTokens, outputTokens, model: config.model, cost },
   };
 }

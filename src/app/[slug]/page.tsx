@@ -42,22 +42,25 @@ export async function generateMetadata({
 
 interface Props {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ preview?: string }>;
+  searchParams: Promise<{ preview?: string; key?: string }>;
 }
 
 export default async function ArtifactPage({ params, searchParams }: Props) {
   const { slug } = await params;
-  const { preview } = await searchParams;
+  const { preview, key } = await searchParams;
 
   let artifact;
 
   if (preview === "true") {
-    // Preview of unpublished draft — requires auth + ownership
+    // Preview of unpublished draft — requires auth + ownership OR edit key
+    const editKey = process.env.STRATA_EDIT_KEY?.trim();
+    const hasValidKey = editKey && key === editKey;
+
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
     const draft = await getArtifactForEdit(slug);
 
-    if (!draft || !user || draft.author_id !== user.id) {
+    if (!draft || (!hasValidKey && (!user || draft.author_id !== user.id))) {
       notFound();
     }
     artifact = draft;

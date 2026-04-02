@@ -1,6 +1,7 @@
 "use client";
 
 import { ExternalLink } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import type { SaveStatus } from "@/hooks/useEditor";
 
 interface TopBarProps {
@@ -16,6 +17,10 @@ export function TopBar({
   isPublished,
   onPublishToggle,
 }: TopBarProps) {
+  const searchParams = useSearchParams();
+  const editKey = searchParams.get("key");
+  const previewUrl = `/${slug}?preview=true${editKey ? `&key=${editKey}` : ""}`;
+
   return (
     <div className="h-10 border-b border-white/10 flex items-center justify-end px-4 gap-4 shrink-0">
       {/* Save status */}
@@ -27,7 +32,7 @@ export function TopBar({
 
       {/* Preview in new tab */}
       <a
-        href={`/${slug}?preview=true`}
+        href={previewUrl}
         target="_blank"
         rel="noopener noreferrer"
         className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"

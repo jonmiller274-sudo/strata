@@ -1,6 +1,6 @@
 import type { TemplateType } from "@/types/artifact";
 
-const SECTION_SCHEMA = `
+export const SECTION_SCHEMA = `
 Each section must have:
 - "id": a unique kebab-case string (e.g., "market-overview")
 - "type": one of "rich-text", "expandable-cards", "timeline", "tier-table", "metric-dashboard", "data-viz", "hub-mockup"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Artifact, Section } from "@/types/artifact";
 import { useEditor } from "@/hooks/useEditor";
@@ -14,7 +14,7 @@ import { AddSection } from "./AddSection";
 import { InlineEditor } from "./InlineEditor";
 import { DocumentSettings } from "./DocumentSettings";
 import { FirstEditHint } from "./FirstEditHint";
-import { ArrowLeft, List, Menu, Plus, Sparkles, SlidersHorizontal, X as XIcon } from "lucide-react";
+import { ArrowLeft, ImageIcon, List, Loader2, Menu, Plus, Sparkles, SlidersHorizontal, X as XIcon } from "lucide-react";
 import Link from "next/link";
 
 type SidebarTab = "sections" | "ai" | "settings";
@@ -32,6 +32,9 @@ interface PendingSuggestion {
   documentData?: { title: string; subtitle?: string; sections: Section[] };
 }
 
+const ALLOWED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp"];
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+
 export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact }) {
   const editor = useEditor(initialArtifact);
   const autoSave = useAutoSave(editor.artifact, editor.saveStatus, editor.setSaveStatus);
@@ -40,6 +43,159 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
   const [showAddSection, setShowAddSection] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [pendingSuggestion, setPendingSuggestion] = useState<PendingSuggestion | null>(null);
+
+  // --- Image drop zone state ---
+  const [isProcessingImage, setIsProcessingImage] = useState(false);
+  const [pendingImageIndex, setPendingImageIndex] = useState<number | null>(null);
+  const [pendingImagePreview, setPendingImagePreview] = useState<string | null>(null);
+  const [dropTargetIndex, setDropTargetIndex] = useState<number | null>(null);
+  const [imageError, setImageError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  const processImageFile = useCallback(
+    async (file: File, insertIndex: number) => {
+      // Guard: only one image at a time
+      if (isProcessingImage) return;
+
+      // Validate type
+      if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+        setImageError("Only PNG, JPEG, and WebP images are supported.");
+        return;
+      }
+      // Validate size
+      if (file.size > MAX_IMAGE_SIZE) {
+        setImageError("Image must be under 5MB.");
+        return;
+      }
+
+      setImageError(null);
+      setIsProcessingImage(true);
+      setPendingImageIndex(insertIndex);
+
+      // Set up abort controller for cancellation
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
+
+      // Convert to base64
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const dataUrl = reader.result as string;
+        setPendingImagePreview(dataUrl);
+
+        // Strip data URL prefix to get raw base64
+        const base64 = dataUrl.split(",")[1];
+        const mimeType = file.type as "image/png" | "image/jpeg" | "image/webp";
+
+        try {
+          // Pass edit key if present (for key-based auth bypass)
+          const urlKey = new URLSearchParams(window.location.search).get("key");
+          const apiUrl = urlKey
+            ? `/api/ai/vision-to-section?key=${encodeURIComponent(urlKey)}`
+            : "/api/ai/vision-to-section";
+          const res = await fetch(apiUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              imageBase64: base64,
+              mimeType,
+              context: {
+                title: editor.artifact.title,
+                existingSectionTypes: editor.artifact.sections.map((s) => s.type),
+              },
+            }),
+            signal: AbortSignal.any([controller.signal, AbortSignal.timeout(30_000)]),
+          });
+
+          if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            throw new Error(errData.error || `Request failed (${res.status})`);
+          }
+
+          const data = await res.json();
+          editor.addSection(data.section as Section, insertIndex);
+        } catch (err) {
+          if (err instanceof DOMException && err.name === "AbortError") {
+            // User cancelled — silently ignore
+          } else if (err instanceof DOMException && err.name === "TimeoutError") {
+            setImageError("Image processing timed out. Try a simpler image.");
+          } else {
+            const msg = err instanceof Error ? err.message : "Failed to process image";
+            setImageError(msg);
+          }
+        } finally {
+          abortControllerRef.current = null;
+          setIsProcessingImage(false);
+          setPendingImageIndex(null);
+          setPendingImagePreview(null);
+        }
+      };
+      reader.readAsDataURL(file);
+    },
+    [editor, isProcessingImage]
+  );
+
+  const getDropIndex = useCallback(
+    (clientY: number) => {
+      const sections = editor.artifact.sections;
+      for (let i = 0; i < sections.length; i++) {
+        const el = document.getElementById(`preview-${sections[i].id}`);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (clientY < rect.top + rect.height / 2) return i;
+        }
+      }
+      return sections.length;
+    },
+    [editor.artifact.sections]
+  );
+
+  const handleDragOver = useCallback(
+    (e: React.DragEvent) => {
+      if (!e.dataTransfer.types.includes("Files")) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "copy";
+      setDropTargetIndex(getDropIndex(e.clientY));
+    },
+    [getDropIndex]
+  );
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    // Only clear if leaving the container entirely
+    const relatedTarget = e.relatedTarget as HTMLElement | null;
+    const currentTarget = e.currentTarget as HTMLElement;
+    if (!relatedTarget || !currentTarget.contains(relatedTarget)) {
+      setDropTargetIndex(null);
+    }
+  }, []);
+
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      setDropTargetIndex(null);
+
+      if (isProcessingImage) return;
+
+      const insertIndex = dropTargetIndex ?? editor.artifact.sections.length;
+      const file = e.dataTransfer.files[0];
+      if (file) {
+        processImageFile(file, insertIndex);
+      }
+    },
+    [dropTargetIndex, editor.artifact.sections.length, processImageFile, isProcessingImage]
+  );
+
+  const handleFileInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        processImageFile(file, editor.artifact.sections.length);
+      }
+      // Reset so same file can be re-selected
+      e.target.value = "";
+    },
+    [editor.artifact.sections.length, processImageFile]
+  );
 
   useEffect(() => {
     if (!editor.selectedSectionId) return;
@@ -273,13 +429,21 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                         onReorder={editor.reorderSections}
                       />
                     </div>
-                    <div className="p-2 border-t border-white/10">
+                    <div className="p-2 border-t border-white/10 space-y-2">
                       <button
                         onClick={() => setShowAddSection(true)}
                         className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-dashed border-white/20 text-sm text-muted-foreground hover:border-white/40 hover:text-foreground transition-colors"
                       >
                         <Plus className="w-4 h-4" />
                         Add Section
+                      </button>
+                      <button
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={isProcessingImage}
+                        className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-dashed border-white/20 text-sm text-muted-foreground hover:border-white/40 hover:text-foreground transition-colors disabled:opacity-50"
+                      >
+                        <ImageIcon className="w-4 h-4" />
+                        {isProcessingImage ? "Processing..." : "Add from Image"}
                       </button>
                     </div>
                   </>
@@ -313,7 +477,36 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto" id="editor-preview">
+        <div
+          className={`flex-1 overflow-y-auto relative ${
+            dropTargetIndex !== null ? "ring-2 ring-accent/30 ring-inset" : ""
+          }`}
+          id="editor-preview"
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
+          {/* Hidden file input for "Add from Image" button */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            className="hidden"
+            onChange={handleFileInputChange}
+          />
+
+          {/* Image error toast */}
+          {imageError && (
+            <div className="sticky top-0 z-20 mx-auto max-w-4xl px-6 pt-3">
+              <div className="flex items-center gap-2 rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-2.5 text-sm text-red-400">
+                <span className="flex-1">{imageError}</span>
+                <button onClick={() => setImageError(null)} className="text-red-400/60 hover:text-red-400">
+                  <XIcon className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
+
           <div className="mx-auto max-w-4xl px-6 py-12">
             <header className="mb-12">
               <div className="relative"><FirstEditHint /><h1 className="text-3xl font-bold tracking-tight">
@@ -354,33 +547,128 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                 const displaySection = docSuggestionSection ?? sectionSuggestion ?? section;
 
                 return (
-                  <div
-                    key={section.id}
-                    id={`preview-${section.id}`}
-                    className={`relative transition-opacity duration-200 rounded-xl p-6 ${
-                      index > 0 ? "border-t border-white/[0.06] pt-10" : ""
-                    } ${
-                      editor.selectedSectionId && editor.selectedSectionId !== section.id
-                        ? "opacity-75"
-                        : editor.selectedSectionId === section.id
-                        ? "opacity-100 ring-1 ring-accent/50 bg-white/[0.02]"
-                        : "opacity-100"
-                    }`}
-                    onClick={() => editor.setSelectedSectionId(section.id)}
-                  >
-                    <EditableSectionRenderer
-                      section={displaySection}
-                      isSelected={editor.selectedSectionId === section.id}
-                      onFieldChange={(path, value) =>
-                        editor.updateSectionField(section.id, path, value)
-                      }
-                    />
-                    {chat.isLoading && editor.selectedSectionId === section.id && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse rounded-lg" />
+                  <div key={section.id}>
+                    {/* Drop indicator line — shown before this section */}
+                    {dropTargetIndex === index && (
+                      <div className="flex items-center gap-2 py-2">
+                        <div className="flex-1 h-0.5 bg-accent rounded-full" />
+                        <span className="text-xs text-accent font-medium whitespace-nowrap">
+                          <ImageIcon className="w-3 h-3 inline mr-1" />
+                          Drop image here
+                        </span>
+                        <div className="flex-1 h-0.5 bg-accent rounded-full" />
+                      </div>
                     )}
+
+                    {/* Image processing placeholder — shown at this position */}
+                    {isProcessingImage && pendingImageIndex === index && (
+                      <div className="relative rounded-xl border border-dashed border-accent/40 bg-accent/5 p-8 mb-8 overflow-hidden">
+                        {pendingImagePreview && (
+                          <div
+                            className="absolute inset-0 bg-cover bg-center opacity-10"
+                            style={{ backgroundImage: `url(${pendingImagePreview})` }}
+                          />
+                        )}
+                        <div className="relative flex flex-col items-center gap-3 text-center">
+                          <Loader2 className="w-6 h-6 text-accent animate-spin" />
+                          <p className="text-sm text-muted-foreground">Creating section from image...</p>
+                          <button
+                            onClick={() => {
+                              abortControllerRef.current?.abort();
+                              abortControllerRef.current = null;
+                              setIsProcessingImage(false);
+                              setPendingImageIndex(null);
+                              setPendingImagePreview(null);
+                            }}
+                            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                        {/* Shimmer animation */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse" />
+                      </div>
+                    )}
+
+                    <div
+                      id={`preview-${section.id}`}
+                      className={`relative transition-opacity duration-200 rounded-xl p-6 ${
+                        index > 0 ? "border-t border-white/[0.06] pt-10" : ""
+                      } ${
+                        editor.selectedSectionId && editor.selectedSectionId !== section.id
+                          ? "opacity-75"
+                          : editor.selectedSectionId === section.id
+                          ? "opacity-100 ring-1 ring-accent/50 bg-white/[0.02]"
+                          : "opacity-100"
+                      }`}
+                      onClick={() => editor.setSelectedSectionId(section.id)}
+                    >
+                      <EditableSectionRenderer
+                        section={displaySection}
+                        isSelected={editor.selectedSectionId === section.id}
+                        onFieldChange={(path, value) =>
+                          editor.updateSectionField(section.id, path, value)
+                        }
+                      />
+                      {chat.isLoading && editor.selectedSectionId === section.id && (
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse rounded-lg" />
+                      )}
+                    </div>
                   </div>
                 );
               })}
+
+              {/* Drop indicator at end of sections */}
+              {dropTargetIndex === editor.artifact.sections.length && (
+                <div className="flex items-center gap-2 py-2">
+                  <div className="flex-1 h-0.5 bg-accent rounded-full" />
+                  <span className="text-xs text-accent font-medium whitespace-nowrap">
+                    <ImageIcon className="w-3 h-3 inline mr-1" />
+                    Drop image here
+                  </span>
+                  <div className="flex-1 h-0.5 bg-accent rounded-full" />
+                </div>
+              )}
+
+              {/* Image processing placeholder at end */}
+              {isProcessingImage && pendingImageIndex === editor.artifact.sections.length && (
+                <div className="relative rounded-xl border border-dashed border-accent/40 bg-accent/5 p-8 overflow-hidden">
+                  {pendingImagePreview && (
+                    <div
+                      className="absolute inset-0 bg-cover bg-center opacity-10"
+                      style={{ backgroundImage: `url(${pendingImagePreview})` }}
+                    />
+                  )}
+                  <div className="relative flex flex-col items-center gap-3 text-center">
+                    <Loader2 className="w-6 h-6 text-accent animate-spin" />
+                    <p className="text-sm text-muted-foreground">Creating section from image...</p>
+                    <button
+                      onClick={() => {
+                        setIsProcessingImage(false);
+                        setPendingImageIndex(null);
+                        setPendingImagePreview(null);
+                      }}
+                      className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse" />
+                </div>
+              )}
+
+              {/* Persistent drop hint — always visible when not processing */}
+              {!isProcessingImage && dropTargetIndex === null && (
+                <div
+                  className="mt-8 flex items-center justify-center gap-3 rounded-xl border border-dashed border-white/10 hover:border-white/20 py-6 cursor-pointer transition-colors group"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <ImageIcon className="w-5 h-5 text-muted-foreground/50 group-hover:text-muted-foreground transition-colors" />
+                  <span className="text-sm text-muted-foreground/50 group-hover:text-muted-foreground transition-colors">
+                    Drop a screenshot here or click to add a section from an image
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         </div>

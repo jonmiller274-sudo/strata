@@ -59,7 +59,7 @@ export function InlineEditor({
           e.stopPropagation();
           setIsEditing(true);
         }}
-        className={`cursor-text rounded transition-all hover:ring-1 hover:ring-accent/30 hover:bg-accent/5 ${
+        className={`block w-full cursor-text rounded transition-all hover:ring-1 hover:ring-accent/30 hover:bg-accent/5 break-words ${
           !value ? "text-muted-foreground italic" : ""
         } ${className}`}
       >
@@ -77,7 +77,7 @@ export function InlineEditor({
       if (e.key === "Escape") cancel();
       if (e.key === "Enter" && !multiline) commit();
     },
-    className: `bg-white/10 rounded px-1 -mx-1 outline-none ring-1 ring-accent/50 ${className}`,
+    className: `w-full bg-white/10 rounded px-1 outline-none ring-1 ring-accent/50 ${className}`,
   };
 
   if (multiline) {
