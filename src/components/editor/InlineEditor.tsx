@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { FormattedText } from "@/components/viewer/FormattedText";
 
 interface InlineEditorProps {
   value: string;
@@ -8,6 +9,8 @@ interface InlineEditorProps {
   multiline?: boolean;
   className?: string;
   placeholder?: string;
+  /** Render **bold** markdown in the non-editing display */
+  renderFormatted?: boolean;
 }
 
 export function InlineEditor({
@@ -16,6 +19,7 @@ export function InlineEditor({
   multiline = false,
   className = "",
   placeholder = "Click to edit...",
+  renderFormatted = false,
 }: InlineEditorProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [draft, setDraft] = useState(value);
@@ -59,7 +63,7 @@ export function InlineEditor({
           !value ? "text-muted-foreground italic" : ""
         } ${className}`}
       >
-        {value || placeholder}
+        {!value ? placeholder : renderFormatted ? <FormattedText text={value} /> : value}
       </span>
     );
   }

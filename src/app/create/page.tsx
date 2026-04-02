@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import {
   Layers,
@@ -11,6 +11,9 @@ import {
   Eye,
   Send,
   RotateCcw,
+  Upload,
+  FileText,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils/cn";
@@ -48,6 +51,53 @@ export default function CreatePage() {
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const [artifactUsage, setArtifactUsage] = useState({ current: 0, limit: 2 });
   const [error, setError] = useState<string | null>(null);
+  const [isExtractingPdf, setIsExtractingPdf] = useState(false);
+  const [pdfFileName, setPdfFileName] = useState<string | null>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handlePdfUpload = useCallback(async (file: File) => {
+    if (file.type !== "application/pdf") {
+      setError("Please upload a PDF file");
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      setError("PDF is too large (max 10MB)");
+      return;
+    }
+
+    setIsExtractingPdf(true);
+    setError(null);
+    setPdfFileName(file.name);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/upload/pdf", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Failed to extract text from PDF");
+        setPdfFileName(null);
+        return;
+      }
+
+      setContent(data.text);
+      if (data.truncated) {
+        setError(`PDF text was truncated to 50,000 characters (${data.pageCount} pages extracted)`);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to upload PDF");
+      setPdfFileName(null);
+    } finally {
+      setIsExtractingPdf(false);
+    }
+  }, []);
 
   async function handleStructure() {
     if (!templateType || !content.trim()) return;
@@ -270,13 +320,77 @@ export default function CreatePage() {
                 />
               </div>
 
+              {/* PDF Upload Zone */}
+              <div>
+                <label className="text-sm font-medium text-muted">
+                  Upload a PDF
+                </label>
+                <div
+                  onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
+                  onDragLeave={() => setIsDragOver(false)}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    setIsDragOver(false);
+                    const file = e.dataTransfer.files[0];
+                    if (file) handlePdfUpload(file);
+                  }}
+                  onClick={() => fileInputRef.current?.click()}
+                  className={cn(
+                    "mt-1 flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed px-6 py-8 cursor-pointer transition-all",
+                    isDragOver
+                      ? "border-accent bg-accent/10"
+                      : "border-border hover:border-accent/40 hover:bg-card-hover",
+                    isExtractingPdf && "pointer-events-none opacity-70"
+                  )}
+                >
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".pdf,application/pdf"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handlePdfUpload(file);
+                      e.target.value = "";
+                    }}
+                  />
+                  {isExtractingPdf ? (
+                    <>
+                      <Loader2 className="h-6 w-6 text-accent animate-spin" />
+                      <p className="text-sm text-muted">Extracting text from PDF...</p>
+                    </>
+                  ) : pdfFileName ? (
+                    <>
+                      <FileText className="h-6 w-6 text-accent" />
+                      <p className="text-sm text-foreground font-medium">{pdfFileName}</p>
+                      <p className="text-xs text-muted-foreground">Text extracted — edit below or upload a different file</p>
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="h-6 w-6 text-muted-foreground" />
+                      <p className="text-sm text-muted">
+                        <span className="text-accent font-medium">Browse</span> or drop a PDF here
+                      </p>
+                      <p className="text-xs text-muted-foreground">Strategy docs, decks, and reports up to 10MB</p>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="h-px flex-1 bg-border" />
+                <span className="text-xs text-muted-foreground">or paste text below</span>
+                <div className="h-px flex-1 bg-border" />
+              </div>
+
+              {/* Raw content textarea */}
               <div>
                 <label className="text-sm font-medium text-muted">
                   Raw content
                 </label>
                 <textarea
                   value={content}
-                  onChange={(e) => setContent(e.target.value)}
+                  onChange={(e) => { setContent(e.target.value); if (pdfFileName) setPdfFileName(null); }}
                   placeholder="Paste your strategy notes, outlines, bullet points, docs — anything you want to turn into an interactive artifact..."
                   rows={16}
                   className="mt-1 w-full rounded-xl border border-border bg-card px-4 py-3 text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent resize-y font-mono text-sm leading-relaxed"

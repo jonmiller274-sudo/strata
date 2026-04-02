@@ -48,6 +48,17 @@ export type SectionType =
   | "hub-mockup"
   | "guided-journey";
 
+export const SECTION_TYPE_LABELS: Record<SectionType, string> = {
+  "rich-text": "Rich Text",
+  "expandable-cards": "Cards",
+  timeline: "Timeline",
+  "tier-table": "Tier Table",
+  "metric-dashboard": "Metrics",
+  "data-viz": "Chart",
+  "hub-mockup": "Hub",
+  "guided-journey": "Journey",
+};
+
 export type Section =
   | RichTextSection
   | ExpandableCardGridSection

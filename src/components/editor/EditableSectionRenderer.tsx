@@ -9,8 +9,8 @@ import type {
   TierTableSection,
   GuidedJourneySection,
 } from "@/types/artifact";
+import { SECTION_TYPE_LABELS } from "@/types/artifact";
 import { SectionRenderer } from "@/components/viewer/SectionRenderer";
-import { FormattedText } from "@/components/viewer/FormattedText";
 import { InlineEditor } from "./InlineEditor";
 import { ItemManager } from "./ItemManager";
 import { EditableGuidedJourney } from "./EditableGuidedJourney";
@@ -50,6 +50,13 @@ export function EditableSectionRenderer({
 
   return (
     <div>
+      {/* Section type badge */}
+      <div className="mb-3">
+        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium tracking-wide uppercase bg-accent/10 text-accent/80 border border-accent/20">
+          {SECTION_TYPE_LABELS[section.type]}
+        </span>
+      </div>
+
       {/* Editable title */}
       <h2 className="text-2xl font-bold tracking-tight mb-2">
         <InlineEditor
@@ -119,49 +126,40 @@ function EditableRichText({
     <div className="space-y-4">
       {/* Summary */}
       <div className="text-foreground/90 leading-relaxed">
-        {isSelected ? (
-          <>
-            <InlineEditor
-              value={section.content.summary}
-              onChange={(v) => onFieldChange("content.summary", v)}
-              multiline
-            />
-            <p className="text-[10px] text-muted-foreground/60 mt-1">
-              Supports **bold** formatting
-            </p>
-          </>
-        ) : (
-          <FormattedText text={section.content.summary || ""} />
+        <InlineEditor
+          value={section.content.summary}
+          onChange={(v) => onFieldChange("content.summary", v)}
+          multiline
+          renderFormatted
+        />
+        {isSelected && (
+          <p className="text-[10px] text-muted-foreground/60 mt-1">
+            Supports **bold** formatting
+          </p>
         )}
       </div>
 
       {/* Detail (collapsible in viewer, always visible in editor) */}
       {section.content.detail && (
         <div className="text-foreground/70 leading-relaxed border-l-2 border-white/10 pl-4">
-          {isSelected ? (
-            <InlineEditor
-              value={section.content.detail}
-              onChange={(v) => onFieldChange("content.detail", v)}
-              multiline
-            />
-          ) : (
-            <FormattedText text={section.content.detail} />
-          )}
+          <InlineEditor
+            value={section.content.detail}
+            onChange={(v) => onFieldChange("content.detail", v)}
+            multiline
+            renderFormatted
+          />
         </div>
       )}
 
       {/* Callout */}
       {section.content.callout && (
         <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-          {isSelected ? (
-            <InlineEditor
-              value={section.content.callout.text}
-              onChange={(v) => onFieldChange("content.callout.text", v)}
-              multiline
-            />
-          ) : (
-            <FormattedText text={section.content.callout.text} />
-          )}
+          <InlineEditor
+            value={section.content.callout.text}
+            onChange={(v) => onFieldChange("content.callout.text", v)}
+            multiline
+            renderFormatted
+          />
         </div>
       )}
     </div>

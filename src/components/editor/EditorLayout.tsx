@@ -357,11 +357,13 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                   <div
                     key={section.id}
                     id={`preview-${section.id}`}
-                    className={`relative transition-opacity duration-200 rounded-xl ${
+                    className={`relative transition-opacity duration-200 rounded-xl p-6 ${
+                      index > 0 ? "border-t border-white/[0.06] pt-10" : ""
+                    } ${
                       editor.selectedSectionId && editor.selectedSectionId !== section.id
                         ? "opacity-75"
                         : editor.selectedSectionId === section.id
-                        ? "opacity-100 ring-1 ring-accent/50"
+                        ? "opacity-100 ring-1 ring-accent/50 bg-white/[0.02]"
                         : "opacity-100"
                     }`}
                     onClick={() => editor.setSelectedSectionId(section.id)}

@@ -17,7 +17,8 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useState } from "react";
-import type { Section, SectionType } from "@/types/artifact";
+import type { Section } from "@/types/artifact";
+import { SECTION_TYPE_LABELS } from "@/types/artifact";
 import { GripVertical, Trash2 } from "lucide-react";
 
 function getItemCount(section: Section): string | null {
@@ -39,16 +40,6 @@ function getItemCount(section: Section): string | null {
   }
 }
 
-const SECTION_TYPE_LABELS: Record<SectionType, string> = {
-  "rich-text": "Rich Text",
-  "expandable-cards": "Cards",
-  timeline: "Timeline",
-  "tier-table": "Tier Table",
-  "metric-dashboard": "Metrics",
-  "data-viz": "Chart",
-  "hub-mockup": "Hub",
-  "guided-journey": "Journey",
-};
 
 interface SortableSectionListProps {
   sections: Section[];
