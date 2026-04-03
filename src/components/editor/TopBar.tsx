@@ -1,6 +1,6 @@
 "use client";
 
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Eye } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import type { SaveStatus } from "@/hooks/useEditor";
 
@@ -9,6 +9,7 @@ interface TopBarProps {
   saveStatus: SaveStatus;
   isPublished: boolean;
   onPublishToggle: () => void;
+  onMobilePreview?: () => void;
 }
 
 export function TopBar({
@@ -16,6 +17,7 @@ export function TopBar({
   saveStatus,
   isPublished,
   onPublishToggle,
+  onMobilePreview,
 }: TopBarProps) {
   const searchParams = useSearchParams();
   const editKey = searchParams.get("key");
@@ -29,6 +31,17 @@ export function TopBar({
         {saveStatus === "saving" && "Saving..."}
         {saveStatus === "unsaved" && "Unsaved changes"}
       </span>
+
+      {/* Mobile preview button — only on small screens when section selected */}
+      {onMobilePreview && (
+        <button
+          onClick={onMobilePreview}
+          className="lg:hidden flex items-center gap-1 text-xs text-accent hover:text-accent/80 transition-colors"
+        >
+          <Eye className="w-3 h-3" />
+          Preview
+        </button>
+      )}
 
       {/* Preview in new tab */}
       <a

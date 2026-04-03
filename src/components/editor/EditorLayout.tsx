@@ -14,6 +14,8 @@ import { AddSection } from "./AddSection";
 import { InlineEditor } from "./InlineEditor";
 import { DocumentSettings } from "./DocumentSettings";
 import { FirstEditHint } from "./FirstEditHint";
+import { SplitViewLayout } from "./SplitViewLayout";
+import { MobilePreviewSheet } from "./MobilePreviewSheet";
 import { ArrowLeft, ImageIcon, List, Loader2, Menu, Plus, Sparkles, SlidersHorizontal, X as XIcon } from "lucide-react";
 import Link from "next/link";
 
@@ -43,6 +45,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
   const [showAddSection, setShowAddSection] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [pendingSuggestion, setPendingSuggestion] = useState<PendingSuggestion | null>(null);
+  const [mobilePreviewOpen, setMobilePreviewOpen] = useState(false);
 
   // --- Image drop zone state ---
   const [isProcessingImage, setIsProcessingImage] = useState(false);
@@ -202,6 +205,10 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
     [editor.artifact.sections.length, processImageFile]
   );
 
+  const triggerImageUpload = useCallback(() => {
+    fileInputRef.current?.click();
+  }, []);
+
   useEffect(() => {
     if (!editor.selectedSectionId) return;
     const el = document.getElementById(`preview-${editor.selectedSectionId}`);
@@ -234,6 +241,18 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
   const selectedSection = editor.selectedSectionId
     ? editor.artifact.sections.find((s) => s.id === editor.selectedSectionId) ?? null
     : null;
+
+  // Version of selected section with AI suggestion overlaid (for preview panel)
+  const previewSelectedSection = (() => {
+    if (!selectedSection) return null;
+    if (
+      pendingSuggestion?.type === "section" &&
+      pendingSuggestion.sectionData?.id === selectedSection.id
+    ) {
+      return pendingSuggestion.sectionData;
+    }
+    return selectedSection;
+  })();
 
   const handleSendMessage = useCallback(
     async (content: string) => {
@@ -350,6 +369,11 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
             editor.updateArtifactField("is_published", !editor.artifact.is_published);
             await autoSave.save();
           }}
+          onMobilePreview={
+            editor.selectedSectionId && selectedSection
+              ? () => setMobilePreviewOpen(true)
+              : undefined
+          }
         />
         {/* Mobile sidebar toggle — visible below md breakpoint */}
         <button
@@ -361,6 +385,60 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
         </button>
       </div>
       <div className="flex-1 flex overflow-hidden">
+        {/* Desktop split view — when section is selected and screen is wide enough */}
+        {editor.selectedSectionId && selectedSection ? (
+          <motion.div
+            key="split-view"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="hidden lg:flex flex-1"
+          >
+            <SplitViewLayout
+              artifact={editor.artifact}
+              selectedSection={selectedSection}
+              previewSection={previewSelectedSection ?? undefined}
+              selectedSectionIndex={editor.artifact.sections.findIndex(
+                (s) => s.id === editor.selectedSectionId
+              )}
+              onSelectSection={(id) => {
+                if (id === "") {
+                  editor.setSelectedSectionId(null);
+                } else {
+                  editor.setSelectedSectionId(id);
+                }
+              }}
+              onFieldChange={(sectionId, path, value) =>
+                editor.updateSectionField(sectionId, path, value)
+              }
+              onReplaceSection={(sectionId, updated) =>
+                editor.updateSection(sectionId, () => updated)
+              }
+              onDeleteSection={editor.deleteSection}
+              onReorderSections={editor.reorderSections}
+              onAddSection={editor.addSection}
+              onUpdateArtifactField={editor.updateArtifactField}
+              chatMessages={chat.messages}
+              chatIsLoading={chat.isLoading}
+              chatScope={chat.scope}
+              chatActiveSectionId={chat.activeSectionId}
+              onChatSend={handleSendMessage}
+              onChatApply={handleApplySuggestion}
+              onChatDiscard={handleDiscardSuggestion}
+              onChatClear={handleClearHistory}
+              isProcessingImage={isProcessingImage}
+              onTriggerImageUpload={triggerImageUpload}
+            />
+          </motion.div>
+        ) : null}
+
+        {/* Original layout — shown when no section selected, OR on mobile/tablet */}
+        <div
+          className={`flex-1 flex ${
+            editor.selectedSectionId && selectedSection ? "lg:hidden" : ""
+          }`}
+        >
         <div
           className={`w-[280px] lg:w-[360px] border-r border-white/10 flex flex-col shrink-0 ${
             sidebarOpen ? "flex" : "hidden"
@@ -680,7 +758,15 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
             </div>
           </div>
         </div>
+        </div>{/* close original layout wrapper */}
       </div>
+
+      {/* Mobile preview bottom sheet */}
+      <MobilePreviewSheet
+        section={selectedSection}
+        isOpen={mobilePreviewOpen}
+        onClose={() => setMobilePreviewOpen(false)}
+      />
     </div>
   );
 }
