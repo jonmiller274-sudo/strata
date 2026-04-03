@@ -11,7 +11,7 @@ const LAYER_COLORS = [
   "#a78bfa", // violet
   "#f59e0b", // amber
   "#ef4444", // red
-  "#10b981", // emerald
+  "#3b82f6", // blue
 ];
 
 function getLayerColor(layerIndex: number): string {
