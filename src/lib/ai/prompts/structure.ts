@@ -3,7 +3,7 @@ import type { TemplateType } from "@/types/artifact";
 export const SECTION_SCHEMA = `
 Each section must have:
 - "id": a unique kebab-case string (e.g., "market-overview")
-- "type": one of "rich-text", "expandable-cards", "timeline", "tier-table", "metric-dashboard", "data-viz", "hub-mockup"
+- "type": one of "rich-text", "expandable-cards", "timeline", "tier-table", "metric-dashboard", "data-viz", "hub-mockup", "guided-journey"
 - "title": section heading shown in sidebar nav
 - "subtitle": optional brief description
 - "content": type-specific content object (see below)
@@ -121,6 +121,34 @@ For FLAT hub-and-spoke diagrams (one center with surrounding items), use the cla
 }
 
 IMPORTANT: If the image shows a TOP-DOWN HIERARCHY (Company > Division > Product > etc.), ALWAYS use "layers". Each hierarchy level = one layer. Order top to bottom.
+
+8. "guided-journey" content:
+{
+  "phases": [
+    { "id": "phase-1", "name": "Phase Name", "color": "#6366f1", "day_range": "Days 0–14" }
+  ],
+  "counters": [
+    { "id": "counter-1", "label": "Counter Label", "sublabel": "Optional", "icon": "Users", "prefix": "$", "suffix": "", "start_value": 0, "color": "#6366f1" }
+  ],
+  "events": [
+    {
+      "id": "event-1",
+      "day": 1,
+      "label": "Week 1",
+      "title": "Event Title",
+      "description": "What happens at this event (markdown)",
+      "phase_id": "phase-1",
+      "personas": ["Persona Name"],
+      "product": "Product Name",
+      "trigger": { "label": "Trigger Label", "text": "How this gets triggered" },
+      "spend_delta": "+$500",
+      "counter_values": { "counter-1": 100 }
+    }
+  ],
+  "autoplay": true,
+  "interval_ms": 3000
+}
+Note: guided-journey is an interactive animated timeline with counters that update per event. Each event belongs to a phase and sets counter values. Phases define color-coded segments. Counters animate between values as the user steps through events. Use for customer journeys, revenue expansion stories, adoption paths.
 `;
 
 const TEMPLATE_GUIDANCE: Record<TemplateType, string> = {

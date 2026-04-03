@@ -10,7 +10,8 @@ type AITask =
   | "suggest-type"
   | "journey-generate"
   | "journey-refine"
-  | "vision-section";
+  | "vision-section"
+  | "remap-section";
 
 type Provider = "anthropic" | "openai";
 
@@ -64,6 +65,13 @@ const MODEL_ROUTING: Record<AITask, ModelConfig> = {
   },
   // Vision — image-to-section extraction
   "vision-section": {
+    provider: "anthropic",
+    model: "claude-sonnet-4-20250514",
+    inputPricePer1M: 3,
+    outputPricePer1M: 15,
+  },
+  // Remap — change section type with AI content restructuring
+  "remap-section": {
     provider: "anthropic",
     model: "claude-sonnet-4-20250514",
     inputPricePer1M: 3,

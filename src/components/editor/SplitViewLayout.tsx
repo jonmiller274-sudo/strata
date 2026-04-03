@@ -86,6 +86,7 @@ export function SplitViewLayout({
   const [activeTab, setActiveTab] = useState<SidebarTab>("sections");
   const [showAddSection, setShowAddSection] = useState(false);
   const [insertAtPosition, setInsertAtPosition] = useState<number | null>(null);
+  const [typeChangePreview, setTypeChangePreview] = useState<Section | null>(null);
 
   // Close zoom-out when section changes
   useEffect(() => {
@@ -178,13 +179,14 @@ export function SplitViewLayout({
           sectionIndex={selectedSectionIndex}
           onFieldChange={onFieldChange}
           onReplaceSection={onReplaceSection}
+          onPendingPreview={setTypeChangePreview}
         />
       </div>
 
       {/* Preview Panel (right ~50%) */}
       <div className="flex-1 min-w-0">
         <SectionPreviewPanel
-          section={previewSection ?? selectedSection}
+          section={typeChangePreview ?? previewSection ?? selectedSection}
           artifact={artifact}
           isZoomedOut={isZoomedOut}
           onToggleZoom={handleToggleZoom}
