@@ -78,17 +78,41 @@ export function AddSection({ documentTitle, documentSubtitle, onAdd, onCancel }:
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          content: `Document: ${documentTitle}${documentSubtitle ? ` — ${documentSubtitle}` : ""}\n\nGenerate a single "${type}" section for: ${description || type}`,
+          content: `Document: "${documentTitle}"${documentSubtitle ? ` — ${documentSubtitle}` : ""}\n\nGenerate exactly ONE section of type "${type}" about: ${description || type}.\n\nReturn it inside a standard artifact JSON object with a "sections" array containing this single section. The section must have "id", "type", "title", and "content" fields.`,
           templateType: "platform-vision",
         }),
       });
 
-      if (!res.ok) throw new Error("Failed to generate section");
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => null);
+        let errMsg = errBody?.error || "Failed to generate section";
+        // Surface user-friendly messages for known API errors
+        if (errMsg.includes("credit balance")) {
+          errMsg = "AI service credits depleted — contact support";
+        } else if (errMsg.includes("rate limit") || errMsg.includes("rate_limit")) {
+          errMsg = "AI service is busy — try again in a moment";
+        } else if (errMsg.includes("overloaded")) {
+          errMsg = "AI service is temporarily overloaded — try again shortly";
+        }
+        throw new Error(errMsg);
+      }
       const data = await res.json();
 
       // AI returns an artifact with sections — take the first one
-      const section = data.artifact?.sections?.[0];
-      if (!section) throw new Error("No section generated");
+      // The API normalizes various response shapes, but add client-side fallback too
+      let section = data.artifact?.sections?.[0];
+
+      // Fallback: if artifact itself looks like a section (has type + content)
+      if (!section && data.artifact?.type && data.artifact?.content) {
+        section = data.artifact;
+      }
+
+      if (!section) throw new Error("No section generated — try adding a description");
+
+      // Ensure the section has the expected type (AI might have picked a different one)
+      if (section.type !== type) {
+        section = { ...section, type };
+      }
 
       setGeneratedSection(section);
       setStep("review");

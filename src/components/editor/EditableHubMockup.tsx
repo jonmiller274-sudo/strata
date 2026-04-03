@@ -299,6 +299,23 @@ function LayersEditor({
               />
             )}
           />
+
+          {/* Arrow label — only for layers that have a next layer below them */}
+          {layerIndex < layers!.length - 1 && (
+            <div>
+              <label className="text-[10px] text-muted-foreground/60 uppercase tracking-wider mb-1 block">
+                Arrow label
+              </label>
+              <InlineEditor
+                value={layer.transition || ""}
+                onChange={(v) =>
+                  onFieldChange(`content.layers.${layerIndex}.transition`, v || undefined)
+                }
+                placeholder="e.g. 350K cameras generate the distribution"
+                className="text-xs italic text-muted-foreground"
+              />
+            </div>
+          )}
         </div>
       )}
     />

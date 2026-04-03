@@ -34,6 +34,9 @@ ${SECTION_SCHEMA}
 - Charts, graphs, data visualizations → "data-viz"
 - Product architectures, system diagrams, hub-and-spoke → "hub-mockup" (use "layers" format for hierarchical/layered diagrams)
 - Lists of items with details (personas, case studies, features) → "expandable-cards"
+  - If the items are customer testimonials or short quotes: use display_mode "open" and style "quote" per card
+  - If the items have substantial hidden detail: use display_mode "expandable" (default)
+  - If there is a strong synthesis theme across all cards, include a callout
 - Paragraphs, executive summaries, key insights → "rich-text"
 
 ## RULES

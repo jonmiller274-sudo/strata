@@ -21,6 +21,7 @@ import {
   Wand2,
   PanelLeft,
   Maximize2,
+  ImagePlus,
 } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -66,7 +67,7 @@ const sectionTypes = [
     icon: GitBranch,
     name: "Hub Diagrams",
     description:
-      "Interconnected nodes showing how products and teams connect",
+      "Layered architecture diagrams with colored labels, hierarchical views, and connected nodes",
   },
   {
     icon: Compass,
@@ -80,16 +81,16 @@ const steps = [
   {
     icon: FileText,
     step: "01",
-    title: "Paste your content",
+    title: "Drop your content",
     description:
-      "Notes, docs, bullet points — whatever you have. No specific format required.",
+      "Screenshots, images, notes, docs — whatever you have. Drop a screenshot and AI extracts the structure. Or paste text. No specific format required.",
   },
   {
     icon: Sparkles,
     step: "02",
     title: "AI structures it",
     description:
-      "Pick a template. AI maps your content to interactive sections — timelines, card grids, metric dashboards — in seconds.",
+      "Pick a template. AI maps your content to interactive sections — timelines, card grids, metric dashboards. Drop a screenshot? AI turns it into editable, interactive content.",
   },
   {
     icon: PenLine,
@@ -113,6 +114,12 @@ const editorFeatures = [
     title: "Rewrite any section with AI",
     description:
       '\u201CMake it more concise.\u201D \u201CMore persuasive.\u201D \u201CSimplify the language.\u201D One click, instant rewrite — or type your own instructions.',
+  },
+  {
+    icon: ImagePlus,
+    title: "Drop screenshots and images",
+    description:
+      "Drag a screenshot into the editor — AI extracts it into an interactive section. Or embed an image directly. No copy-pasting from other tools.",
   },
   {
     icon: PanelLeft,
@@ -415,7 +422,7 @@ export default function HomePage() {
             </p>
           </motion.div>
 
-          <div className="mt-16 grid gap-8 sm:grid-cols-3">
+          <div className="mt-16 grid gap-8 sm:grid-cols-2">
             {editorFeatures.map((feature, i) => (
               <motion.div
                 key={feature.title}

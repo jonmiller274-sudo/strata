@@ -128,7 +128,7 @@ export function ArtifactViewer({ artifact }: { artifact: Artifact }) {
 
         {/* Scroll-snap container */}
         <main
-          className="beats-container"
+          className={`beats-container${artifact.nav_style !== "progress-bar" ? " lg:ml-[var(--sidebar-width)]" : ""}`}
           ref={(el) => {
             scrollContainerRef.current = el;
           }}

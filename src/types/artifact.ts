@@ -100,6 +100,11 @@ export interface ExpandableCardGridSection extends SectionBase {
   content: {
     columns?: 2 | 3 | 4;
     cards: ExpandableCard[];
+    display_mode?: "expandable" | "open"; // defaults to "expandable"
+    callout?: {
+      type: "insight" | "warning" | "quote";
+      text: string;
+    };
   };
 }
 
@@ -114,6 +119,7 @@ export interface ExpandableCard {
     value: string;
     label: string;
   };
+  style?: "default" | "quote"; // when "quote", renders as testimonial
 }
 
 // ===== 3. Animated Timeline =====
@@ -204,6 +210,7 @@ export interface DataVizSection extends SectionBase {
 export interface HubMockupLayer {
   label: string; // "Company", "Platform", "Products", etc.
   nodes: HubNode[];
+  transition?: string; // Optional label on the arrow below this layer (e.g. "350K cameras generate the distribution")
 }
 
 export interface HubMockupSection extends SectionBase {

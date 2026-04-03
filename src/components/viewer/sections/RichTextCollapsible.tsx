@@ -55,10 +55,12 @@ export function RichTextCollapsible({
         <p className="mt-2 text-muted">{section.subtitle}</p>
       )}
 
-      {/* Summary — always visible */}
-      <div className="mt-6 text-lg leading-relaxed text-foreground/90 whitespace-pre-line">
-        <FormattedText text={content.summary} />
-      </div>
+      {/* Summary — always visible (skip when empty, e.g. pure image-embed sections) */}
+      {content.summary?.trim() && (
+        <div className="mt-6 text-lg leading-relaxed text-foreground/90 whitespace-pre-line">
+          <FormattedText text={content.summary} />
+        </div>
+      )}
 
       {/* Callout */}
       {content.callout && (

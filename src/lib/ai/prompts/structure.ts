@@ -20,6 +20,7 @@ SECTION TYPE SCHEMAS:
 2. "expandable-cards" content:
 {
   "columns": 2 | 3 | 4,
+  "display_mode": "expandable" | "open",
   "cards": [
     {
       "id": "unique-id",
@@ -27,10 +28,16 @@ SECTION TYPE SCHEMAS:
       "summary": "1-2 sentence summary shown by default",
       "detail": "Optional expanded detail text",
       "tags": ["Tag1", "Tag2"],
-      "metric": { "value": "$2.1B", "label": "Valuation" }
+      "metric": { "value": "$2.1B", "label": "Valuation" },
+      "style": "default" | "quote"
     }
-  ]
+  ],
+  "callout": { "type": "insight" | "warning" | "quote", "text": "Synthesis statement tying cards together" }
 }
+Use display_mode "open" for testimonials, customer quotes, or short reference cards where all content should be visible at once. Use "expandable" (default) when cards have detail text worth hiding behind a click.
+Set style "quote" on individual cards that are testimonials or direct customer quotes — these render with italic text and a left accent border instead of a top border.
+Include a callout when there is a strong synthesis insight or theme that ties all the cards together.
+Omit display_mode, style, and callout when not applicable — they are all optional.
 
 3. "timeline" content:
 {

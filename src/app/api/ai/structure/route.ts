@@ -15,6 +15,56 @@ function extractJSON(text: string): string {
   return text;
 }
 
+/**
+ * Normalize AI output into a consistent artifact shape.
+ * The AI might return:
+ * 1. A full artifact: { title, subtitle, sections: [...] }
+ * 2. A single section: { id, type, title, content, ... }
+ * 3. A wrapper with a single section: { section: { ... } }
+ * 4. An array of sections: [{ ... }]
+ *
+ * This function always returns { title, subtitle, sections: [...] }.
+ */
+function normalizeArtifact(parsed: Record<string, unknown>): {
+  title: string;
+  subtitle?: string;
+  sections: Record<string, unknown>[];
+} {
+  // Case 1: Standard artifact shape — has a sections array
+  if (Array.isArray(parsed.sections) && parsed.sections.length > 0) {
+    return parsed as { title: string; subtitle?: string; sections: Record<string, unknown>[] };
+  }
+
+  // Case 2: AI returned a single section object (has "type" and "content" fields)
+  if (parsed.type && parsed.content && typeof parsed.type === "string") {
+    return {
+      title: (parsed.title as string) || "Generated Section",
+      subtitle: parsed.subtitle as string | undefined,
+      sections: [parsed],
+    };
+  }
+
+  // Case 3: Wrapped in a "section" key
+  if (parsed.section && typeof parsed.section === "object") {
+    return {
+      title: (parsed.title as string) || "Generated Section",
+      subtitle: parsed.subtitle as string | undefined,
+      sections: [parsed.section as Record<string, unknown>],
+    };
+  }
+
+  // Case 4: AI returned an array at the top level (unlikely but defensive)
+  if (Array.isArray(parsed)) {
+    return {
+      title: "Generated",
+      sections: parsed,
+    };
+  }
+
+  // Fallback: return as-is and let the caller handle the missing sections
+  return parsed as { title: string; subtitle?: string; sections: Record<string, unknown>[] };
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -48,7 +98,8 @@ export async function POST(req: NextRequest) {
       temperature: 0.7,
     });
 
-    const artifact = JSON.parse(extractJSON(result.content));
+    const raw = JSON.parse(extractJSON(result.content));
+    const artifact = normalizeArtifact(raw);
 
     return NextResponse.json({
       artifact,

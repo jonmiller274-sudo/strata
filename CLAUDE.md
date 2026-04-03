@@ -205,7 +205,7 @@ Full research documents are at: `/Users/JonMiller/Downloads/strata-research-pack
 - **Language:** TypeScript (strict mode)
 - **Styling:** Tailwind CSS v4 (CSS variables via `@theme inline`)
 - **Animations:** Framer Motion 12
-- **AI:** OpenAI GPT-4.1-mini via `openai` SDK (~$0.007/structuring call)
+- **AI:** Anthropic Claude (Sonnet for speed, Opus for quality) via Anthropic SDK
 - **Hosting:** Vercel
 - **Database:** Supabase (`xqmrfhfgrzwrypdwupvh` — `artifacts` table with JSON sections)
 - **Auth:** Supabase Auth (Phase 2+)

@@ -61,15 +61,15 @@ function NodeCard({
   );
 }
 
-/** Arrow connector between layers */
-function LayerArrow({ index }: { index: number }) {
+/** Arrow connector between layers, with optional transition label */
+function LayerArrow({ index, label }: { index: number; label?: string }) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.3, delay: 0.2 + index * 0.08 }}
       viewport={{ once: true }}
-      className="flex justify-center py-3"
+      className="flex flex-col items-center py-3 gap-1"
     >
       <svg width="32" height="48" viewBox="0 0 32 48" className="text-accent/50">
         <line
@@ -80,6 +80,11 @@ function LayerArrow({ index }: { index: number }) {
         />
         <polygon points="10,36 16,46 22,36" fill="currentColor" />
       </svg>
+      {label && (
+        <p className="text-xs italic text-muted-foreground opacity-70 text-center max-w-xs">
+          {label}
+        </p>
+      )}
     </motion.div>
   );
 }
@@ -93,8 +98,10 @@ function LayeredView({ layers, description }: { layers: HubMockupLayer[]; descri
 
         return (
           <div key={layer.label}>
-            {/* Arrow between layers */}
-            {layerIndex > 0 && <LayerArrow index={layerIndex} />}
+            {/* Arrow between layers — label comes from the previous layer's transition field */}
+            {layerIndex > 0 && (
+              <LayerArrow index={layerIndex} label={layers[layerIndex - 1].transition} />
+            )}
 
             {/* Layer label — above nodes */}
             <motion.div

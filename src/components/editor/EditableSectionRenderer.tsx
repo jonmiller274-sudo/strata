@@ -189,7 +189,17 @@ function SectionImagePreview({
       <img
         src={section.image_url}
         alt={section.title || "Section image"}
-        className="w-full"
+        style={{
+          display: "block",
+          /* Use intrinsic width up to container max — never upscale.
+             On retina Macs, screenshots are captured at 2x device pixels.
+             Displaying at natural CSS width means 1 source pixel = 1 CSS pixel
+             = 2 physical pixels, which is perfectly sharp. Forcing width: 100%
+             would upscale small screenshots and cause blurriness. */
+          maxWidth: "100%",
+          width: "auto",
+          height: "auto",
+        } as React.CSSProperties}
       />
       <div className="flex items-center gap-2 p-2 bg-white/5">
         {!hasContent && onReplaceSection && (
@@ -315,6 +325,8 @@ function EditableCardGrid({
   onFieldChange: (path: string, value: unknown) => void;
 }) {
   const cards = section.content.cards;
+  const displayMode = section.content.display_mode ?? "expandable";
+  const callout = section.content.callout;
 
   const handleAdd = () => {
     const newCard = {
@@ -339,42 +351,176 @@ function EditableCardGrid({
   };
 
   return (
-    <ItemManager
-      items={cards}
-      getItemId={(card) => card.id}
-      onAdd={handleAdd}
-      onRemove={handleRemove}
-      onReorder={handleReorder}
-      addLabel="Add card"
-      minItems={1}
-      renderItem={(card, i) => (
-        <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-          <h3 className="font-semibold mb-2">
-            <InlineEditor
-              value={card.title}
-              onChange={(v) => onFieldChange(`content.cards.${i}.title`, v)}
-            />
-          </h3>
-          <div className="text-sm text-foreground/70">
-            <InlineEditor
-              value={card.summary}
-              onChange={(v) => onFieldChange(`content.cards.${i}.summary`, v)}
-              multiline
-            />
-          </div>
-          {card.detail !== undefined && (
-            <div className="text-sm text-foreground/50 mt-2 border-t border-white/10 pt-2">
+    <div className="space-y-4">
+      {/* Display mode toggle */}
+      <div className="flex items-center gap-2">
+        <span className="text-xs text-muted-foreground">Display:</span>
+        {(["expandable", "open"] as const).map((mode) => (
+          <button
+            key={mode}
+            onClick={() => onFieldChange("content.display_mode", mode)}
+            className={`px-2.5 py-1 rounded text-xs transition-colors ${
+              displayMode === mode
+                ? "bg-accent/20 text-accent"
+                : "bg-white/10 text-muted-foreground hover:bg-white/20"
+            }`}
+          >
+            {mode === "expandable" ? "Expandable" : "Always Open"}
+          </button>
+        ))}
+      </div>
+
+      <ItemManager
+        items={cards}
+        getItemId={(card) => card.id}
+        onAdd={handleAdd}
+        onRemove={handleRemove}
+        onReorder={handleReorder}
+        addLabel="Add card"
+        minItems={1}
+        renderItem={(card, i) => (
+          <div className="bg-white/5 rounded-lg p-4 border border-white/10 space-y-2">
+            {/* Card style toggle */}
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-[10px] text-muted-foreground uppercase tracking-wide">Style:</span>
+              {(["default", "quote"] as const).map((s) => (
+                <button
+                  key={s}
+                  onClick={() => onFieldChange(`content.cards.${i}.style`, s)}
+                  className={`px-2 py-0.5 rounded text-[10px] transition-colors ${
+                    (card.style ?? "default") === s
+                      ? "bg-accent/20 text-accent"
+                      : "bg-white/10 text-muted-foreground hover:bg-white/20"
+                  }`}
+                >
+                  {s === "default" ? "Default" : "Quote"}
+                </button>
+              ))}
+            </div>
+
+            <h3 className="font-semibold">
               <InlineEditor
-                value={card.detail || ""}
-                onChange={(v) => onFieldChange(`content.cards.${i}.detail`, v)}
+                value={card.title}
+                onChange={(v) => onFieldChange(`content.cards.${i}.title`, v)}
+              />
+            </h3>
+            <div className="text-sm text-foreground/70">
+              <InlineEditor
+                value={card.summary}
+                onChange={(v) => onFieldChange(`content.cards.${i}.summary`, v)}
                 multiline
-                placeholder="Add detail..."
               />
             </div>
-          )}
-        </div>
-      )}
-    />
+            {card.detail !== undefined && (
+              <div className="text-sm text-foreground/50 border-t border-white/10 pt-2">
+                <InlineEditor
+                  value={card.detail || ""}
+                  onChange={(v) => onFieldChange(`content.cards.${i}.detail`, v)}
+                  multiline
+                  placeholder="Add detail..."
+                />
+              </div>
+            )}
+
+            {/* Tags editor */}
+            <div className="pt-1">
+              <label className="text-[10px] text-muted-foreground uppercase tracking-wide block mb-1">
+                Tags (comma-separated)
+              </label>
+              <input
+                type="text"
+                value={(card.tags ?? []).join(", ")}
+                onChange={(e) => {
+                  const raw = e.target.value;
+                  const tags = raw
+                    .split(",")
+                    .map((t) => t.trim())
+                    .filter(Boolean);
+                  onFieldChange(`content.cards.${i}.tags`, tags);
+                }}
+                placeholder="e.g. Series B, SaaS, B2B"
+                className="w-full bg-white/5 border border-white/10 rounded px-2 py-1 text-xs text-foreground/80 placeholder:text-muted-foreground/50 focus:outline-none focus:border-white/20"
+              />
+            </div>
+
+            {/* Metric editor */}
+            <div className="pt-1">
+              <label className="text-[10px] text-muted-foreground uppercase tracking-wide block mb-1">
+                Metric
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={card.metric?.value ?? ""}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    onFieldChange(`content.cards.${i}.metric`, val ? { value: val, label: card.metric?.label ?? "" } : undefined);
+                  }}
+                  placeholder="Value (e.g. $2.1B)"
+                  className="flex-1 bg-white/5 border border-white/10 rounded px-2 py-1 text-xs text-foreground/80 placeholder:text-muted-foreground/50 focus:outline-none focus:border-white/20"
+                />
+                <input
+                  type="text"
+                  value={card.metric?.label ?? ""}
+                  onChange={(e) => {
+                    const lbl = e.target.value;
+                    if (card.metric?.value) {
+                      onFieldChange(`content.cards.${i}.metric`, { value: card.metric.value, label: lbl });
+                    }
+                  }}
+                  placeholder="Label (e.g. Valuation)"
+                  className="flex-1 bg-white/5 border border-white/10 rounded px-2 py-1 text-xs text-foreground/80 placeholder:text-muted-foreground/50 focus:outline-none focus:border-white/20"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      />
+
+      {/* Callout editor */}
+      <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+        <label className="text-xs text-muted-foreground block mb-2">Callout (synthesis block below cards)</label>
+        {callout ? (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 mb-2">
+              {(["insight", "warning", "quote"] as const).map((t) => (
+                <button
+                  key={t}
+                  onClick={() => onFieldChange("content.callout", { ...callout, type: t })}
+                  className={`px-2.5 py-1 rounded text-xs transition-colors capitalize ${
+                    callout.type === t
+                      ? "bg-accent/20 text-accent"
+                      : "bg-white/10 text-muted-foreground hover:bg-white/20"
+                  }`}
+                >
+                  {t}
+                </button>
+              ))}
+              <button
+                onClick={() => onFieldChange("content.callout", undefined)}
+                className="ml-auto text-xs text-muted-foreground hover:text-red-400 transition-colors"
+              >
+                Remove
+              </button>
+            </div>
+            <textarea
+              value={callout.text}
+              onChange={(e) => onFieldChange("content.callout", { ...callout, text: e.target.value })}
+              rows={3}
+              placeholder="Key insight tying cards together..."
+              className="w-full bg-white/5 border border-white/10 rounded px-2 py-1.5 text-sm text-foreground/80 placeholder:text-muted-foreground/50 focus:outline-none focus:border-white/20 resize-none"
+            />
+          </div>
+        ) : (
+          <button
+            onClick={() => onFieldChange("content.callout", { type: "insight", text: "" })}
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            + Add callout
+          </button>
+        )}
+      </div>
+    </div>
   );
 }
 
