@@ -85,6 +85,7 @@ export function SplitViewLayout({
   const [sidebarOverlayOpen, setSidebarOverlayOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<SidebarTab>("sections");
   const [showAddSection, setShowAddSection] = useState(false);
+  const [insertAtPosition, setInsertAtPosition] = useState<number | null>(null);
 
   // Close zoom-out when section changes
   useEffect(() => {
@@ -102,6 +103,7 @@ export function SplitViewLayout({
   const handleCloseSidebarOverlay = useCallback(() => {
     setSidebarOverlayOpen(false);
     setShowAddSection(false);
+    setInsertAtPosition(null);
   }, []);
 
   // Keyboard shortcuts
@@ -264,10 +266,11 @@ export function SplitViewLayout({
                     documentTitle={artifact.title}
                     documentSubtitle={artifact.subtitle}
                     onAdd={(section) => {
-                      onAddSection(section);
+                      onAddSection(section, insertAtPosition ?? undefined);
                       setShowAddSection(false);
+                      setInsertAtPosition(null);
                     }}
-                    onCancel={() => setShowAddSection(false)}
+                    onCancel={() => { setShowAddSection(false); setInsertAtPosition(null); }}
                   />
                 ) : activeTab === "sections" ? (
                   <>
@@ -281,6 +284,10 @@ export function SplitViewLayout({
                         }}
                         onDelete={onDeleteSection}
                         onReorder={onReorderSections}
+                        onInsertAt={(pos) => {
+                          setInsertAtPosition(pos);
+                          setShowAddSection(true);
+                        }}
                       />
                     </div>
                     <div className="p-2 border-t border-white/10 space-y-2">

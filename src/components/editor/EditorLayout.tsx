@@ -43,6 +43,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
   const chat = useAiChat();
   const [activeTab, setActiveTab] = useState<SidebarTab>("sections");
   const [showAddSection, setShowAddSection] = useState(false);
+  const [insertAtPosition, setInsertAtPosition] = useState<number | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [pendingSuggestion, setPendingSuggestion] = useState<PendingSuggestion | null>(null);
   const [mobilePreviewOpen, setMobilePreviewOpen] = useState(false);
@@ -496,10 +497,11 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                     documentTitle={editor.artifact.title}
                     documentSubtitle={editor.artifact.subtitle}
                     onAdd={(section) => {
-                      editor.addSection(section);
+                      editor.addSection(section, insertAtPosition ?? undefined);
                       setShowAddSection(false);
+                      setInsertAtPosition(null);
                     }}
-                    onCancel={() => setShowAddSection(false)}
+                    onCancel={() => { setShowAddSection(false); setInsertAtPosition(null); }}
                   />
                 ) : activeTab === "sections" ? (
                   <>
@@ -510,6 +512,10 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                         onSelect={editor.setSelectedSectionId}
                         onDelete={editor.deleteSection}
                         onReorder={editor.reorderSections}
+                        onInsertAt={(pos) => {
+                          setInsertAtPosition(pos);
+                          setShowAddSection(true);
+                        }}
                       />
                     </div>
                     <div className="p-2 border-t border-white/10 space-y-2">

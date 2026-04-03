@@ -19,7 +19,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { useState } from "react";
 import type { Section } from "@/types/artifact";
 import { SECTION_TYPE_LABELS } from "@/types/artifact";
-import { GripVertical, Trash2 } from "lucide-react";
+import { GripVertical, Plus, Trash2 } from "lucide-react";
 
 function getItemCount(section: Section): string | null {
   switch (section.type) {
@@ -41,12 +41,27 @@ function getItemCount(section: Section): string | null {
 }
 
 
+function InsertDivider({ onClick }: { onClick: () => void }) {
+  return (
+    <div className="group/insert relative flex items-center py-0.5">
+      <div className="absolute inset-x-3 h-px bg-transparent group-hover/insert:bg-accent/40 transition-colors" />
+      <button
+        onClick={onClick}
+        className="relative mx-auto flex items-center justify-center w-5 h-5 rounded-full border border-transparent text-transparent group-hover/insert:border-accent/40 group-hover/insert:text-accent/70 hover:!border-accent hover:!text-accent hover:!bg-accent/10 transition-all"
+      >
+        <Plus className="w-3 h-3" />
+      </button>
+    </div>
+  );
+}
+
 interface SortableSectionListProps {
   sections: Section[];
   selectedSectionId: string | null;
   onSelect: (id: string) => void;
   onDelete: (id: string) => void;
   onReorder: (fromIndex: number, toIndex: number) => void;
+  onInsertAt?: (position: number) => void;
 }
 
 function SortableItem({
@@ -127,6 +142,7 @@ export function SortableSectionList({
   onSelect,
   onDelete,
   onReorder,
+  onInsertAt,
 }: SortableSectionListProps) {
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -154,15 +170,18 @@ export function SortableSectionList({
         items={sections.map((s) => s.id)}
         strategy={verticalListSortingStrategy}
       >
-        <div className="space-y-1">
-          {sections.map((section) => (
-            <SortableItem
-              key={section.id}
-              section={section}
-              isSelected={section.id === selectedSectionId}
-              onSelect={() => onSelect(section.id)}
-              onDelete={() => onDelete(section.id)}
-            />
+        <div className="space-y-0">
+          {onInsertAt && <InsertDivider onClick={() => onInsertAt(0)} />}
+          {sections.map((section, index) => (
+            <div key={section.id}>
+              <SortableItem
+                section={section}
+                isSelected={section.id === selectedSectionId}
+                onSelect={() => onSelect(section.id)}
+                onDelete={() => onDelete(section.id)}
+              />
+              {onInsertAt && <InsertDivider onClick={() => onInsertAt(index + 1)} />}
+            </div>
           ))}
         </div>
       </SortableContext>
