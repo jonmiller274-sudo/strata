@@ -84,16 +84,14 @@ export function EditableSectionRenderer({
         />
       </h2>
 
-      {/* Editable subtitle */}
-      {section.subtitle !== undefined && (
-        <p className="text-muted mb-6">
-          <InlineEditor
-            value={section.subtitle || ""}
-            onChange={(v) => onFieldChange("subtitle", v)}
-            placeholder="Add subtitle..."
-          />
-        </p>
-      )}
+      {/* Editable subtitle — always visible so users can add one to any section */}
+      <p className="text-muted mb-6">
+        <InlineEditor
+          value={section.subtitle || ""}
+          onChange={(v) => onFieldChange("subtitle", v)}
+          placeholder="Add subtitle..."
+        />
+      </p>
 
       {/* Section content */}
       <EditableContent section={section} isSelected={isSelected} onFieldChange={onFieldChange} />
