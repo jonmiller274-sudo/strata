@@ -276,7 +276,7 @@ export function AddSectionUpload({
               ? "border-accent/40 bg-accent/5 cursor-wait"
               : dragOver
                 ? "border-accent bg-accent/10"
-                : "border-white/15 hover:border-white/30 hover:bg-white/5"
+                : "border-white/10 hover:border-white/30 hover:bg-white/5"
           }`}
         >
           {state === "processing" ? (
