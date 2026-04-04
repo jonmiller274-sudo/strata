@@ -129,12 +129,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 
 ## Priority 5: Viewer Quality (investor-facing surface)
 
-### QR-17: Add loading skeleton to artifact page
-- **Tier:** 1
-- **What:** Show a content skeleton (pulsing gray blocks for title, subtitle, and section placeholders) while Supabase fetch completes. Currently the page is blank for 1-2 seconds.
-- **Files:** `src/app/[slug]/page.tsx` or the viewer layout component
-- **Test:** Hard-refresh an artifact page — see skeleton animation, then smooth transition to content (no blank flash)
-- **Status:** OPEN
+### ~~QR-17: Add loading skeleton to artifact page~~ DONE
+- **Status:** DONE — PR #20. Created `src/app/[slug]/loading.tsx` (Next.js route-level Suspense loading UI). Shows pulsing sidebar + title + 3 section card skeletons while the server fetch completes.
 
 ### QR-18: Graceful 404 for missing artifacts
 - **Tier:** 2
@@ -176,6 +172,7 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 
 - **QR-01: Kill non-standard text sizes** — PR #1, merged 2026-04-04
 - **QR-02: Normalize border opacity to white/10 default** — PR #2, merged 2026-04-04
+- **QR-17: Add loading skeleton to artifact page** — PR #20, 2026-04-04
 
 ---
 
