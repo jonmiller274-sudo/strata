@@ -10,6 +10,13 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-04 — Full rubric run: 7 PRs, all Tier 2
+- `gh` CLI not available in this environment — use GitHub REST API via curl with the PAT. Set remote URL to `https://x-access-token:<token>@github.com/...` before pushing.
+- `npm run build` requires `npm install` first if node_modules is absent (cold environment). Always check before assuming build works.
+- Many rubric items already had open PRs from prior runs (QR-03, QR-13, QR-14, QR-15, QR-17). Scan open PRs before starting to avoid duplicates.
+- `opengraph-image.tsx` existed but had a privacy bug (used `getArtifactForEdit` — no `is_published` filter). QR-19 was fixing the bug, not building from scratch.
+- SplitViewLayout changes (QR-09, QR-10) require checking ALL consumers of changed components, not just the primary file.
+
 ### 2026-04-04 — Seeded
 No lessons yet. First few PRs will populate this section.
 

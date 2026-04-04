@@ -29,7 +29,12 @@ Each item should state:
 
 ## Awaiting Product Decision
 
-*(none currently)*
+### QR-16 Landing page sync — audit and update editor capabilities
+- **What:** Landing page may not reflect all current editor capabilities (split view, AI chat, 8 section types, paste/upload ingestion, drag-drop reorder, type changing).
+- **Why blocked:** `src/app/page.tsx` is brand-voice-sensitive and off-limits to the autonomous quality agent. Any copy or content changes require Jon's direct involvement.
+- **Added:** 2026-04-04
+- **Suggested advisor:** Product Advisor (capability audit) + Copy Advisor (voice/messaging review)
+- **Reference:** `docs/quality-rubric.md` item QR-16, `src/app/page.tsx`
 
 ---
 

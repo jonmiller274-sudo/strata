@@ -13,6 +13,17 @@ Read this top-to-bottom when you want to know "what happened today." Do not edit
 
 ---
 
+## 2026-04-06
+
+- | quality | PR #24 | QR-06 | tier-2 | open | Replace fragile 2s delete timeout with persistent Confirm delete? pill
+- | quality | PR #25 | QR-08 | tier-2 | open | Enhance AI chat empty state with contextual quick-start prompts
+- | quality | PR #26 | QR-09 | tier-2 | open | Add section duplicate action (Copy icon + useEditor.duplicateSection)
+- | quality | PR #27 | QR-10 | tier-2 | open | Keyboard shortcut help overlay triggered by ? key in split view
+- | quality | PR #28 | QR-18 | tier-2 | open | Branded 404 page for missing artifact slugs
+- | quality | PR #29 | QR-19 | tier-2 | open | Fix OG image to use public artifact fetch (getArtifactBySlug)
+- | quality | PR #30 | QR-20 | tier-2 | open | Mobile beats nav: floating X/Y pill replaces unreadable 3px bar
+- | quality | parked | QR-16 | tier-3 | n/a | Landing page sync — off-limits file, added to pending-planning.md
+
 ## 2026-04-05
 
 - 07:00 | director | Generated first daily digest → `docs/digest/2026-04-05.md` (2 merged, 1 open review, 1 Tier 3 planning item, 0 reverts)
