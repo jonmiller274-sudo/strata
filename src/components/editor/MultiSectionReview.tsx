@@ -126,7 +126,7 @@ export function MultiSectionReview({
             onConfirm(sections.filter((s) => selected.has(s.id)))
           }
           disabled={selectedCount === 0}
-          className="w-full px-3 py-2 rounded-lg text-sm font-medium bg-green-600/20 text-green-400 hover:bg-green-600/30 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          className="w-full px-3 py-2 rounded-lg text-sm font-medium bg-accent text-white hover:bg-accent/80 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
         >
           Add {selectedCount} Selected
         </button>

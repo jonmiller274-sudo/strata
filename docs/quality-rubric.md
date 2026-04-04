@@ -28,12 +28,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 - **Test:** Every `text-red-400` in editor components is inside a `bg-red-500/10` container
 - **Status:** IN PROGRESS
 
-### QR-04: Unify button patterns to 3 types
-- **Tier:** 1
-- **What:** Audit every `<button>` in editor components. Each must match one of: Primary (accent), Secondary (white/10), or Destructive (red-500/10). Fix any that don't match.
-- **Files:** All files in `src/components/editor/`
-- **Test:** Manual audit — every button matches one of the 3 patterns in design-system.md
-- **Status:** OPEN
+### ~~QR-04: Unify button patterns to 3 types~~ DONE
+- **Status:** DONE — PR #18. Fixed Apply (SectionEditorPanel), Keep (AddSection), Add Selected (MultiSectionReview) — all changed from non-standard green to Primary accent. TopBar publish toggle uses green as a status indicator (published=live), which is intentional semantic colour; left as-is (would require Tier 2 design decision).
 
 ### ~~QR-05: Add transition-colors to all buttons~~ DONE
 - **Status:** DONE — PR #5
@@ -176,6 +172,7 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 
 - **QR-01: Kill non-standard text sizes** — PR #1, merged 2026-04-04
 - **QR-02: Normalize border opacity to white/10 default** — PR #2, merged 2026-04-04
+- **QR-04: Unify button patterns to 3 types** — PR #18, 2026-04-04
 
 ---
 
