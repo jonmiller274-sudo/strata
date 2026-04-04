@@ -124,9 +124,10 @@ export function SidebarNav({ items, title, subtitle, logoUrl }: SidebarNavProps)
                     className={cn(
                       "flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-xs font-medium",
                       activeId === item.id
-                        ? "bg-accent text-white"
+                        ? "text-white"
                         : "bg-card text-muted"
                     )}
+                    style={activeId === item.id ? { backgroundColor: "var(--palette-accent1, var(--color-accent))" } : undefined}
                   >
                     {index + 1}
                   </span>
@@ -141,8 +142,9 @@ export function SidebarNav({ items, title, subtitle, logoUrl }: SidebarNavProps)
         <div className="border-t border-border px-6 py-4">
           <div className="h-1.5 overflow-hidden rounded-full bg-card">
             <div
-              className="h-full rounded-full bg-accent transition-all duration-300"
+              className="h-full rounded-full transition-all duration-300"
               style={{
+                backgroundColor: "var(--palette-accent1, var(--color-accent))",
                 width: `${((items.findIndex((i) => i.id === activeId) + 1) / items.length) * 100}%`,
               }}
             />
