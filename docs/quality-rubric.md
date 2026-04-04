@@ -108,12 +108,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 - **Test:** Trigger type change error — close dropdown — error still visible for 5s
 - **Status:** OPEN
 
-### QR-22: Timeline dots should show status differentiation
-- **Tier:** 1
-- **What:** In `AnimatedTimeline` (Section 5 on /demo), all timeline dots render the same gray circle regardless of whether a step's status is `current`, `completed`, or `upcoming`. Current status should have a filled/accent dot, upcoming should be outlined gray, completed should be checkmarked.
-- **Files:** `src/components/viewer/sections/AnimatedTimeline.tsx`
-- **Test:** /demo Section 5 "12-Month Rollout" — the Q3 2026 step (status: current) should visually stand out from the other steps (status: upcoming).
-- **Status:** OPEN
+### ~~QR-22: Timeline dots should show status differentiation~~ DONE
+- **Status:** DONE — Already implemented in AnimatedTimeline.tsx via STATUS_STYLES object (accent dot + ArrowRight for current, success dot + Check for completed, card dot + Circle for upcoming). Rubric pre-dated the implementation.
 
 ### QR-23: Metric dashboard layout should handle 4-item case gracefully
 - **Tier:** 1
