@@ -119,12 +119,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 - **Test:** /demo Section 5 "12-Month Rollout" — the Q3 2026 step (status: current) should visually stand out from the other steps (status: upcoming).
 - **Status:** OPEN
 
-### QR-23: Metric dashboard layout should handle 4-item case gracefully
-- **Tier:** 1
-- **What:** Revenue Model metric cards render as 3-up + 1 orphan on a second row. Either implement a 2x2 grid for 4 items or 4-across for lg screens.
-- **Files:** `src/components/viewer/sections/MetricDashboard.tsx`
-- **Test:** /demo Section 8 "Revenue Model" — four metric cards should lay out in a balanced grid, not 3+1.
-- **Status:** OPEN
+### ~~QR-23: Metric dashboard layout should handle 4-item case gracefully~~ DONE
+- **Status:** DONE — PR #9
 
 ### QR-24: Hub Diagram visual upgrade — currently just boxes + text list
 - **Tier:** 3
