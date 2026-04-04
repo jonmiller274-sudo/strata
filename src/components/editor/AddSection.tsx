@@ -5,6 +5,7 @@ import type { Section, SectionType } from "@/types/artifact";
 import { Loader2, ArrowLeft, Pencil, ClipboardPaste, Upload } from "lucide-react";
 import { SectionTypePreview } from "./SectionTypePreview";
 import { AddSectionPaste } from "./AddSectionPaste";
+import { AddSectionUpload } from "./AddSectionUpload";
 
 const SECTION_TYPES: { type: SectionType; label: string; description: string }[] = [
   { type: "rich-text", label: "Rich Text", description: "Text with expandable details" },
@@ -23,7 +24,7 @@ type AddSectionMode = "describe" | "paste" | "upload";
 const MODE_TABS: { id: AddSectionMode; label: string; icon: typeof Pencil; disabled?: boolean }[] = [
   { id: "describe", label: "Describe", icon: Pencil },
   { id: "paste", label: "Paste", icon: ClipboardPaste },
-  { id: "upload", label: "Upload", icon: Upload, disabled: true },
+  { id: "upload", label: "Upload", icon: Upload },
 ];
 
 interface AddSectionProps {
@@ -177,6 +178,23 @@ export function AddSection({ documentTitle, documentSubtitle, onAdd, onAddMultip
               onAddMultiple(sections);
             } else {
               // Fallback: add one by one
+              sections.forEach((s) => onAdd(s));
+            }
+            handleBack();
+          }}
+          onCancel={handleBack}
+        />
+      )}
+
+      {/* Upload mode */}
+      {mode === "upload" && (
+        <AddSectionUpload
+          documentTitle={documentTitle}
+          documentSubtitle={documentSubtitle}
+          onAddMultiple={(sections) => {
+            if (onAddMultiple) {
+              onAddMultiple(sections);
+            } else {
               sections.forEach((s) => onAdd(s));
             }
             handleBack();

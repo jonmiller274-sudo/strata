@@ -175,7 +175,7 @@ export function SplitViewLayout({
       />
 
       {/* Editor Panel (left ~50%) */}
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 flex flex-col overflow-hidden">
         <SectionEditorPanel
           section={selectedSection}
           sectionIndex={selectedSectionIndex}
@@ -186,7 +186,7 @@ export function SplitViewLayout({
       </div>
 
       {/* Preview Panel (right ~50%) */}
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 flex flex-col overflow-hidden">
         <SectionPreviewPanel
           section={typeChangePreview ?? previewSection ?? selectedSection}
           artifact={artifact}
