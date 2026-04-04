@@ -51,6 +51,7 @@ function InsertDivider({ onClick }: { onClick: () => void }) {
       <div className="absolute inset-x-3 h-px bg-transparent group-hover/insert:bg-accent/40 transition-colors" />
       <button
         onClick={onClick}
+        aria-label="Insert section here"
         className="relative mx-auto flex items-center justify-center w-5 h-5 rounded-full border border-transparent text-transparent group-hover/insert:border-accent/40 group-hover/insert:text-accent/70 hover:!border-accent hover:!text-accent hover:!bg-accent/10 transition-all"
       >
         <Plus className="w-3 h-3" />
@@ -102,6 +103,7 @@ function SortableItem({
       <button
         {...attributes}
         {...listeners}
+        aria-label="Drag to reorder section"
         className="opacity-0 group-hover:opacity-50 shrink-0 cursor-grab touch-none"
       >
         <GripVertical className="w-3.5 h-3.5" />
@@ -127,6 +129,7 @@ function SortableItem({
             setTimeout(() => setConfirmDelete(false), 2000);
           }
         }}
+        aria-label={confirmDelete ? "Confirm delete section" : "Delete section"}
         className={`flex items-center transition-opacity ${
           confirmDelete
             ? "opacity-100 text-red-400"

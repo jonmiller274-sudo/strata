@@ -145,12 +145,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 - **Test:** Screen reader announces save status changes and new chat messages
 - **Status:** OPEN
 
-### QR-15: ARIA labels on all icon-only buttons
-- **Tier:** 0
-- **What:** Every button that contains only an icon (no text) must have `aria-label`. Audit all editor components.
-- **Files:** All files in `src/components/editor/`
-- **Test:** `grep -r "className=.*w-[34].*h-[34]" src/components/editor/ | grep "<button"` — every match has `aria-label`
-- **Status:** OPEN
+### ~~QR-15: ARIA labels on all icon-only buttons~~ DONE
+- **Status:** DONE — PR #7
 
 ---
 
