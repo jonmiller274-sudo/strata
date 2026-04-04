@@ -1,0 +1,150 @@
+name: Auto-Merge Tier 1
+
+on:
+  schedule:
+    # Run every 5 minutes — scans all open tier-1 PRs for merge eligibility
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'Specific PR number to check (optional)'
+        required: false
+
+# SECURITY: This workflow NEVER checks out PR code.
+# It only reads PR metadata and performs merge/comment operations.
+# Cron-based approach is the most reliable for the 15-minute window enforcement.
+
+permissions:
+  pull-requests: write
+  contents: write
+  checks: read
+
+jobs:
+  auto-merge-tier1:
+    name: Scan tier-1 PRs and merge eligible ones
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Find open tier-1 PRs
+        id: find-prs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          SPECIFIC_PR: ${{ github.event.inputs.pr_number }}
+        run: |
+          if [ -n "$SPECIFIC_PR" ]; then
+            echo "pr_numbers=$SPECIFIC_PR" >> "$GITHUB_OUTPUT"
+          else
+            PRS=$(gh pr list --repo $REPO --label "tier-1" --state open --json number \
+              --jq '[.[].number] | join(" ")')
+            echo "pr_numbers=$PRS" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Process each tier-1 PR
+        if: steps.find-prs.outputs.pr_numbers != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          PR_NUMBERS: ${{ steps.find-prs.outputs.pr_numbers }}
+        run: |
+          WINDOW_MINUTES=15
+          NOW=$(date -u +%s)
+
+          for PR_NUMBER in $PR_NUMBERS; do
+            echo ""
+            echo "=== Checking PR #$PR_NUMBER ==="
+
+            # Get PR metadata: updatedAt, labels, mergeable state
+            PR_DATA=$(gh pr view $PR_NUMBER --repo $REPO \
+              --json updatedAt,labels,mergeable,isDraft,state 2>/dev/null)
+
+            if [ -z "$PR_DATA" ]; then
+              echo "Could not fetch PR data for #$PR_NUMBER — skipping"
+              continue
+            fi
+
+            # Skip if draft or not open
+            IS_DRAFT=$(echo "$PR_DATA" | python3 -c "import sys,json; d=json.load(sys.stdin); print('true' if d.get('isDraft') else 'false')")
+            STATE=$(echo "$PR_DATA" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('state',''))")
+            if [ "$IS_DRAFT" = "true" ] || [ "$STATE" != "OPEN" ]; then
+              echo "PR #$PR_NUMBER is draft or not open — skipping"
+              continue
+            fi
+
+            # Get the time the tier-1 label was applied via timeline events
+            # Fall back to updatedAt if timeline not available
+            LABEL_APPLIED_AT=$(gh api repos/$REPO/issues/$PR_NUMBER/timeline \
+              --jq '[.[] | select(.event=="labeled" and .label.name=="tier-1") | .created_at] | last' \
+              2>/dev/null || echo "")
+
+            if [ -z "$LABEL_APPLIED_AT" ] || [ "$LABEL_APPLIED_AT" = "null" ]; then
+              # Fallback: use PR updatedAt (conservative — this may be newer than label apply)
+              LABEL_APPLIED_AT=$(echo "$PR_DATA" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('updatedAt',''))")
+              echo "Using updatedAt as label-applied fallback: $LABEL_APPLIED_AT"
+            else
+              echo "tier-1 label applied at: $LABEL_APPLIED_AT"
+            fi
+
+            LABEL_TS=$(date -d "$LABEL_APPLIED_AT" +%s 2>/dev/null || date -j -f "%Y-%m-%dT%H:%M:%SZ" "$LABEL_APPLIED_AT" +%s 2>/dev/null || echo "0")
+            ELAPSED=$(( (NOW - LABEL_TS) / 60 ))
+            echo "Minutes since tier-1 label applied: $ELAPSED"
+
+            if [ "$ELAPSED" -lt "$WINDOW_MINUTES" ]; then
+              REMAINING=$(( WINDOW_MINUTES - ELAPSED ))
+              echo "PR #$PR_NUMBER — ${REMAINING}min remaining in review window. Skipping."
+              continue
+            fi
+
+            echo "15-minute review window has elapsed."
+
+            # Check for veto label
+            LABELS=$(echo "$PR_DATA" | python3 -c "import sys,json; d=json.load(sys.stdin); print(' '.join(l['name'] for l in d.get('labels',[])))")
+            if echo "$LABELS" | grep -qw "veto"; then
+              echo "PR #$PR_NUMBER has veto label — skipping auto-merge."
+              continue
+            fi
+
+            # Check for veto in comments
+            COMMENTS=$(gh api repos/$REPO/issues/$PR_NUMBER/comments \
+              --jq '[.[].body | ascii_downcase] | join(" ")' 2>/dev/null || echo "")
+            if echo "$COMMENTS" | grep -qw "veto"; then
+              echo "PR #$PR_NUMBER has veto comment — skipping auto-merge."
+              continue
+            fi
+
+            # Check CI status
+            CI_STATUS=$(gh pr checks $PR_NUMBER --repo $REPO --json state,name 2>/dev/null \
+              | python3 -c "
+          import sys, json
+          checks = json.load(sys.stdin)
+          relevant = [c for c in checks if 'auto-merge' not in c.get('name','').lower() and 'tier-enforcement' not in c.get('name','').lower()]
+          if not relevant:
+              print('no-checks')
+          elif all(c['state'] == 'SUCCESS' for c in relevant):
+              print('pass')
+          elif any(c['state'] in ('FAILURE','ERROR','CANCELLED') for c in relevant):
+              print('fail')
+          else:
+              print('pending')
+          " 2>/dev/null || echo "pending")
+
+            echo "CI status: $CI_STATUS"
+
+            if [ "$CI_STATUS" = "fail" ]; then
+              echo "PR #$PR_NUMBER — CI failed. Skipping."
+              continue
+            fi
+
+            if [ "$CI_STATUS" = "pending" ]; then
+              echo "PR #$PR_NUMBER — CI still pending. Will check again next run."
+              continue
+            fi
+
+            # All clear — merge
+            echo "PR #$PR_NUMBER — All checks passed. Merging..."
+            gh pr merge $PR_NUMBER --repo $REPO --squash --delete-branch \
+              --subject "$(gh pr view $PR_NUMBER --repo $REPO --json title --jq .title) (#$PR_NUMBER)" \
+              && gh pr comment $PR_NUMBER --repo $REPO \
+                --body "Auto-merged as Tier 1 (15-min review window elapsed with no veto)." \
+              || echo "Merge failed for PR #$PR_NUMBER — may already be merged or have conflicts."
+          done

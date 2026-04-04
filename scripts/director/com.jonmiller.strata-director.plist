@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Strata Director agent scheduled trigger.
+
+  Runs /Users/JonMiller/strata/scripts/director/run-director.sh every day at 07:00
+  America/New_York. launchd uses the system's local timezone, which on Jon's iMac is
+  already America/New_York, so StartCalendarInterval Hour=7 fires at 07:00 ET.
+
+  Install:
+    cp scripts/director/com.jonmiller.strata-director.plist ~/Library/LaunchAgents/
+    launchctl load -w ~/Library/LaunchAgents/com.jonmiller.strata-director.plist
+
+  Check status:
+    launchctl list | grep strata-director
+
+  Trigger manually (for testing):
+    launchctl start com.jonmiller.strata-director
+
+  Unload:
+    launchctl unload -w ~/Library/LaunchAgents/com.jonmiller.strata-director.plist
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.jonmiller.strata-director</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/JonMiller/strata/scripts/director/run-director.sh</string>
+    </array>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/Users/JonMiller/.npm-global/bin:/Users/JonMiller/.bun/bin:/Users/JonMiller/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+        <key>HOME</key>
+        <string>/Users/JonMiller</string>
+    </dict>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>7</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>KeepAlive</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/JonMiller/strata/scripts/director/director.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/JonMiller/strata/scripts/director/director-error.log</string>
+</dict>
+</plist>

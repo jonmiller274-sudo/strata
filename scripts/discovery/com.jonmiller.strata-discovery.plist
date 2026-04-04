@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Strata Discovery agent scheduled trigger.
+
+  Runs /Users/JonMiller/strata/scripts/discovery/run-discovery.sh every 2 hours at :50
+  past the hour (local time). On Jon's iMac this is America/New_York. The offset to :50
+  is chosen so Discovery does not race with the cloud Quality agent (runs at :00 every
+  hour with a 40-minute budget, so finishes by :40).
+
+  Install:
+    cp scripts/discovery/com.jonmiller.strata-discovery.plist ~/Library/LaunchAgents/
+    launchctl load -w ~/Library/LaunchAgents/com.jonmiller.strata-discovery.plist
+
+  Check status:
+    launchctl list | grep strata-discovery
+
+  Trigger manually (for testing):
+    launchctl start com.jonmiller.strata-discovery
+
+  Unload:
+    launchctl unload -w ~/Library/LaunchAgents/com.jonmiller.strata-discovery.plist
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.jonmiller.strata-discovery</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/JonMiller/strata/scripts/discovery/run-discovery.sh</string>
+    </array>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/Users/JonMiller/.npm-global/bin:/Users/JonMiller/.bun/bin:/Users/JonMiller/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+        <key>HOME</key>
+        <string>/Users/JonMiller</string>
+    </dict>
+
+    <key>StartCalendarInterval</key>
+    <array>
+        <dict><key>Hour</key><integer>0</integer><key>Minute</key><integer>50</integer></dict>
+        <dict><key>Hour</key><integer>2</integer><key>Minute</key><integer>50</integer></dict>
+        <dict><key>Hour</key><integer>4</integer><key>Minute</key><integer>50</integer></dict>
+        <dict><key>Hour</key><integer>6</integer><key>Minute</key><integer>50</integer></dict>
+        <dict><key>Hour</key><integer>8</integer><key>Minute</key><integer>50</integer></dict>
+        <dict><key>Hour</key><integer>10</integer><key>Minute</key><integer>50</integer></dict>
+        <dict><key>Hour</key><integer>12</integer><key>Minute</key><integer>50</integer></dict>
+        <dict><key>Hour</key><integer>14</integer><key>Minute</key><integer>50</integer></dict>
+        <dict><key>Hour</key><integer>16</integer><key>Minute</key><integer>50</integer></dict>
+        <dict><key>Hour</key><integer>18</integer><key>Minute</key><integer>50</integer></dict>
+        <dict><key>Hour</key><integer>20</integer><key>Minute</key><integer>50</integer></dict>
+        <dict><key>Hour</key><integer>22</integer><key>Minute</key><integer>50</integer></dict>
+    </array>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>KeepAlive</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/JonMiller/strata/scripts/discovery/discovery.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/JonMiller/strata/scripts/discovery/discovery-error.log</string>
+</dict>
+</plist>

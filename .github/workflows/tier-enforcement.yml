@@ -1,0 +1,76 @@
+name: Tier Label Enforcement
+
+on:
+  pull_request:
+    types: [opened, edited, labeled, unlabeled, ready_for_review]
+
+permissions:
+  pull-requests: write
+  statuses: write
+
+jobs:
+  enforce-tier-label:
+    name: Require exactly one tier label
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check tier labels
+        id: check
+        env:
+          LABELS: ${{ toJson(github.event.pull_request.labels.*.name) }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          TIER_COUNT=$(echo "$LABELS" | python3 -c "
+          import sys, json
+          labels = json.load(sys.stdin)
+          tiers = [l for l in labels if l in ('tier-0','tier-1','tier-2','tier-3')]
+          print(len(tiers))
+          print(' '.join(tiers))
+          " | head -1)
+
+          TIER_NAMES=$(echo "$LABELS" | python3 -c "
+          import sys, json
+          labels = json.load(sys.stdin)
+          tiers = [l for l in labels if l in ('tier-0','tier-1','tier-2','tier-3')]
+          print(' '.join(tiers))
+          ")
+
+          echo "tier_count=$TIER_COUNT" >> "$GITHUB_OUTPUT"
+          echo "tier_names=$TIER_NAMES" >> "$GITHUB_OUTPUT"
+
+      - name: Fail if no tier label
+        if: steps.check.outputs.tier_count == '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh pr comment $PR_NUMBER --repo $REPO --body \
+            "**Missing tier label.** Please add exactly one of: \`tier-0\`, \`tier-1\`, \`tier-2\`, \`tier-3\`.
+
+          | Label | Meaning |
+          |-------|---------|
+          | \`tier-0\` | Tokens only (typos, spacing, imports) — auto-merges after CI |
+          | \`tier-1\` | Visual polish — auto-merges after 15min if no veto |
+          | \`tier-2\` | Copy/UX changes — needs Jon's review |
+          | \`tier-3\` | Architecture/features — needs planning session |
+
+          See [AGENTS.md](.github/AGENTS.md) for the full tier guide."
+          exit 1
+
+      - name: Fail if multiple tier labels
+        if: steps.check.outputs.tier_count > '1'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+          TIER_NAMES: ${{ steps.check.outputs.tier_names }}
+        run: |
+          gh pr comment $PR_NUMBER --repo $REPO --body \
+            "**Multiple tier labels detected:** \`$TIER_NAMES\`. A PR must have exactly one tier label. Please remove the extra label(s)."
+          exit 1
+
+      - name: Pass — tier label valid
+        if: steps.check.outputs.tier_count == '1'
+        run: |
+          echo "Tier label is valid: ${{ steps.check.outputs.tier_names }}"
