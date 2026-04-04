@@ -79,15 +79,16 @@ export function SidebarNav({ items, title, subtitle, logoUrl }: SidebarNavProps)
       </button>
 
       {/* Sidebar */}
+      {/* NOTE: Tailwind v4 composes transforms via the CSS `translate` property using
+          --tw-translate-x / --tw-translate-y CSS variables. On Chrome the @supports
+          block that initialises --tw-translate-y to 0 does not fire, leaving the
+          variable unset. An unset CSS variable makes the whole `translate` declaration
+          guaranteed-invalid, so the browser silently ignores it — the sidebar never
+          moves off-screen. Fix: use a data attribute + explicit CSS rules in
+          globals.css so we never depend on --tw-translate-y being initialised. */}
       <aside
-        className={cn(
-          "fixed top-0 left-0 z-40 h-screen w-[var(--sidebar-width)] border-r border-border bg-sidebar",
-          "flex flex-col transition-transform duration-300",
-          // Mobile: slide in/out
-          mobileOpen ? "translate-x-0" : "-translate-x-full",
-          // Desktop: always visible
-          "lg:translate-x-0"
-        )}
+        data-mobile-open={mobileOpen ? "true" : "false"}
+        className="sidebar-nav fixed top-0 left-0 z-40 h-screen w-[var(--sidebar-width)] border-r border-border bg-sidebar flex flex-col"
       >
         {/* Title area */}
         <div className="border-b border-border px-6 py-6">

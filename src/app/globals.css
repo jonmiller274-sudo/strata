@@ -153,6 +153,31 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+/* ===== Sidebar Nav — mobile slide behaviour =====
+   Tailwind v4 composes transforms via CSS `translate` using --tw-translate-y.
+   Chrome does not enter the @supports block that initialises that variable to 0,
+   so `translate: var(--tw-translate-x) var(--tw-translate-y)` is
+   guaranteed-invalid and the browser ignores it entirely. We avoid the CSS
+   variable dependency by using explicit translate values here instead of
+   -translate-x-full / translate-x-0 utility classes. */
+.sidebar-nav {
+  /* Default (mobile): off-screen left. Use translate not transform so it is
+     composited on its own layer and animates independently of transform. */
+  translate: -100% 0;
+  transition: translate 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-nav[data-mobile-open="true"] {
+  translate: 0 0;
+}
+
+/* Desktop: always visible regardless of mobileOpen state */
+@media (min-width: 1024px) {
+  .sidebar-nav {
+    translate: 0 0;
+  }
+}
+
 /* ===== Beats Layout Mode ===== */
 
 .beats-container {

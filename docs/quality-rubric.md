@@ -8,18 +8,6 @@ Reference: `docs/design-system.md` for correct patterns.
 
 ## Priority 1: Visual Consistency (systematic, no taste required)
 
-### QR-01: Kill non-standard text sizes
-- **What:** Replace all `text-[11px]` with `text-xs` and all `text-[9px]` with `text-[10px]`
-- **Files:** All files in `src/components/editor/`
-- **Test:** `grep -r "text-\[11px\]\|text-\[9px\]" src/components/editor/` returns 0 results
-- **Status:** IN PROGRESS
-
-### QR-02: Normalize border opacity to white/10 default
-- **What:** Replace `border-white/15` with `border-white/10` everywhere in editor
-- **Files:** `src/components/editor/AddSectionUpload.tsx` and any others
-- **Test:** `grep -r "border-white/15" src/components/editor/` returns 0 results
-- **Status:** IN PROGRESS
-
 ### QR-03: Unify error message pattern
 - **What:** All error displays must use the standard error pill: `text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2`. Replace any inline red text, raw `text-red-400` without background, or other error formats.
 - **Files:** All editor components showing errors
@@ -36,6 +24,11 @@ Reference: `docs/design-system.md` for correct patterns.
 - **What:** Every `<button>` with a hover state must have `transition-colors`
 - **Files:** All files in `src/components/editor/`
 - **Test:** `grep -r "hover:bg-" src/components/editor/ | grep -v "transition"` returns 0 results for buttons
+- **Status:** OPEN
+
+### QR-21: Palette consistency audit — charts and active states should use Velocity palette
+- **What:** Audit components that render charts and highlights to ensure they prefer `--palette-accent1` through `--palette-accent5` over the default `--color-accent`. Currently the Market Sizing funnel chart renders default indigo bars even when the artifact has a custom `branding.palette`. Same for sidebar active-state highlight and the BOARD STRATEGY tag. Files to audit: `src/components/viewer/sections/DataVisualization.tsx`, `src/components/viewer/SidebarNav.tsx`, `src/components/viewer/sections/RichTextCollapsible.tsx`
+- **Test:** Open /demo (light theme, Velocity navy/teal palette). Funnel chart bars should be navy (`#1e3a5f`), not indigo. Sidebar active section should show navy highlight.
 - **Status:** OPEN
 
 ---
@@ -93,6 +86,25 @@ Reference: `docs/design-system.md` for correct patterns.
 - **Files:** `src/components/editor/TypeSelectorDropdown.tsx`
 - **Test:** Trigger type change error — close dropdown — error still visible for 5s
 - **Status:** OPEN
+
+### QR-22: Timeline dots should show status differentiation
+- **What:** In `AnimatedTimeline` (Section 5 on /demo), all timeline dots render the same gray circle regardless of whether a step's status is `current`, `completed`, or `upcoming`. Current status should have a filled/accent dot, upcoming should be outlined gray, completed should be checkmarked.
+- **Files:** `src/components/viewer/sections/AnimatedTimeline.tsx`
+- **Test:** /demo Section 5 "12-Month Rollout" — the Q3 2026 step (status: current) should visually stand out from the other steps (status: upcoming).
+- **Status:** OPEN
+
+### QR-23: Metric dashboard layout should handle 4-item case gracefully
+- **What:** Revenue Model metric cards render as 3-up + 1 orphan on a second row. Either implement a 2x2 grid for 4 items or 4-across for lg screens.
+- **Files:** `src/components/viewer/sections/MetricDashboard.tsx`
+- **Test:** /demo Section 8 "Revenue Model" — four metric cards should lay out in a balanced grid, not 3+1.
+- **Status:** OPEN
+
+### QR-24: Hub Diagram visual upgrade — currently just boxes + text list
+- **What:** The `HubMockup` component renders a central node + surrounding nodes as boxes with a text list of connections below. It should be a visual hub-and-spoke diagram with SVG connector lines between the center node and the surrounding nodes. This is the weakest visual section and needs redesign.
+- **Files:** `src/components/viewer/sections/HubMockup.tsx`
+- **Test:** /demo Section 7 "Go-to-Market Architecture" — nodes should be visually connected via lines/curves, not a text list.
+- **Status:** BLOCKED — needs design direction from planning session before building
+- **Note:** Do NOT work this item autonomously. Requires planning session with Jon.
 
 ---
 
@@ -152,6 +164,9 @@ Reference: `docs/design-system.md` for correct patterns.
 
 ## Completed
 (Agent moves items here after fix is merged)
+
+- **QR-01: Kill non-standard text sizes** — PR #1, merged 2026-04-04
+- **QR-02: Normalize border opacity to white/10 default** — PR #2, merged 2026-04-04
 
 ---
 

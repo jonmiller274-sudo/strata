@@ -205,7 +205,7 @@ export function ArtifactViewer({
             href="https://sharestrata.com/discover?ref=artifact-watermark"
             target="_blank"
             rel="noopener noreferrer"
-            className={`fixed bottom-4 left-2 sm:left-4 z-40 flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/30 backdrop-blur-sm transition-opacity ${hideWatermark ? "opacity-0 pointer-events-none" : "opacity-70 hover:opacity-90"}`}
+            className={`fixed bottom-4 left-2 sm:left-4 z-40 flex items-center gap-1.5 px-2 py-1 rounded-full bg-card border border-border shadow-sm transition-opacity ${hideWatermark ? "opacity-0 pointer-events-none" : "opacity-80 hover:opacity-100"}`}
           >
             <Layers className="h-4 w-4" style={{ color: "var(--color-muted-foreground)" }} />
             <span className="text-xs font-medium" style={{ color: "var(--color-muted-foreground)" }}>
@@ -266,7 +266,7 @@ export function ArtifactViewer({
           </div>
         </div>
 
-        <StrataFooter planTier={artifact.plan_tier} />
+        <StrataFooter planTier={artifact.plan_tier} isDemoPage={isDemoPage} />
       </main>
     </div>
   );
