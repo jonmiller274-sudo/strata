@@ -19,6 +19,13 @@ Each item should state:
 - **Suggested advisor:** Design Advisor (lead) + Product Advisor (to confirm the section is worth the polish)
 - **Reference:** `docs/quality-rubric.md` item QR-24, `src/components/viewer/sections/HubMockup.tsx`
 
+### QR-16 Update landing page to reflect current editor capabilities
+- **What:** Landing page needs to show all 8 section types, split view editor, AI chat co-editor, paste/upload ingestion, drag-drop reorder, and type changing — several of these are missing or outdated.
+- **Why blocked:** `src/app/page.tsx` is brand-voice-sensitive and off-limits to autonomous agents. Requires Jon to approve copy, positioning, and feature showcase choices.
+- **Added:** 2026-04-04
+- **Suggested advisor:** Product Advisor (lead) + Design Advisor (for section layout and visuals)
+- **Reference:** `docs/quality-rubric.md` item QR-16, `src/app/page.tsx`
+
 ---
 
 ## Awaiting Architecture Review

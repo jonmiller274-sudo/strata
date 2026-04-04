@@ -16,6 +16,7 @@ Read this top-to-bottom when you want to know "what happened today." Do not edit
 ## 2026-04-05
 
 - 07:00 | director | Generated first daily digest → `docs/digest/2026-04-05.md` (2 merged, 1 open review, 1 Tier 3 planning item, 0 reverts)
+- run | quality | 13 PRs created this session: QR-03 tier-1, QR-04 tier-1 (#15), QR-05 tier-0, QR-07 tier-1, QR-11 tier-1, QR-12 tier-1, QR-14 tier-0, QR-15 tier-0, QR-17 tier-1, QR-21 tier-1, QR-22 tier-0 (housekeeping), QR-23 tier-1; QR-16 parked in pending-planning
 
 ## 2026-04-04
 
