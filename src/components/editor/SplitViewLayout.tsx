@@ -43,6 +43,7 @@ interface SplitViewLayoutProps {
   onDeleteSection: (id: string) => void;
   onReorderSections: (from: number, to: number) => void;
   onAddSection: (section: Section, position?: number) => void;
+  onAddSections: (sections: Section[], position?: number) => void;
   onUpdateArtifactField: <K extends keyof Artifact>(field: K, value: Artifact[K]) => void;
   // AI chat props
   chatMessages: ChatMessage[];
@@ -69,6 +70,7 @@ export function SplitViewLayout({
   onDeleteSection,
   onReorderSections,
   onAddSection,
+  onAddSections,
   onUpdateArtifactField,
   chatMessages,
   chatIsLoading,
@@ -269,6 +271,11 @@ export function SplitViewLayout({
                     documentSubtitle={artifact.subtitle}
                     onAdd={(section) => {
                       onAddSection(section, insertAtPosition ?? undefined);
+                      setShowAddSection(false);
+                      setInsertAtPosition(null);
+                    }}
+                    onAddMultiple={(sections) => {
+                      onAddSections(sections, insertAtPosition ?? undefined);
                       setShowAddSection(false);
                       setInsertAtPosition(null);
                     }}

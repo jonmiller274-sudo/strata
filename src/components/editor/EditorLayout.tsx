@@ -419,6 +419,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
               onDeleteSection={editor.deleteSection}
               onReorderSections={editor.reorderSections}
               onAddSection={editor.addSection}
+              onAddSections={editor.addSections}
               onUpdateArtifactField={editor.updateArtifactField}
               chatMessages={chat.messages}
               chatIsLoading={chat.isLoading}
@@ -498,6 +499,11 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                     documentSubtitle={editor.artifact.subtitle}
                     onAdd={(section) => {
                       editor.addSection(section, insertAtPosition ?? undefined);
+                      setShowAddSection(false);
+                      setInsertAtPosition(null);
+                    }}
+                    onAddMultiple={(sections) => {
+                      editor.addSections(sections, insertAtPosition ?? undefined);
                       setShowAddSection(false);
                       setInsertAtPosition(null);
                     }}

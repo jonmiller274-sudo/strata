@@ -102,6 +102,20 @@ export function useEditor(initialArtifact: Artifact) {
     [markUnsaved]
   );
 
+  // Add multiple sections at a specific position (batch insert, single auto-save)
+  const addSections = useCallback(
+    (sections: Section[], position?: number) => {
+      setArtifact((prev) => {
+        const updated = [...prev.sections];
+        const idx = position ?? updated.length;
+        updated.splice(idx, 0, ...sections);
+        return { ...prev, sections: updated };
+      });
+      markUnsaved();
+    },
+    [markUnsaved]
+  );
+
   // Replace multiple artifact fields at once (for document-level AI apply)
   const mergeArtifact = useCallback(
     (fields: Partial<Artifact>) => {
@@ -123,6 +137,7 @@ export function useEditor(initialArtifact: Artifact) {
     reorderSections,
     deleteSection,
     addSection,
+    addSections,
     mergeArtifact,
   };
 }

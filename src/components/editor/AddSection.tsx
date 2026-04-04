@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import type { Section, SectionType } from "@/types/artifact";
-import { Loader2, ArrowLeft } from "lucide-react";
+import { Loader2, ArrowLeft, Pencil, ClipboardPaste, Upload } from "lucide-react";
 import { SectionTypePreview } from "./SectionTypePreview";
+import { AddSectionPaste } from "./AddSectionPaste";
 
 const SECTION_TYPES: { type: SectionType; label: string; description: string }[] = [
   { type: "rich-text", label: "Rich Text", description: "Text with expandable details" },
@@ -17,26 +18,42 @@ const SECTION_TYPES: { type: SectionType; label: string; description: string }[]
 ];
 
 type AddSectionStep = "describe" | "confirm" | "generating" | "review";
+type AddSectionMode = "describe" | "paste" | "upload";
+
+const MODE_TABS: { id: AddSectionMode; label: string; icon: typeof Pencil; disabled?: boolean }[] = [
+  { id: "describe", label: "Describe", icon: Pencil },
+  { id: "paste", label: "Paste", icon: ClipboardPaste },
+  { id: "upload", label: "Upload", icon: Upload, disabled: true },
+];
 
 interface AddSectionProps {
   documentTitle: string;
   documentSubtitle?: string;
   onAdd: (section: Section) => void;
+  onAddMultiple?: (sections: Section[]) => void;
   onCancel: () => void;
 }
 
-export function AddSection({ documentTitle, documentSubtitle, onAdd, onCancel }: AddSectionProps) {
+export function AddSection({ documentTitle, documentSubtitle, onAdd, onAddMultiple, onCancel }: AddSectionProps) {
+  const [mode, setMode] = useState<AddSectionMode>("describe");
+
+  // --- Describe mode state ---
   const [step, setStep] = useState<AddSectionStep>("describe");
   const [description, setDescription] = useState("");
   const [suggestedType, setSuggestedType] = useState<SectionType | null>(null);
   const [generatedSection, setGeneratedSection] = useState<Section | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const reset = () => {
+  const resetDescribe = () => {
     setDescription("");
     setSuggestedType(null);
     setGeneratedSection(null);
     setError(null);
+    setStep("describe");
+  };
+
+  const handleBack = () => {
+    resetDescribe();
     onCancel();
   };
 
@@ -57,18 +74,15 @@ export function AddSection({ documentTitle, documentSubtitle, onAdd, onCancel }:
       const data = await res.json();
       setSuggestedType(data.type);
     } catch {
-      // Fallback: let user pick manually
       setSuggestedType(null);
     }
   };
 
-  // Step 2: Pick type directly
   const handlePickType = (type: SectionType) => {
     setSuggestedType(type);
     setStep("confirm");
   };
 
-  // Step 2 → Step 3: Generate section content
   const handleGenerate = async (type: SectionType) => {
     setStep("generating");
     setError(null);
@@ -86,7 +100,6 @@ export function AddSection({ documentTitle, documentSubtitle, onAdd, onCancel }:
       if (!res.ok) {
         const errBody = await res.json().catch(() => null);
         let errMsg = errBody?.error || "Failed to generate section";
-        // Surface user-friendly messages for known API errors
         if (errMsg.includes("credit balance")) {
           errMsg = "AI service credits depleted — contact support";
         } else if (errMsg.includes("rate limit") || errMsg.includes("rate_limit")) {
@@ -98,18 +111,12 @@ export function AddSection({ documentTitle, documentSubtitle, onAdd, onCancel }:
       }
       const data = await res.json();
 
-      // AI returns an artifact with sections — take the first one
-      // The API normalizes various response shapes, but add client-side fallback too
       let section = data.artifact?.sections?.[0];
-
-      // Fallback: if artifact itself looks like a section (has type + content)
       if (!section && data.artifact?.type && data.artifact?.content) {
         section = data.artifact;
       }
-
       if (!section) throw new Error("No section generated — try adding a description");
 
-      // Ensure the section has the expected type (AI might have picked a different one)
       if (section.type !== type) {
         section = { ...section, type };
       }
@@ -124,122 +131,161 @@ export function AddSection({ documentTitle, documentSubtitle, onAdd, onCancel }:
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
-      {/* Back button header */}
+      {/* Header */}
       <div className="px-4 py-3 border-b border-white/10">
         <button
-          onClick={reset}
+          onClick={handleBack}
           className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft className="w-3 h-3" /> Back to sections
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4">
+      {/* Mode tabs */}
+      <div className="flex border-b border-white/10">
+        {MODE_TABS.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => {
+              if (!tab.disabled) {
+                setMode(tab.id);
+                resetDescribe();
+              }
+            }}
+            disabled={tab.disabled}
+            className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 text-xs font-medium transition-colors ${
+              mode === tab.id
+                ? "text-foreground border-b-2 border-accent"
+                : tab.disabled
+                  ? "text-muted-foreground/30 cursor-not-allowed"
+                  : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <tab.icon className="w-3.5 h-3.5" />
+            {tab.label}
+          </button>
+        ))}
+      </div>
 
-      {/* Step 1: Describe */}
-      {step === "describe" && (
-        <>
-          <input
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleDescribe()}
-            placeholder="Describe what you want to add..."
-            autoFocus
-            className="w-full bg-white/10 rounded px-2 py-1.5 text-sm outline-none placeholder:text-muted-foreground/50 focus:ring-1 focus:ring-accent/50 mb-3"
-          />
-          <p className="text-xs text-muted-foreground mb-2">Or pick a type:</p>
-          <div className="grid grid-cols-2 gap-2">
-            {SECTION_TYPES.map((st) => (
-              <button
-                key={st.type}
-                onClick={() => handlePickType(st.type)}
-                className="text-left rounded-lg border border-white/10 hover:border-accent/30 hover:scale-[1.02] transition-all overflow-hidden"
-              >
-                <SectionTypePreview type={st.type} />
-                <div className="px-2 py-1.5">
-                  <span className="text-xs font-medium block">{st.label}</span>
-                  <span className="text-[10px] text-muted-foreground">{st.description}</span>
-                </div>
-              </button>
-            ))}
-          </div>
-        </>
+      {/* Paste mode */}
+      {mode === "paste" && (
+        <AddSectionPaste
+          documentTitle={documentTitle}
+          documentSubtitle={documentSubtitle}
+          onAddMultiple={(sections) => {
+            if (onAddMultiple) {
+              onAddMultiple(sections);
+            } else {
+              // Fallback: add one by one
+              sections.forEach((s) => onAdd(s));
+            }
+            handleBack();
+          }}
+          onCancel={handleBack}
+        />
       )}
 
-      {/* Step 2: Confirm type */}
-      {step === "confirm" && (
-        <div>
-          {suggestedType ? (
+      {/* Describe mode */}
+      {mode === "describe" && (
+        <div className="flex-1 overflow-y-auto p-4">
+          {step === "describe" && (
             <>
+              <input
+                type="text"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleDescribe()}
+                placeholder="Describe what you want to add..."
+                autoFocus
+                className="w-full bg-white/10 rounded px-2 py-1.5 text-sm outline-none placeholder:text-muted-foreground/50 focus:ring-1 focus:ring-accent/50 mb-3"
+              />
+              <p className="text-xs text-muted-foreground mb-2">Or pick a type:</p>
+              <div className="grid grid-cols-2 gap-2">
+                {SECTION_TYPES.map((st) => (
+                  <button
+                    key={st.type}
+                    onClick={() => handlePickType(st.type)}
+                    className="text-left rounded-lg border border-white/10 hover:border-accent/30 hover:scale-[1.02] transition-all overflow-hidden"
+                  >
+                    <SectionTypePreview type={st.type} />
+                    <div className="px-2 py-1.5">
+                      <span className="text-xs font-medium block">{st.label}</span>
+                      <span className="text-[10px] text-muted-foreground">{st.description}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+
+          {step === "confirm" && (
+            <div>
+              {suggestedType ? (
+                <>
+                  <p className="text-sm mb-2">
+                    I&apos;ll create a <span className="font-medium text-accent">
+                      {SECTION_TYPES.find((t) => t.type === suggestedType)?.label}
+                    </span>
+                  </p>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleGenerate(suggestedType)}
+                      className="px-3 py-1 rounded text-xs font-medium bg-accent text-white hover:bg-accent/80"
+                    >
+                      Generate
+                    </button>
+                    <button
+                      onClick={() => { setSuggestedType(null); setStep("describe"); }}
+                      className="px-3 py-1 rounded text-xs font-medium bg-white/10 text-muted-foreground hover:bg-white/20"
+                    >
+                      Change type
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <p className="text-sm text-muted-foreground">Pick a section type above</p>
+              )}
+            </div>
+          )}
+
+          {step === "generating" && (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Generating section...
+            </div>
+          )}
+
+          {step === "review" && generatedSection && (
+            <div>
               <p className="text-sm mb-2">
-                I&apos;ll create a <span className="font-medium text-accent">
-                  {SECTION_TYPES.find((t) => t.type === suggestedType)?.label}
-                </span>
+                <span className="font-medium">{generatedSection.title}</span>
               </p>
               <div className="flex gap-2">
                 <button
-                  onClick={() => handleGenerate(suggestedType)}
-                  className="px-3 py-1 rounded text-xs font-medium bg-accent text-white hover:bg-accent/80"
+                  onClick={() => { onAdd(generatedSection); handleBack(); }}
+                  className="px-3 py-1 rounded text-xs font-medium bg-green-600/20 text-green-400 hover:bg-green-600/30"
                 >
-                  Generate
+                  Keep
                 </button>
                 <button
-                  onClick={() => {
-                    setSuggestedType(null);
-                    setStep("describe");
-                  }}
+                  onClick={handleBack}
                   className="px-3 py-1 rounded text-xs font-medium bg-white/10 text-muted-foreground hover:bg-white/20"
                 >
-                  Change type
+                  Discard
+                </button>
+                <button
+                  onClick={() => suggestedType && handleGenerate(suggestedType)}
+                  className="px-3 py-1 rounded text-xs font-medium bg-white/10 text-muted-foreground hover:bg-white/20"
+                >
+                  Regenerate
                 </button>
               </div>
-            </>
-          ) : (
-            <p className="text-sm text-muted-foreground">Pick a section type above</p>
+            </div>
           )}
+
+          {error && <p className="text-xs text-red-400 mt-2">{error}</p>}
         </div>
       )}
-
-      {/* Step 3: Generating */}
-      {step === "generating" && (
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Loader2 className="w-4 h-4 animate-spin" />
-          Generating section...
-        </div>
-      )}
-
-      {/* Step 4: Review */}
-      {step === "review" && generatedSection && (
-        <div>
-          <p className="text-sm mb-2">
-            <span className="font-medium">{generatedSection.title}</span>
-          </p>
-          <div className="flex gap-2">
-            <button
-              onClick={() => { onAdd(generatedSection); reset(); }}
-              className="px-3 py-1 rounded text-xs font-medium bg-green-600/20 text-green-400 hover:bg-green-600/30"
-            >
-              Keep
-            </button>
-            <button
-              onClick={reset}
-              className="px-3 py-1 rounded text-xs font-medium bg-white/10 text-muted-foreground hover:bg-white/20"
-            >
-              Discard
-            </button>
-            <button
-              onClick={() => suggestedType && handleGenerate(suggestedType)}
-              className="px-3 py-1 rounded text-xs font-medium bg-white/10 text-muted-foreground hover:bg-white/20"
-            >
-              Regenerate
-            </button>
-          </div>
-        </div>
-      )}
-
-      {error && <p className="text-xs text-red-400 mt-2">{error}</p>}
-      </div>
     </div>
   );
 }
