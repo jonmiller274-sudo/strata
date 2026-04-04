@@ -146,12 +146,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 - **Test:** Share an artifact link in Slack → see title, description, and preview image
 - **Status:** OPEN
 
-### QR-20: Mobile-friendly beats navigation
-- **Tier:** 2
-- **What:** Progress bar nav is unreadable on mobile (3px height, no labels). On mobile, replace with a floating "Beat 3 of 7" pill with prev/next arrows, or switch to sidebar nav.
-- **Files:** `src/components/viewer/ProgressBarNav.tsx` or equivalent
-- **Test:** View beats artifact on iPhone → can navigate all sections easily
-- **Status:** OPEN
+### ~~QR-20: Mobile-friendly beats navigation~~ DONE
+- **Status:** DONE — PR opened 2026-04-04. Progress bar hidden on mobile (`hidden sm:flex`). Floating `X / Y` pill with prev/next arrows shown at bottom of screen on mobile only (`sm:hidden`). Desktop unchanged.
 
 ---
 
