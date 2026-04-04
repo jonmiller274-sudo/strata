@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { getArtifactBySlug, getArtifactForEdit } from "@/lib/artifacts/actions";
+import { getArtifactBySlug } from "@/lib/artifacts/actions";
 
 export const runtime = "edge";
 export const alt = "Strata — Interactive Strategy Artifact";
@@ -20,7 +20,7 @@ export default async function OGImage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const artifact = await getArtifactForEdit(slug);
+  const artifact = await getArtifactBySlug(slug);
 
   if (!artifact) {
     // Fallback: generic Strata card
