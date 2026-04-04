@@ -93,10 +93,10 @@ function SortableItem({
       ref={setNodeRef}
       style={style}
       onClick={onSelect}
-      className={`group flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer transition-colors ${
+      className={`group flex items-center gap-2 pl-2 pr-3 py-2 rounded-lg cursor-pointer transition-colors border-l-2 ${
         isSelected
-          ? "bg-white/10 text-foreground"
-          : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
+          ? "bg-accent/5 text-foreground border-accent"
+          : "text-muted-foreground hover:bg-white/5 hover:text-foreground border-transparent"
       }`}
     >
       <button

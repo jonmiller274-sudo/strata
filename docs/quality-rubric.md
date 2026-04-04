@@ -86,12 +86,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 ### ~~QR-11: Split view visual hierarchy~~ DONE
 - **Status:** DONE — PR #12
 
-### QR-12: Consistent hover states on sidebar items
-- **Tier:** 1
-- **What:** All sidebar section items should have: hover bg-white/5, selected bg-accent/5 + left border accent, smooth transition
-- **Files:** `src/components/editor/SortableSectionList.tsx`, `SidebarRail.tsx`
-- **Test:** Hover over sidebar items — consistent highlight. Selected item has accent indicator.
-- **Status:** OPEN
+### ~~QR-12: Consistent hover states on sidebar items~~ DONE
+- **Status:** DONE — PR #11
 
 ### QR-13: Type selector dropdown polish
 - **Tier:** 1

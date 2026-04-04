@@ -83,7 +83,7 @@ export function SidebarRail({
                 className={`relative w-full h-10 flex items-center justify-center transition-colors ${
                   isActive
                     ? "text-accent"
-                    : "text-muted-foreground hover:text-foreground"
+                    : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
                 }`}
                 aria-label={`Section ${index + 1}: ${section.title || section.type}`}
                 title={section.title || `Section ${index + 1}`}
