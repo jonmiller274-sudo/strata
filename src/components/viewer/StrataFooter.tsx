@@ -18,7 +18,7 @@ export function StrataFooter({ planTier = "free" }: StrataFooterProps) {
     >
       <div className="mx-auto flex max-w-4xl w-full items-center justify-between">
         <a
-          href="https://sharestrata.com/?ref=artifact-badge"
+          href="https://sharestrata.com/discover?ref=artifact-badge"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2 text-footer-text hover:text-foreground transition-colors"
@@ -27,12 +27,12 @@ export function StrataFooter({ planTier = "free" }: StrataFooterProps) {
           <span className="text-sm">Made with Strata</span>
         </a>
         <a
-          href="https://sharestrata.com/create?ref=artifact-cta"
+          href="https://sharestrata.com/discover?ref=artifact-cta"
           target="_blank"
           rel="noopener noreferrer"
           className="text-sm text-accent hover:text-accent-hover transition-colors"
         >
-          Create your own &rarr;
+          Learn more &rarr;
         </a>
       </div>
     </footer>

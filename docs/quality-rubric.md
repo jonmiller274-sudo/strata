@@ -112,7 +112,35 @@ Reference: `docs/design-system.md` for correct patterns.
 
 ---
 
-## Priority 5: Landing Page Sync
+## Priority 5: Viewer Quality (investor-facing surface)
+
+### QR-17: Add loading skeleton to artifact page
+- **What:** Show a content skeleton (pulsing gray blocks for title, subtitle, and section placeholders) while Supabase fetch completes. Currently the page is blank for 1-2 seconds.
+- **Files:** `src/app/[slug]/page.tsx` or the viewer layout component
+- **Test:** Hard-refresh an artifact page — see skeleton animation, then smooth transition to content (no blank flash)
+- **Status:** OPEN
+
+### QR-18: Graceful 404 for missing artifacts
+- **What:** Instead of Next.js default notFound(), show a branded 404 page with "This document doesn't exist" message and a CTA to visit sharestrata.com
+- **Files:** `src/app/[slug]/page.tsx`, create `src/app/[slug]/not-found.tsx`
+- **Test:** Visit `/nonexistent-slug` → see branded error page, not blank or generic 404
+- **Status:** OPEN
+
+### QR-19: Generate og:image for social sharing
+- **What:** Add dynamic Open Graph meta tags (title, description, image) so shared artifact links show a rich preview in Slack, email, Twitter. Use Next.js `generateMetadata` with the artifact title/subtitle.
+- **Files:** `src/app/[slug]/page.tsx` (metadata), optionally `src/app/[slug]/opengraph-image.tsx`
+- **Test:** Share an artifact link in Slack → see title, description, and preview image
+- **Status:** OPEN
+
+### QR-20: Mobile-friendly beats navigation
+- **What:** Progress bar nav is unreadable on mobile (3px height, no labels). On mobile, replace with a floating "Beat 3 of 7" pill with prev/next arrows, or switch to sidebar nav.
+- **Files:** `src/components/viewer/ProgressBarNav.tsx` or equivalent
+- **Test:** View beats artifact on iPhone → can navigate all sections easily
+- **Status:** OPEN
+
+---
+
+## Priority 6: Landing Page Sync
 
 ### QR-16: Update landing page to reflect current editor capabilities
 - **What:** Landing page must show: all 8 section types, split view editor, AI chat co-editor, paste/upload ingestion, drag-drop reorder, type changing. Audit `src/app/page.tsx` and update any outdated sections.

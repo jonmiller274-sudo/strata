@@ -195,7 +195,7 @@ export function ArtifactViewer({ artifact }: { artifact: Artifact }) {
         {/* Persistent watermark — free tier only */}
         {(!artifact.plan_tier || artifact.plan_tier === "free") && (
           <a
-            href="https://sharestrata.com?ref=artifact-watermark"
+            href="https://sharestrata.com/discover?ref=artifact-watermark"
             target="_blank"
             rel="noopener noreferrer"
             className={`fixed bottom-4 left-2 sm:left-4 z-40 flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/30 backdrop-blur-sm transition-opacity ${hideWatermark ? "opacity-0 pointer-events-none" : "opacity-70 hover:opacity-90"}`}
