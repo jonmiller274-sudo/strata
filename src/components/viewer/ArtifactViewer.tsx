@@ -8,7 +8,13 @@ import { SectionRenderer } from "./SectionRenderer";
 import { StrataFooter } from "./StrataFooter";
 import { ChevronDown, Layers } from "lucide-react";
 
-export function ArtifactViewer({ artifact }: { artifact: Artifact }) {
+export function ArtifactViewer({
+  artifact,
+  isDemoPage = false,
+}: {
+  artifact: Artifact;
+  isDemoPage?: boolean;
+}) {
   const isBeatMode = artifact.layout_mode === "beats";
 
   const sidebarItems = artifact.sections.map((section) => ({
@@ -106,6 +112,7 @@ export function ArtifactViewer({ artifact }: { artifact: Artifact }) {
   if (isBeatMode) {
     return (
       <div
+        data-theme={artifact.theme ?? "dark"}
         className="min-h-screen bg-background text-foreground"
         style={paletteStyle}
       >
@@ -189,7 +196,7 @@ export function ArtifactViewer({ artifact }: { artifact: Artifact }) {
             );
           })}
 
-          <StrataFooter planTier={artifact.plan_tier} />
+          <StrataFooter planTier={artifact.plan_tier} isDemoPage={isDemoPage} />
         </main>
 
         {/* Persistent watermark — free tier only */}
@@ -213,6 +220,7 @@ export function ArtifactViewer({ artifact }: { artifact: Artifact }) {
   // ===== CONTINUOUS LAYOUT (default) =====
   return (
     <div
+      data-theme={artifact.theme ?? "dark"}
       className="min-h-screen bg-background text-foreground"
       style={paletteStyle}
     >

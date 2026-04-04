@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@theme inline {
+@theme {
   /* ===== Dark theme (default) ===== */
   --color-background: #0a0b10;
   --color-surface: #12141d;

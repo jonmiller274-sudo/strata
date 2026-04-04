@@ -3,326 +3,626 @@ import { ArtifactViewer } from "@/components/viewer/ArtifactViewer";
 import type { Artifact } from "@/types/artifact";
 
 export const metadata: Metadata = {
-  title: "Strata Demo — Interactive Strategy Artifact",
+  title: "Velocity EMEA GTM — Strata Demo",
   description:
-    "See what a Strata artifact looks like. This demo showcases all 7 section types — built with Strata, pitching Strata.",
+    "See what a Strata board document looks like. Velocity's EMEA Go-to-Market Strategy — all 8 section types in a light-theme, sidebar-nav layout.",
   openGraph: {
-    title: "Strata Demo — Interactive Strategy Artifact",
+    title: "Velocity EMEA GTM — Strata Demo",
     description:
-      "See what a Strata artifact looks like. This demo showcases all 7 section types — built with Strata, pitching Strata.",
+      "See what a Strata board document looks like. Velocity's EMEA Go-to-Market Strategy — all 8 section types in a light-theme, sidebar-nav layout.",
   },
 };
 
 const DEMO_ARTIFACT: Artifact = {
   id: "demo",
-  slug: "strata-demo",
-  title: "Strata",
-  subtitle: "Where strategy gets built before it becomes a slide deck, a video, or a PDF.",
-  author_name: "Strata Team",
-  plan_tier: "free",
-  theme: "dark",
+  slug: "velocity-emea-gtm",
+  title: "EMEA Go-to-Market Strategy — Q3 2026",
+  subtitle: "Velocity Revenue Intelligence — Board Strategy Document",
+  author_name: "Velocity Strategy Team",
+  plan_tier: "pro",
+  theme: "light",
+  layout_mode: "continuous",
   is_published: true,
   created_at: new Date().toISOString(),
   updated_at: new Date().toISOString(),
+  branding: {
+    palette: {
+      accent1: "#1e3a5f",
+      accent2: "#0d9488",
+      accent3: "#475569",
+      accent4: "#d97706",
+      accent5: "#059669",
+    },
+  },
   sections: [
+    // ─── Section 1: Executive Summary — Rich Text ───────────────────────────
     {
-      id: "format-crisis",
+      id: "the-case-for-emea",
       type: "rich-text",
-      title: "The Format Crisis",
-      subtitle: "Why every strategy document ends in the same argument",
+      title: "The Case for EMEA",
       content: {
+        tag: {
+          label: "Board Strategy",
+          color: "#1e3a5f",
+        },
         summary:
-          "A CEO asks two senior leaders to explain how the company's strategy ties together. Both independently open AI coding tools and build interactive HTML files — not slides, not docs, not dashboards. Something new.\n\nThe results are stunning. But then the format debate starts:\n\n\"Make this a video\" — the CEO wants to text it to investors.\n\"I'll convert it to PDF\" — the VP wants a polished deliverable.\n\"It should stay interactive\" — the builder knows the format is right.\n\nNobody can agree on what to call it or how to deliver it. The artifact is powerful. The delivery infrastructure doesn't exist.",
-        detail:
-          "This isn't a hypothetical. It happened. Two senior executives at a growth-stage tech company independently built interactive strategy documents on the same day, for the same CEO brief, without consulting each other. Neither considered PowerPoint, Google Slides, or Gamma.\n\nThe job — synthesizing complex, multi-dimensional strategy into something a C-suite audience can navigate on their own — is one that existing tools don't even attempt.\n\nSlides compress too much. Documents are too linear. Dashboards are too operational. Custom HTML is too much work to deliver confidently.\n\nStrata exists because this artifact class has no home.",
+          "Velocity has reached an inflection point. At $18.2M ARR with 142% net revenue retention, our US business is scaling predictably — but our addressable market is constrained. Sixty-three percent of enterprise revenue intelligence spend will come from outside North America by 2028, and European competitors are moving.\n\nRevera (Berlin, $6M seed, 47 customers) and Klosio (London, CRM pivot, ~30 customers) are establishing footholds in a market with no dominant player. Neither has the conversation data moat we've built over 3 years and 12 million analyzed calls.\n\nThis document outlines our plan to launch Velocity EMEA in Q3 2026, targeting $4.2M in incremental ARR within 18 months. We're requesting board approval for a $2.8M investment: a London hub, 12 initial hires, and localized product infrastructure.",
         callout: {
           type: "insight",
-          text: "The format debate itself is the product opportunity. When nobody can agree whether it should be a video, PDF, or link — the answer is: all three, from the same source.",
+          text: "The European revenue intelligence market is where the US market was in 2022 — early, fragmented, and waiting for a category leader. Our 18-month window before Revera closes their Series B is our competitive moat.",
         },
+        detail:
+          "Three factors make this the right moment:\n\n1. Product-market fit signals: 23% of our inbound demo requests already come from EMEA, despite zero marketing spend in the region. Our largest customer, Meridian Financial, expanded to their London team on their own — they forwarded login credentials to 14 UK reps without telling us.\n\n2. Competitive window: Revera is pre-Series B with limited conversation data. Klosio pivoted from CRM analytics 8 months ago and has accuracy issues in multi-accent English analysis. Neither has enterprise-grade security (SOC 2 Type II) or a mature integration ecosystem.\n\n3. Regulatory tailwind: GDPR created a strong preference for EU-hosted solutions. Our planned Frankfurt data residency turns compliance from a sales objection into a selling point — 40% of our lost DACH opportunities cited data residency as the primary blocker.",
       },
     },
+
+    // ─── Section 2: Market Sizing — Data Visualization (funnel) ─────────────
     {
-      id: "building-blocks",
-      type: "expandable-cards",
-      title: "The 8 Building Blocks",
-      subtitle: "Every strategic artifact is composed from these opinionated section types",
+      id: "market-sizing",
+      type: "data-viz",
+      title: "Market Sizing",
       content: {
-        columns: 2,
-        cards: [
+        chart_type: "funnel",
+        data: [
           {
-            id: "rich-text",
-            title: "Rich Text + Progressive Disclosure",
-            summary: "Executive summary visible by default. Supporting evidence revealed on expand.",
-            detail: "The core UX pattern that makes complex strategy consumable. Readers get the headline immediately. They choose when to go deeper. No more 60-slide decks where the insight is buried on slide 47.",
-            tags: ["Foundation"],
+            label: "Global TAM",
+            value: 2400,
+            detail: "Enterprise revenue intelligence worldwide",
           },
           {
-            id: "cards",
-            title: "Expandable Card Grids",
-            summary: "Personas, case studies, competitor profiles — each as a card with click-to-expand detail.",
-            detail: "Cards show the summary view by default. Click to reveal supporting data, quotes, or evidence. Perfect for displaying 4-8 items that each deserve their own space without overwhelming the reader.",
-            tags: ["Visual"],
+            label: "EMEA SAM",
+            value: 680,
+            detail: "Mid-market & enterprise, addressable segments",
           },
           {
-            id: "timelines",
-            title: "Animated Timelines",
-            summary: "Customer journeys, roadmaps, 30/60/90 plans — step by step with motion.",
-            detail: "Steps animate into view as the reader scrolls, creating a sense of progression and narrative. Each step has a label, title, and description. Status indicators show completed, current, and upcoming.",
-            tags: ["Narrative"],
+            label: "Year 1 Addressable",
+            value: 42,
+            detail: "Reachable with London hub + DACH expansion",
           },
           {
-            id: "tiers",
-            title: "Tier & Comparison Tables",
-            summary: "Pricing, feature matrices, plan comparisons — clean, responsive, highlighted.",
-            detail: "One column can be highlighted as 'Recommended'. Features show checkmarks, X marks, or custom values. Responsive layout adapts from side-by-side on desktop to stacked on mobile.",
-            tags: ["Decision"],
+            label: "Year 1 Target",
+            value: 4.2,
+            detail: "10% capture rate — conservative vs. Gong benchmark",
+          },
+        ],
+        x_key: "label",
+        y_key: "value",
+        description:
+          "European revenue intelligence market, 2026 estimates (Forrester, Gartner)",
+        callout:
+          "**$680M SAM** with no dominant player. Revera holds approximately $3M ARR — just 0.4% market share. The market is open.",
+      },
+    },
+
+    // ─── Section 3: The First 90 Days — Guided Journey ───────────────────────
+    {
+      id: "first-90-days",
+      type: "guided-journey",
+      title: "The First 90 Days",
+      content: {
+        interval_ms: 3000,
+        phases: [
+          {
+            id: "foundation",
+            name: "Foundation",
+            color: "#1e3a5f",
+            day_range: "Days 1-30",
           },
           {
-            id: "metrics",
-            title: "Metric Dashboards",
-            summary: "KPI cards with animated counters that count up as they scroll into view.",
-            detail: "Numbers animate from 0 to their target value using an eased cubic function. Each metric can show a trend indicator (up/down/neutral) and a description. Tabular number formatting keeps everything aligned.",
-            tags: ["Data"],
+            id: "activation",
+            name: "Activation",
+            color: "#0d9488",
+            day_range: "Days 31-60",
           },
           {
-            id: "dataviz",
-            title: "Data Visualizations",
-            summary: "Bar charts, funnel charts, and custom SVG diagrams — animated on scroll.",
-            detail: "Built-in chart types handle the most common strategy visuals: bar charts for comparisons, funnel charts for conversion flows, with extensibility for custom SVG when needed.",
-            tags: ["Data"],
+            id: "pipeline",
+            name: "Pipeline",
+            color: "#059669",
+            day_range: "Days 61-90",
+          },
+        ],
+        counters: [
+          {
+            id: "headcount",
+            label: "EMEA Headcount",
+            sublabel: "of 12 target",
+            icon: "users",
+            color: "#1e3a5f",
+            start_value: 0,
           },
           {
-            id: "hub",
-            title: "Hub & Product Mockups",
-            summary: "Interconnected diagrams showing how products, features, or teams connect.",
-            detail: "A central node surrounded by connected nodes, with labeled relationships between them. Perfect for platform visions, org structures, or product suite overviews.",
-            tags: ["Architecture"],
+            id: "pipeline_val",
+            label: "Pipeline Created",
+            sublabel: "qualified pipeline",
+            icon: "dollar",
+            color: "#0d9488",
+            prefix: "$",
+            suffix: "K",
+            start_value: 0,
           },
           {
-            id: "nav",
-            title: "Navigation Sidebar",
-            summary: "Non-linear browsing with scroll-spy, progress indicators, and section jumping.",
-            detail: "The sidebar tracks reading progress automatically using IntersectionObserver. Readers can jump to any section non-linearly. The progress bar shows how far through the document they are.",
-            tags: ["Navigation"],
+            id: "burn",
+            label: "Monthly Burn",
+            sublabel: "per month",
+            icon: "bar",
+            color: "#d97706",
+            prefix: "£",
+            suffix: "K",
+            start_value: 0,
+          },
+        ],
+        events: [
+          {
+            id: "day-1-gm-starts",
+            day: 1,
+            label: "Day 1",
+            title: "GM Starts",
+            phase_id: "foundation",
+            description:
+              "Sarah Chen joins as GM EMEA. Based in London, reports to CRO. First week: office setup, hiring plan finalization, target account list review with US sales leadership.",
+            trigger: {
+              label: "Key Hire",
+              text: "Sarah Chen — ex-Gong EMEA. Built their UK team from 0 to £8M ARR in 14 months.",
+            },
+            counter_values: { headcount: 1, pipeline_val: 0, burn: 45 },
+          },
+          {
+            id: "week-1-office-live",
+            day: 7,
+            label: "Week 1",
+            title: "London Office Live",
+            phase_id: "foundation",
+            description:
+              "Shoreditch WeWork — 15 desks reserved with expansion option to 30. Video conferencing configured for daily US standup sync (5pm GMT / 12pm EST). IT security provisioned, VPN active.",
+            trigger: {
+              label: "Milestone",
+              text: "Physical EMEA presence established — Velocity is now a two-continent company.",
+            },
+            counter_values: { headcount: 1, pipeline_val: 0, burn: 52 },
+          },
+          {
+            id: "week-2-first-aes",
+            day: 14,
+            label: "Week 2",
+            title: "First AEs Start",
+            phase_id: "foundation",
+            description:
+              "2 UK Mid-Market Account Executives join. Weeks 1-2: US product certification, talk track localization for UK market, target account assignment (85 accounts each). Shadow 10+ US discovery calls.",
+            personas: ["James Ward — AE", "Priya Sharma — AE"],
+            counter_values: { headcount: 3, pipeline_val: 0, burn: 78 },
+          },
+          {
+            id: "week-3-sdr-se",
+            day: 21,
+            label: "Week 3",
+            title: "SDR + SE Join",
+            phase_id: "foundation",
+            description:
+              "1 SDR begins outbound sequences targeting 170 UK mid-market accounts. 1 Solutions Engineer supports UK demo pipeline and builds EMEA-specific demo environments. SDR target: 200 outbound touches per week.",
+            personas: ["Alex Torres — SDR", "Maria Okonkwo — SE"],
+            counter_values: { headcount: 5, pipeline_val: 0, burn: 95 },
+          },
+          {
+            id: "day-30-first-pipeline",
+            day: 30,
+            label: "Day 30",
+            title: "First Pipeline",
+            phase_id: "foundation",
+            description:
+              "Month 1 results: 15 first meetings booked (11 outbound, 4 inbound). AEs running discovery calls. SE delivering technical deep-dives. 3 proof-of-concept agreements signed with UK mid-market targets.",
+            trigger: {
+              label: "Board Checkpoint",
+              text: "15 meetings, 3 POCs signed. Pipeline on track. Burn within budget.",
+            },
+            counter_values: { headcount: 5, pipeline_val: 180, burn: 95 },
+          },
+          {
+            id: "week-5-6-partners",
+            day: 38,
+            label: "Week 5-6",
+            title: "Partners Activated",
+            phase_id: "activation",
+            description:
+              "Co-selling agreements executed with Accenture UK and Deloitte Digital. First joint pipeline reviews completed. Partner AEs briefed on Velocity positioning and trained on demo flow. Referral incentive structure: 15% of Year 1 ACV.",
+            trigger: {
+              label: "Channel",
+              text: "2 SI partners activated. Targeting 20% of Year 1 pipeline from partner channel.",
+            },
+            counter_values: { headcount: 5, pipeline_val: 320, burn: 102 },
+          },
+          {
+            id: "day-45-frankfurt",
+            day: 45,
+            label: "Day 45",
+            title: "Frankfurt Data Center Live",
+            phase_id: "activation",
+            description:
+              "EU data residency fully operational. All EMEA customer data stored and processed in Frankfurt. GDPR and DSGVO compliance documentation finalized and published. Legal review complete. This removes the #1 sales objection from DACH enterprise pipeline.",
+            trigger: {
+              label: "Technical Milestone",
+              text: "Data residency was the primary objection in 40% of DACH discovery calls. Now resolved.",
+            },
+            counter_values: { headcount: 5, pipeline_val: 480, burn: 108 },
+          },
+          {
+            id: "week-7-8-first-revenue",
+            day: 52,
+            label: "Week 7-8",
+            title: "First Revenue",
+            phase_id: "activation",
+            description:
+              "First 2 UK mid-market deals closed: Paddle (£42K ACV, 85-seat deployment) and a Series C fintech (£38K ACV, 62 seats). Average sales cycle: 6.5 weeks from first meeting. Win rate: 22% vs. 28% US benchmark — expected variance for new market.",
+            spend_delta: "+£80K ARR",
+            trigger: {
+              label: "First Revenue",
+              text: "£80K combined ARR from 2 UK logos. Win rate tracking 6 points below US — within expected range for market entry.",
+            },
+            counter_values: { headcount: 5, pipeline_val: 640, burn: 108 },
+          },
+          {
+            id: "day-60-dach-team",
+            day: 60,
+            label: "Day 60",
+            title: "DACH Team Joins",
+            phase_id: "activation",
+            description:
+              "2 German-speaking AEs start in London (relocating to Munich hub in Q1 2027). German UI localization enters beta with 3 design partners. DSGVO certification published. DACH outbound begins: 85 enterprise target accounts across Germany, Austria, and Switzerland.",
+            personas: ["Lukas Bauer — DACH AE", "Nina Hoffmann — DACH AE"],
+            counter_values: { headcount: 7, pipeline_val: 820, burn: 142 },
+          },
+          {
+            id: "day-75-pipeline-milestone",
+            day: 75,
+            label: "Day 75",
+            title: "Pipeline Milestone",
+            phase_id: "pipeline",
+            description:
+              "$1.2M qualified pipeline across UK direct and DACH enterprise. 8 active proof-of-concept evaluations. Nordics self-serve launched quietly — 23 trial signups in first 2 weeks with zero outbound spend.",
+            trigger: {
+              label: "Pipeline Check",
+              text: "Qualified pipeline 15% ahead of plan. Nordics self-serve showing early product-market fit signal.",
+            },
+            counter_values: { headcount: 7, pipeline_val: 1200, burn: 148 },
+          },
+          {
+            id: "day-90-board-review",
+            day: 90,
+            label: "Day 90",
+            title: "Board Review",
+            phase_id: "pipeline",
+            description:
+              "End of Q3 snapshot: 7 EMEA headcount ramped. 5 closed UK customers totaling £210K ARR. $1.8M qualified pipeline with 60% in active evaluation. 3 DACH enterprise POCs in progress (expected close Q4). Nordics: 41 trial signups, 6 converted to paid without sales touch.",
+            spend_delta: "+£210K ARR",
+            trigger: {
+              label: "Board Update",
+              text: "Pipeline 15% ahead of plan. Closed ARR 8% behind — 2 UK deals slipped to early Q4 (procurement delays, not loss). Requesting approval to accelerate Q4 hiring: 5 additional headcount.",
+            },
+            counter_values: { headcount: 7, pipeline_val: 1800, burn: 155 },
           },
         ],
       },
     },
+
+    // ─── Section 4: Target Segments — Expandable Card Grid ─────────────────
     {
-      id: "customer-journey",
+      id: "target-segments",
+      type: "expandable-cards",
+      title: "Target Segments",
+      content: {
+        columns: 2,
+        display_mode: "expandable",
+        cards: [
+          {
+            id: "uk-mid-market",
+            title: "UK Mid-Market",
+            summary:
+              "200-1,000 employee SaaS companies with established sales teams. Fastest path to revenue — English-speaking, familiar buying process, London proximity.",
+            tags: ["Priority 1", "Direct Sales"],
+            metric: {
+              value: "340",
+              label: "qualified accounts",
+            },
+            detail:
+              "ICP: VP Sales or CRO at Series B-D SaaS companies headquartered in London, Manchester, or Edinburgh. Pain point: forecasting in spreadsheets, zero call intelligence, reps self-reporting pipeline quality. Typical budget: £30-80K annually. Decision cycle: 6-8 weeks with single VP approval. Key target accounts: Paddle, GoCardless, Checkout.com growth team, Monzo Business, Thought Machine.",
+          },
+          {
+            id: "dach-enterprise",
+            title: "DACH Enterprise",
+            summary:
+              "1,000+ employee companies in Germany, Austria, and Switzerland. Higher ACV but longer sales cycles. Requires German-language support and EU data residency.",
+            tags: ["Priority 2", "Enterprise"],
+            metric: {
+              value: "€92K",
+              label: "avg deal size",
+            },
+            detail:
+              "ICP: VP Revenue Operations at enterprise SaaS or financial services firms. Pain point: multi-language call analysis (German/English switching mid-call), compliance-grade conversation storage, forecasting across distributed European teams. Budget: €80-200K annually. Decision cycle: 4-6 months with procurement involvement. Requirements: Frankfurt data center, German UI localization, DSGVO compliance certification. Key target accounts: TeamViewer, Personio, Celonis, N26 Enterprise, Wefox.",
+          },
+          {
+            id: "nordics-plg",
+            title: "Nordics PLG",
+            summary:
+              "Product-led SaaS companies in Stockholm, Helsinki, and Copenhagen. Tech-forward buyers who prefer to self-serve. Lower ACV but fastest adoption and strongest reference customers.",
+            tags: ["Priority 3", "Self-Serve"],
+            metric: {
+              value: "14 days",
+              label: "avg time to value",
+            },
+            detail:
+              "ICP: Revenue leaders at 50-500 person product-led companies. Pain point: scaling beyond founder-led sales without losing deal intelligence and coaching consistency. Budget: €20-50K annually. Decision cycle: 2-3 weeks, often self-serve trial converting to paid without sales touch. English-first market — no localization required. Key target accounts: Klarna growth team, Spotify B2B, Pleo, Wolt Enterprise, Supermetrics.",
+          },
+          {
+            id: "southern-europe",
+            title: "Southern Europe — Deprioritized",
+            summary:
+              "France, Spain, and Italy via channel partners only. Not a Year 1 priority — complex localization, longer enterprise cycles, and less mature SaaS ecosystems. Revisit in H2 2027.",
+            tags: ["Year 2", "Channel"],
+            metric: {
+              value: "Deprioritized",
+              label: "status",
+            },
+            detail:
+              "Why not now: French and Spanish localization adds 3-4 months of product work with limited near-term ROI. Enterprise buying in France is relationship-driven and heavily favors local vendors — cold outbound conversion rates are 60% lower than UK. Italy's B2B SaaS market trails UK/Nordics by 3-4 years in adoption maturity. The right model here is channel (reseller + implementation partner), which requires a mature EMEA operations team to support. We'll revisit once the London hub is generating pipeline independently and we have 2+ reference customers that Southern European buyers would recognize.",
+          },
+        ],
+        callout: {
+          type: "quote",
+          text: "Deliberate focus. We're not trying to win all of Europe in Year 1 — we're trying to prove the EMEA model works in three segments before scaling to the rest.",
+        },
+      },
+    },
+
+    // ─── Section 5: 12-Month Rollout — Animated Timeline ─────────────────────
+    {
+      id: "twelve-month-rollout",
       type: "timeline",
-      title: "The Customer Journey",
-      subtitle: "From format crisis to strategic superpower",
+      title: "12-Month Rollout",
       content: {
         steps: [
           {
-            id: "discover",
-            label: "Day 0",
-            title: "The Format Crisis",
-            description: "A CEO asks you to explain something complex. You open Claude Code and build an interactive HTML file. It's amazing. But you can't send it confidently — PDF? Video? Link? Nobody knows.",
-            status: "completed",
-          },
-          {
-            id: "find-strata",
-            label: "Day 1",
-            title: "Discover Strata",
-            description: "You see a colleague's interactive strategy document with 'Made with Strata' at the bottom. You click 'Create your own.' You paste your content, pick a template, and the AI structures it in seconds.",
-            status: "completed",
-          },
-          {
-            id: "first-artifact",
-            label: "Day 2",
-            title: "Ship Your First Artifact",
-            description: "You publish a shareable link. Your CEO opens it on their phone — instant load, sidebar navigation, expandable sections. They forward it to three board members. No PDF conversion needed.",
+            id: "q3-london-hub",
+            label: "Q3 2026",
+            title: "London Hub Launch",
+            description:
+              "Open Shoreditch office. Hire GM (Sarah Chen, ex-Gong EMEA), 2 Account Executives, 1 Solutions Engineer, 1 SDR. Frankfurt data center goes live. Begin UK mid-market outbound.",
             status: "current",
           },
           {
-            id: "check-stats",
-            label: "Week 1",
-            title: "Check Your Stats",
-            description: "You see who opened it, which sections they spent time on, and when they forwarded it. Your CEO spent 4 minutes on the customer journey section. The CFO skipped straight to pricing. You learn what lands.",
+            id: "q3-first-pipeline",
+            label: "Q3 2026",
+            title: "First UK Pipeline",
+            description:
+              "Target: 40 qualified opportunities from UK mid-market. Activate co-selling with SI partners (Accenture UK, Deloitte Digital). Close first 5 UK logos by end of quarter.",
             status: "upcoming",
           },
           {
-            id: "team-adopts",
-            label: "Month 1",
-            title: "Your Team Adopts",
-            description: "Your VP Sales starts using Strata for quarterly business reviews. The QBR link replaces the 40-slide deck. Clients engage with it asynchronously. Win rates tick up because the proposal works when the sales rep isn't in the room.",
+            id: "q4-dach-entry",
+            label: "Q4 2026",
+            title: "DACH Market Entry",
+            description:
+              "Hire 2 German-speaking AEs and 1 DACH SDR. German UI localization ships. DSGVO compliance certified. Begin enterprise outbound across 85 DACH target accounts.",
             status: "upcoming",
           },
           {
-            id: "strategic-layer",
-            label: "Month 3",
-            title: "Strata Becomes Your Strategic Layer",
-            description: "Board decks, product roadmaps, investor updates, GTM strategies — all built in Strata, all shareable as links, all tracked. You export video for the board meeting and PDF for the filing cabinet. Same source artifact.",
+            id: "q4-enterprise-deals",
+            label: "Q4 2026",
+            title: "First Enterprise Deals",
+            description:
+              "Close 2-3 DACH enterprise deals at $80K+ ACV. Launch Nordics PLG self-serve motion. Target: $800K in closed-won EMEA ARR by end of Q4.",
             status: "upcoming",
+          },
+          {
+            id: "q1-2027-scale",
+            label: "Q1 2027",
+            title: "Scale & Optimize",
+            description:
+              "Expand to 12 EMEA headcount. Launch partner referral program. Analyze channel performance: UK direct vs. DACH enterprise vs. Nordics PLG — double down on highest-performing motion.",
+            status: "upcoming",
+          },
+          {
+            id: "q2-2027-run-rate",
+            label: "Q2 2027",
+            title: "Run Rate Target",
+            description:
+              "Target: $4.2M EMEA ARR run rate. 60+ EMEA customers across 3 segments. Evaluate Southern Europe timing for H2. Present EMEA growth story as part of Series C narrative.",
+            status: "upcoming",
+          },
+        ],
+        evidence: {
+          text: "Benchmark: Gong's EMEA expansion reached $10M ARR within 14 months of their London office opening. Our target of $4.2M in 18 months is conservative by comparison, reflecting our smaller team and more focused segment approach.",
+        },
+      },
+    },
+
+    // ─── Section 6: Competitive Landscape — Tier Table (comparison) ──────────
+    {
+      id: "competitive-landscape",
+      type: "tier-table",
+      title: "Competitive Landscape",
+      content: {
+        mode: "comparison",
+        kicker:
+          "We win on data depth and US-proven playbook. We need to close the gap on localization and physical EU presence.",
+        columns: [
+          {
+            name: "Velocity",
+            description: "US-based, expanding to EMEA",
+            is_highlighted: true,
+            features: [
+              { name: "Conversation Intelligence: 12M+ calls, 3 years", included: true },
+              { name: "ML Revenue Forecasting: 94% accuracy", included: true },
+              { name: "EU Data Residency: Frankfurt — Q3 2026", included: "Q3 2026" },
+              { name: "Multi-language Analysis: English + German Q4", included: "Q4 2026" },
+              { name: "EMEA Sales Team: Hiring — 8 by Q4", included: "In progress" },
+              { name: "Customer Base: 847 customers (0 EMEA)", included: "847 US" },
+              { name: "Integration Ecosystem: 42 native integrations", included: true },
+              { name: "Enterprise Security (SOC 2 Type II)", included: true },
+            ],
+          },
+          {
+            name: "Revera",
+            description: "Berlin · Series A · $6M raised",
+            features: [
+              { name: "Conversation Intelligence: ~200K calls, 18 months", included: true },
+              { name: "ML Revenue Forecasting", included: false },
+              { name: "EU Data Residency", included: true },
+              { name: "Multi-language Analysis: DE, EN, FR", included: true },
+              { name: "EMEA Sales Team: 12 reps across DACH", included: true },
+              { name: "Customer Base: 47 EMEA customers", included: "47 customers" },
+              { name: "Integration Ecosystem: 8 integrations", included: "8 integrations" },
+              { name: "Enterprise Security (SOC 2 Type II)", included: false },
+            ],
+          },
+          {
+            name: "Klosio",
+            description: "London · Pivoted from CRM · 2025",
+            features: [
+              { name: "Conversation Intelligence: 8 months, accuracy issues", included: "Limited" },
+              { name: "ML Revenue Forecasting: CRM-based (legacy)", included: "CRM-based" },
+              { name: "EU Data Residency", included: true },
+              { name: "Multi-language Analysis", included: false },
+              { name: "EMEA Sales Team: 6 reps, UK only", included: "6 reps (UK)" },
+              { name: "Customer Base: ~30 UK customers", included: "~30 customers" },
+              { name: "Integration Ecosystem: 15 (CRM-heavy)", included: "15 (CRM)" },
+              { name: "Enterprise Security (SOC 2 Type II)", included: "In progress" },
+            ],
           },
         ],
       },
     },
+
+    // ─── Section 7: GTM Architecture — Hub Mockup ───────────────────────────
     {
-      id: "how-it-connects",
+      id: "gtm-architecture",
       type: "hub-mockup",
-      title: "How It All Connects",
-      subtitle: "Strata is where strategy gets built — everything else is a delivery format",
+      title: "Go-to-Market Architecture",
+      subtitle: "How Velocity's EMEA channels connect and reinforce each other.",
       content: {
         center: {
-          id: "strata-core",
-          label: "Strata Artifact",
-          description: "The single source of truth for your strategy — interactive, structured, navigable",
-          color: "#6366f1",
+          id: "velocity",
+          label: "Velocity EMEA",
+          description: "London Hub — GM + Regional Teams",
+          color: "#1e3a5f",
         },
         nodes: [
           {
-            id: "link",
-            label: "Shareable Link",
-            description: "Instant load, no login, any device",
-            color: "#34d399",
+            id: "direct",
+            label: "UK Direct Sales",
+            description: "Mid-market AEs (2 → 4 by Q1)",
+            color: "#0d9488",
           },
           {
-            id: "video",
-            label: "Video Export",
-            description: "Structured video with chapter markers",
-            color: "#f59e0b",
+            id: "enterprise",
+            label: "DACH Enterprise",
+            description: "German-speaking AEs + SE",
+            color: "#1e3a5f",
           },
           {
-            id: "pdf",
-            label: "PDF Export",
-            description: "Polished layout, not a static dump",
-            color: "#f87171",
+            id: "plg",
+            label: "Nordics Self-Serve",
+            description: "PLG motion, no sales touch",
+            color: "#059669",
           },
           {
-            id: "analytics",
-            label: "Viewer Analytics",
-            description: "Who opened, which sections, time spent",
-            color: "#8b5cf6",
+            id: "partners",
+            label: "SI Partners",
+            description: "Accenture UK, Deloitte Digital",
+            color: "#475569",
           },
           {
-            id: "ai",
-            label: "AI Structuring",
-            description: "Paste content, get structured artifact",
-            color: "#38bdf8",
+            id: "marketing",
+            label: "Field Marketing",
+            description: "SaaStr EU, Revenue Summit, local events",
+            color: "#d97706",
           },
           {
-            id: "templates",
-            label: "Templates",
-            description: "Board Deck, QBR, Roadmap, GTM, Vision",
-            color: "#ec4899",
+            id: "cs",
+            label: "Customer Success",
+            description: "EMEA CSM (hire Q4 2026)",
+            color: "#0d9488",
           },
         ],
         connections: [
-          { from: "strata-core", to: "link", label: "Publish" },
-          { from: "strata-core", to: "video", label: "Export" },
-          { from: "strata-core", to: "pdf", label: "Export" },
-          { from: "strata-core", to: "analytics", label: "Track" },
-          { from: "ai", to: "strata-core", label: "Generate" },
-          { from: "templates", to: "strata-core", label: "Scaffold" },
+          { from: "direct", to: "velocity", label: "UK pipeline" },
+          { from: "enterprise", to: "velocity", label: "DACH pipeline" },
+          { from: "plg", to: "velocity", label: "Self-serve signups" },
+          { from: "partners", to: "enterprise", label: "Enterprise referrals" },
+          { from: "marketing", to: "direct", label: "Event leads" },
+          { from: "marketing", to: "plg", label: "Content + SEO" },
+          { from: "cs", to: "velocity", label: "Expansion revenue" },
+          { from: "direct", to: "cs", label: "Onboarded customers" },
         ],
-        description: "Build once in Strata. Deliver as a link for async consumption, export to video for investor emails, or generate a PDF for the board package. Same artifact, every format.",
+        description:
+          "Build once in London, distribute across three parallel motions: UK direct for near-term revenue, DACH enterprise for ACV growth, and Nordics self-serve for scalable pipeline without headcount.",
       },
     },
+
+    // ─── Section 8: Revenue Model — Metric Dashboard ─────────────────────────
     {
-      id: "pricing",
-      type: "tier-table",
-      title: "Pricing",
-      subtitle: "No free tier. 14-day trial with full functionality.",
-      content: {
-        columns: [
-          {
-            name: "Solo",
-            price: "$79",
-            price_period: "month",
-            description: "For individual strategists and founders",
-            cta: "Start free trial",
-            features: [
-              { name: "1 creator seat", included: true },
-              { name: "Up to 10 active artifacts", included: true },
-              { name: "All 8 section types", included: true },
-              { name: "Viewer analytics", included: true },
-              { name: "Video + PDF export", included: true },
-              { name: "Basic brand customization", included: true },
-              { name: "Team collaboration", included: false },
-              { name: "Advanced analytics", included: false },
-            ],
-          },
-          {
-            name: "Team",
-            price: "$199",
-            price_period: "month",
-            description: "For teams building strategy together",
-            cta: "Start free trial",
-            is_highlighted: true,
-            features: [
-              { name: "5 creator seats", included: true },
-              { name: "Unlimited active artifacts", included: true },
-              { name: "All 8 section types", included: true },
-              { name: "Advanced viewer analytics", included: true },
-              { name: "Priority video + PDF export", included: true },
-              { name: "Full brand kit", included: true },
-              { name: "Team collaboration", included: true },
-              { name: "Co-authorship with AI mediation", included: "Soon" },
-            ],
-          },
-        ],
-      },
-    },
-    {
-      id: "the-business",
+      id: "revenue-model",
       type: "metric-dashboard",
-      title: "The Business",
-      subtitle: "The math behind $1M ARR as a bootstrapped, no-employee SaaS",
+      title: "Revenue Model",
       content: {
         metrics: [
           {
-            id: "arr-target",
-            label: "ARR Target",
-            value: "$1M",
+            id: "year1-arr",
+            label: "Year 1 EMEA ARR Target",
+            value: "$4.2M",
+            numeric_value: 4200000,
             prefix: "$",
-            numeric_value: 1000000,
-            suffix: "",
-            description: "Bootstrapped. No investors. No employees. PLG distribution.",
+            change: {
+              direction: "up",
+              value: "from $0 today",
+            },
+            description:
+              "Based on 60+ customers at $70K blended ACV across UK mid-market, DACH enterprise, and Nordics self-serve.",
           },
           {
-            id: "accounts",
-            label: "Paying Accounts Needed",
-            value: "900",
-            numeric_value: 900,
-            description: "At 60% Team ($199) / 40% Solo ($79) mix",
+            id: "cac-payback",
+            label: "Blended CAC Payback",
+            value: "14",
+            numeric_value: 14,
+            suffix: " months",
+            change: {
+              direction: "up",
+              value: "vs 11mo US",
+            },
+            description:
+              "Higher initial CAC due to market entry costs, brand building, and lower initial win rates. Normalizes to US levels by Q2 2027 as pipeline matures.",
           },
           {
-            id: "timeline",
-            label: "Timeline to $1M",
-            value: "20-24 months",
-            description: "From first line of code to $83K MRR",
+            id: "quota-per-rep",
+            label: "Quota per Rep (Ramped)",
+            value: "$520K",
+            numeric_value: 520000,
+            prefix: "$",
+            change: {
+              direction: "neutral",
+              value: "85% of US quota",
+            },
+            description:
+              "Year 1 ramp quota — 85% of US target to account for new market development and longer European enterprise cycles.",
           },
           {
-            id: "margin",
-            label: "SaaS Margin",
-            value: "85%+",
-            description: "Infrastructure costs are minimal — Vercel + Supabase + AI API calls",
+            id: "pipeline-coverage",
+            label: "Pipeline Coverage",
+            value: "3.5",
+            numeric_value: 3.5,
+            suffix: "x",
+            change: {
+              direction: "up",
+              value: "above 3x minimum",
+            },
+            description:
+              "Conservative coverage ratio for a new market. Higher than our US 3.0x target to buffer for EMEA conversion rate uncertainty.",
           },
         ],
       },
     },
-    {
-      id: "why-now",
-      type: "rich-text",
-      title: "Why Now",
-      subtitle: "Three forces converging to create this category",
-      content: {
-        summary:
-          "AI coding tools have collapsed the skill barrier between business leaders and technical output. For the first time, a CBO can build an interactive HTML artifact in a day. But the delivery infrastructure hasn't caught up.\n\nThe gap between what executives can BUILD and what they can confidently SEND is the entire product opportunity.\n\nNo existing tool — not Gamma, not Notion, not PowerPoint — even attempts to solve this job. They optimize for creation speed, not delivery trust. Strata optimizes for both.",
-        detail:
-          "Three forces are converging:\n\n1. AI coding tools (Claude Code, Cursor, etc.) mean non-technical executives can build sophisticated interactive documents — but they can't deliver them.\n\n2. Remote/async work means more strategy is consumed without a presenter. The document must be self-navigating and self-convincing.\n\n3. The rise of the 'strategic artifact' as a distinct category — not a deck, not a doc, not a dashboard. Something new that combines depth with accessibility.\n\nGamma won't build this because their 70M users want fast first drafts, not deep strategy artifacts. Notion won't build this because their architecture is block-based, not narrative-based. Claude Code won't productize the delivery layer because they're a development tool, not a communication platform.\n\nThe window is open. The job exists. The category is forming.",
-        callout: {
-          type: "quote",
-          text: "\"Strata is where strategy gets built before it becomes a slide deck, a video, or a PDF.\"",
-        },
-      },
-    },
+
   ],
 };
 
 export default function DemoPage() {
-  return <ArtifactViewer artifact={DEMO_ARTIFACT} />;
+  return <ArtifactViewer artifact={DEMO_ARTIFACT} isDemoPage />;
 }
