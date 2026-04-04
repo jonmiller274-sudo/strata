@@ -130,7 +130,7 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 ## Priority 5: Viewer Quality (investor-facing surface)
 
 ### ~~QR-17: Add loading skeleton to artifact page~~ DONE
-- **Status:** DONE — PR #20. Created `src/app/[slug]/loading.tsx` (Next.js route-level Suspense loading UI). Shows pulsing sidebar + title + 3 section card skeletons while the server fetch completes.
+- **Status:** DONE — PR #14. Created `src/app/[slug]/loading.tsx` (Next.js route-level Suspense loading UI). Shows pulsing sidebar + title + 3 section card skeletons while the server fetch completes.
 
 ### QR-18: Graceful 404 for missing artifacts
 - **Tier:** 2
@@ -172,7 +172,7 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 
 - **QR-01: Kill non-standard text sizes** — PR #1, merged 2026-04-04
 - **QR-02: Normalize border opacity to white/10 default** — PR #2, merged 2026-04-04
-- **QR-17: Add loading skeleton to artifact page** — PR #20, 2026-04-04
+- **QR-17: Add loading skeleton to artifact page** — PR #14, 2026-04-04
 
 ---
 
