@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Strata PR notifier. Polls GitHub every 2 minutes for newly opened PRs
+  and sends Jon an iMessage via scripts/ping-jon.sh.
+
+  Install:
+    cp scripts/notify-pr/com.jonmiller.strata-notify-pr.plist ~/Library/LaunchAgents/
+    launchctl load -w ~/Library/LaunchAgents/com.jonmiller.strata-notify-pr.plist
+
+  Check status:
+    launchctl list | grep strata-notify-pr
+
+  Trigger manually:
+    launchctl start com.jonmiller.strata-notify-pr
+
+  Unload (stop the channel):
+    launchctl unload -w ~/Library/LaunchAgents/com.jonmiller.strata-notify-pr.plist
+
+  Edit tier filter (to reduce noise):
+    Open scripts/notify-pr/run-notify-pr.sh, change MIN_TIER, reload the agent.
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.jonmiller.strata-notify-pr</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/JonMiller/strata/scripts/notify-pr/run-notify-pr.sh</string>
+    </array>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/Users/JonMiller/.npm-global/bin:/Users/JonMiller/.bun/bin:/Users/JonMiller/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+        <key>HOME</key>
+        <string>/Users/JonMiller</string>
+    </dict>
+
+    <key>StartInterval</key>
+    <integer>120</integer>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/JonMiller/strata/scripts/notify-pr/notify-pr.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/JonMiller/strata/scripts/notify-pr/notify-pr-error.log</string>
+</dict>
+</plist>
