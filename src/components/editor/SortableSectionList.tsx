@@ -16,7 +16,7 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Section } from "@/types/artifact";
 import { SECTION_TYPE_LABELS } from "@/types/artifact";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
@@ -83,6 +83,15 @@ function SortableItem({
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: section.id });
 
+  useEffect(() => {
+    if (!confirmDelete) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setConfirmDelete(false);
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [confirmDelete]);
+
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
@@ -117,6 +126,7 @@ function SortableItem({
         </p>
       </div>
       <button
+        aria-label={confirmDelete ? "Confirm delete" : "Delete section"}
         onClick={(e) => {
           e.stopPropagation();
           if (confirmDelete) {
@@ -124,17 +134,16 @@ function SortableItem({
             setConfirmDelete(false);
           } else {
             setConfirmDelete(true);
-            setTimeout(() => setConfirmDelete(false), 2000);
           }
         }}
-        className={`flex items-center transition-opacity ${
+        className={`flex items-center gap-1 rounded px-1.5 py-0.5 transition-all ${
           confirmDelete
-            ? "opacity-100 text-red-400"
-            : "opacity-0 group-hover:opacity-50 hover:!opacity-100 hover:text-red-400"
+            ? "opacity-100 bg-red-500/10 text-red-400 border border-red-500/20"
+            : "opacity-0 group-hover:opacity-50 hover:!opacity-100 hover:text-red-400 border border-transparent"
         }`}
       >
-        <Trash2 className="w-3.5 h-3.5" />
-        {confirmDelete && <span className="text-xs ml-1">confirm?</span>}
+        <Trash2 className="w-3.5 h-3.5 shrink-0" />
+        {confirmDelete && <span className="text-xs whitespace-nowrap">Confirm delete?</span>}
       </button>
     </div>
   );
