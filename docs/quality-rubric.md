@@ -41,12 +41,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 
 ## Priority 2: Interaction Completeness (4-state rule)
 
-### QR-06: Delete confirmation is too fragile
-- **Tier:** 2
-- **What:** Current delete uses a 2-second timeout that resets if you hover away. Replace with a proper confirmation: click delete → button changes to "Confirm delete?" (red, stays until clicked or Escape)
-- **Files:** `src/components/editor/SortableSectionList.tsx`
-- **Test:** Click delete, wait 10 seconds — "Confirm?" still visible. Press Escape — cancels. Click confirm — deletes.
-- **Status:** OPEN
+### ~~QR-06: Delete confirmation is too fragile~~ DONE
+- **Status:** DONE — PR opened 2026-04-04. Replaced 2s timeout with persistent "Confirm delete?" pill (Escape to cancel).
 
 ### ~~QR-07: Add loading states to Upload tab~~ DONE
 - **Status:** DONE — PR #13
