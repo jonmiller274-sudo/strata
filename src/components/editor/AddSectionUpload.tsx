@@ -29,8 +29,15 @@ export function AddSectionUpload({
   const [error, setError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const [statusText, setStatusText] = useState("");
+  const [uploadFile, setUploadFile] = useState<{ name: string; size: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const abortRef = useRef<AbortController | null>(null);
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  };
 
   const getEditKeyParam = useCallback(() => {
     const urlKey = new URLSearchParams(window.location.search).get("key");
@@ -176,6 +183,7 @@ export function AddSectionUpload({
       }
 
       setState("processing");
+      setUploadFile({ name: file.name, size: formatFileSize(file.size) });
       const controller = new AbortController();
       abortRef.current = controller;
 
@@ -237,6 +245,7 @@ export function AddSectionUpload({
     }
     setState("idle");
     setStatusText("");
+    setUploadFile(null);
   }, []);
 
   // Review mode — reuse MultiSectionReview
@@ -282,6 +291,12 @@ export function AddSectionUpload({
           {state === "processing" ? (
             <>
               <Loader2 className="w-8 h-8 text-accent animate-spin" />
+              {uploadFile && (
+                <p className="text-xs font-medium text-foreground/80 text-center truncate max-w-full">
+                  {uploadFile.name}
+                  <span className="text-muted-foreground font-normal ml-1.5">· {uploadFile.size}</span>
+                </p>
+              )}
               <p className="text-sm text-muted-foreground text-center">
                 {statusText}
               </p>

@@ -55,12 +55,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 - **Test:** Click delete, wait 10 seconds — "Confirm?" still visible. Press Escape — cancels. Click confirm — deletes.
 - **Status:** OPEN
 
-### QR-07: Add loading states to Upload tab
-- **Tier:** 1
-- **What:** Upload tab should show: (1) file name while processing, (2) progress stage text that updates ("Extracting text..." → "Structuring content..."), (3) file size
-- **Files:** `src/components/editor/AddSectionUpload.tsx`
-- **Test:** Upload a PDF — see filename, size, and stage text update during processing
-- **Status:** OPEN
+### ~~QR-07: Add loading states to Upload tab~~ DONE
+- **Status:** DONE — PR #13
 
 ### QR-08: Add empty state to AI chat panel
 - **Tier:** 2
