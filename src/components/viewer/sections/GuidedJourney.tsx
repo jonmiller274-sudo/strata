@@ -347,7 +347,7 @@ function TimelineTrack({
                     </span>
                     <span
                       className={cn(
-                        "mt-0.5 max-w-[80px] text-center text-[9px] leading-tight transition-colors whitespace-nowrap",
+                        "mt-0.5 max-w-[80px] text-center text-[10px] leading-tight transition-colors whitespace-nowrap",
                         isActive
                           ? "font-semibold"
                           : "text-muted opacity-50"
