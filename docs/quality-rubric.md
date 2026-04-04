@@ -83,12 +83,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 
 ## Priority 3: Visual Hierarchy & Polish
 
-### QR-11: Split view visual hierarchy
-- **Tier:** 1
-- **What:** Editor panel (left) should feel like the primary workspace. Preview panel (right) should feel like a reference. Add subtle visual differentiation: editor gets full-opacity background, preview gets slightly muted (`bg-background/50` — already partially done).
-- **Files:** `src/components/editor/SplitViewLayout.tsx`, `SectionPreviewPanel.tsx`
-- **Test:** Visual check — editor panel clearly feels "primary," preview clearly feels "secondary"
-- **Status:** OPEN
+### ~~QR-11: Split view visual hierarchy~~ DONE
+- **Status:** DONE — PR #12
 
 ### QR-12: Consistent hover states on sidebar items
 - **Tier:** 1
