@@ -229,6 +229,54 @@ Keep infrastructure boring. Ship in 4 weeks.
 
 ---
 
+## Autonomous Agent Workflow
+
+A scheduled remote agent runs every 2 hours, making quality improvements and creating PRs for Jon to review.
+
+### Reference Documents
+- **Design system:** `docs/design-system.md` — visual patterns, colors, typography, buttons, states
+- **Quality rubric:** `docs/quality-rubric.md` — prioritized work queue with pass/fail tests
+- **Quality Engineer advisor:** `~/.claude/skills/personal/advisors/quality-engineer.md`
+
+### How It Works
+1. Agent reads quality-rubric.md, picks the highest-priority OPEN item
+2. Reads design-system.md for the correct pattern
+3. Makes the fix on a new branch (`quality/QR-XX-short-description`)
+4. Runs `npm run build` — must pass with 0 errors
+5. Creates a PR with plain-English title and description
+6. Moves to the next item on the next cycle
+
+### Agent Scope (can do WITHOUT Jon's approval)
+- Fix visual inconsistencies (per design-system.md)
+- Add missing interaction states (loading, error, empty, success)
+- Improve accessibility (ARIA labels, keyboard support)
+- Fix TypeScript warnings
+- Unify component patterns to match design system
+- Performance improvements with no behavior change
+- Update landing page to reflect existing features (QR-16)
+
+### Needs Planning Session (CANNOT do alone)
+- New features or capabilities
+- Design direction changes (empty states, onboarding, first-60-seconds experience)
+- Database schema changes
+- New API endpoints
+- Anything requiring product taste/judgment
+- Changes to the quality rubric or design system themselves
+- Landing page copy/messaging/positioning changes
+
+### PR Requirements
+- One focused improvement per PR (atomic, self-contained)
+- Branch name: `quality/QR-XX-short-description`
+- Plain-English title (e.g., "Unify all editor buttons to 3 standard patterns")
+- Description includes: what changed, why, which rubric item, files modified
+- Build must pass (`npm run build` with 0 errors)
+- Mark the rubric item as DONE after PR is merged
+
+### Current Priority: Quality Over Features
+The feature roadmap (docs/features/hardcoded-features-audit.md) is **frozen**. No new features until the quality rubric is complete. The autonomous agent only polishes existing capabilities to enterprise grade. New features happen in planning sessions with Jon.
+
+---
+
 ## Post-Build Review Process (Mandatory for Major Features)
 
 After completing a major feature build (multi-commit, multi-file, or multi-session work), run both reviews in parallel before pushing or deploying:
@@ -257,4 +305,4 @@ Combine findings from both reviews into a single report. Fix critical issues bef
 
 ---
 
-*Last updated: 2026-03-31*
+*Last updated: 2026-04-04*
