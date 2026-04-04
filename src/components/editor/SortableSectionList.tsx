@@ -33,8 +33,12 @@ function getItemCount(section: Section): string | null {
       return `${section.content.events.length} events`;
     case "tier-table":
       return `${section.content.columns.length} tiers`;
-    case "hub-mockup":
-      return `${section.content.nodes.length} nodes`;
+    case "hub-mockup": {
+      const nodeCount = section.content.layers
+        ? section.content.layers.reduce((sum: number, l: { nodes: unknown[] }) => sum + l.nodes.length, 0)
+        : section.content.nodes?.length ?? 0;
+      return `${nodeCount} nodes`;
+    }
     default:
       return null;
   }
