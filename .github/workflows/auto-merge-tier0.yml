@@ -1,0 +1,140 @@
+name: Auto-Merge Tier 0
+
+on:
+  pull_request_target:
+    types: [labeled, opened, synchronize, reopened]
+
+# SECURITY: This workflow NEVER checks out PR code.
+# It only reads PR metadata and performs merge/comment operations.
+# pull_request_target is safe here because we never run code from the PR branch.
+
+permissions:
+  pull-requests: write
+  contents: write
+  checks: read
+
+jobs:
+  auto-merge-tier0:
+    name: Auto-merge if tier-0 and CI passes
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'tier-0')
+
+    steps:
+      - name: Check for veto label
+        id: veto-label
+        run: |
+          LABELS='${{ toJson(github.event.pull_request.labels.*.name) }}'
+          if echo "$LABELS" | grep -q '"veto"'; then
+            echo "vetoed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "vetoed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check for veto in comments
+        id: veto-comment
+        if: steps.veto-label.outputs.vetoed == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          COMMENTS=$(gh api repos/$REPO/issues/$PR_NUMBER/comments --jq '[.[].body | ascii_downcase] | join(" ")')
+          if echo "$COMMENTS" | grep -qw "veto"; then
+            echo "vetoed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "vetoed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Bail if vetoed
+        if: steps.veto-label.outputs.vetoed == 'true' || steps.veto-comment.outputs.vetoed == 'true'
+        run: |
+          echo "PR is vetoed — skipping auto-merge."
+          exit 0
+
+      - name: Wait for CI checks to pass
+        if: steps.veto-label.outputs.vetoed == 'false' && steps.veto-comment.outputs.vetoed == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          echo "Polling CI checks for PR #$PR_NUMBER..."
+          for i in $(seq 1 20); do
+            STATUS=$(gh pr checks $PR_NUMBER --repo $REPO --json state,name 2>/dev/null \
+              | python3 -c "
+          import sys, json
+          checks = json.load(sys.stdin)
+          # Filter out this workflow itself
+          relevant = [c for c in checks if 'auto-merge' not in c.get('name','').lower() and 'tier-enforcement' not in c.get('name','').lower()]
+          if not relevant:
+              print('pending')
+          elif all(c['state'] == 'SUCCESS' for c in relevant):
+              print('pass')
+          elif any(c['state'] in ('FAILURE','ERROR','CANCELLED') for c in relevant):
+              print('fail')
+          else:
+              print('pending')
+          " 2>/dev/null || echo "pending")
+
+            echo "Check $i/20 — status: $STATUS"
+
+            if [ "$STATUS" = "pass" ]; then
+              echo "All CI checks passed."
+              break
+            elif [ "$STATUS" = "fail" ]; then
+              echo "CI checks failed — aborting auto-merge."
+              exit 1
+            fi
+
+            if [ "$i" -eq 20 ]; then
+              echo "Timed out waiting for CI checks."
+              exit 1
+            fi
+            sleep 30
+          done
+
+      - name: Re-check veto before merging
+        id: final-veto
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          # Re-check labels in case veto was added while CI was running
+          LABELS=$(gh api repos/$REPO/issues/$PR_NUMBER/labels --jq '[.[].name] | join(" ")')
+          COMMENTS=$(gh api repos/$REPO/issues/$PR_NUMBER/comments --jq '[.[].body | ascii_downcase] | join(" ")')
+          if echo "$LABELS" | grep -qw "veto" || echo "$COMMENTS" | grep -qw "veto"; then
+            echo "vetoed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "vetoed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Squash-merge the PR
+        if: steps.final-veto.outputs.vetoed == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh pr merge $PR_NUMBER --repo $REPO --squash --delete-branch \
+            --subject "$(gh pr view $PR_NUMBER --repo $REPO --json title --jq .title) (#$PR_NUMBER)"
+
+      - name: Comment on merged PR
+        if: steps.final-veto.outputs.vetoed == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh pr comment $PR_NUMBER --repo $REPO \
+            --body "Auto-merged as Tier 0. [Authorized by .github/workflows/auto-merge-tier0.yml]"
+
+      - name: Comment if vetoed after CI
+        if: steps.final-veto.outputs.vetoed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh pr comment $PR_NUMBER --repo $REPO \
+            --body "Auto-merge blocked: veto detected. Remove the \`veto\` label or veto comment to allow auto-merge."
