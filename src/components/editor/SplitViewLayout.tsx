@@ -174,8 +174,8 @@ export function SplitViewLayout({
         onExpandSidebar={handleExpandSidebar}
       />
 
-      {/* Editor Panel (left ~50%) */}
-      <div className="flex-1 min-w-0 flex flex-col overflow-hidden">
+      {/* Editor Panel (left ~50%) — primary workspace, slightly elevated */}
+      <div className="flex-1 min-w-0 flex flex-col overflow-hidden bg-surface">
         <SectionEditorPanel
           section={selectedSection}
           sectionIndex={selectedSectionIndex}
