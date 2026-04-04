@@ -204,7 +204,7 @@ function SectionImagePreview({
           <button
             onClick={handleExtractStructure}
             disabled={isExtracting}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-accent/10 text-accent hover:bg-accent/20 transition-colors disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-accent/10 text-accent hover:bg-accent/20 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
             {isExtracting ? (
               <Loader2 className="w-3 h-3 animate-spin" />
