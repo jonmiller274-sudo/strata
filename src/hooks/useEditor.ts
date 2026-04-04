@@ -102,6 +102,27 @@ export function useEditor(initialArtifact: Artifact) {
     [markUnsaved]
   );
 
+  // Duplicate a section by ID — deep copy with new ID inserted immediately after original
+  const duplicateSection = useCallback(
+    (sectionId: string) => {
+      setArtifact((prev) => {
+        const idx = prev.sections.findIndex((s) => s.id === sectionId);
+        if (idx === -1) return prev;
+        const original = prev.sections[idx];
+        const copy: Section = {
+          ...JSON.parse(JSON.stringify(original)),
+          id: crypto.randomUUID(),
+          title: `${original.title} (Copy)`,
+        };
+        const sections = [...prev.sections];
+        sections.splice(idx + 1, 0, copy);
+        return { ...prev, sections };
+      });
+      markUnsaved();
+    },
+    [markUnsaved]
+  );
+
   // Add multiple sections at a specific position (batch insert, single auto-save)
   const addSections = useCallback(
     (sections: Section[], position?: number) => {
@@ -136,6 +157,7 @@ export function useEditor(initialArtifact: Artifact) {
     updateSectionField,
     reorderSections,
     deleteSection,
+    duplicateSection,
     addSection,
     addSections,
     mergeArtifact,

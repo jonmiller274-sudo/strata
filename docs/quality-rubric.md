@@ -58,12 +58,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 - **Test:** Open AI tab with no messages — see icon + quick-start suggestions
 - **Status:** OPEN
 
-### QR-09: Add section duplicate action
-- **Tier:** 2
-- **What:** Each section in the sidebar list should have a "Duplicate" action (copy icon) alongside delete. Creates exact copy with new ID, inserted below.
-- **Files:** `src/components/editor/SortableSectionList.tsx`, parent editor component
-- **Test:** Click duplicate on any section — new identical section appears below with "(Copy)" suffix on title
-- **Status:** OPEN
+### ~~QR-09: Add section duplicate action~~ DONE
+- **Status:** DONE — PR opened 2026-04-04. Copy icon on each section row (hidden until hover); creates deep copy with new ID and "(Copy)" title suffix, inserted immediately below.
 
 ### QR-10: Keyboard shortcut discoverability
 - **Tier:** 2

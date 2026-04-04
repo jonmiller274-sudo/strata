@@ -41,6 +41,7 @@ interface SplitViewLayoutProps {
   onReplaceSection: (sectionId: string, updated: Section) => void;
   // Sidebar overlay props
   onDeleteSection: (id: string) => void;
+  onDuplicateSection: (id: string) => void;
   onReorderSections: (from: number, to: number) => void;
   onAddSection: (section: Section, position?: number) => void;
   onAddSections: (sections: Section[], position?: number) => void;
@@ -68,6 +69,7 @@ export function SplitViewLayout({
   onFieldChange,
   onReplaceSection,
   onDeleteSection,
+  onDuplicateSection,
   onReorderSections,
   onAddSection,
   onAddSections,
@@ -292,6 +294,7 @@ export function SplitViewLayout({
                           handleCloseSidebarOverlay();
                         }}
                         onDelete={onDeleteSection}
+                        onDuplicate={onDuplicateSection}
                         onReorder={onReorderSections}
                         onInsertAt={(pos) => {
                           setInsertAtPosition(pos);
