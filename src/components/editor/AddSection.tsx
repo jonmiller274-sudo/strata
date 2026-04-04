@@ -248,13 +248,13 @@ export function AddSection({ documentTitle, documentSubtitle, onAdd, onAddMultip
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleGenerate(suggestedType)}
-                      className="px-3 py-1 rounded text-xs font-medium bg-accent text-white hover:bg-accent/80"
+                      className="px-3 py-1 rounded text-xs font-medium bg-accent text-white hover:bg-accent/80 transition-colors"
                     >
                       Generate
                     </button>
                     <button
                       onClick={() => { setSuggestedType(null); setStep("describe"); }}
-                      className="px-3 py-1 rounded text-xs font-medium bg-white/10 text-muted-foreground hover:bg-white/20"
+                      className="px-3 py-1 rounded text-xs font-medium bg-white/10 text-muted-foreground hover:bg-white/20 transition-colors"
                     >
                       Change type
                     </button>
@@ -281,19 +281,19 @@ export function AddSection({ documentTitle, documentSubtitle, onAdd, onAddMultip
               <div className="flex gap-2">
                 <button
                   onClick={() => { onAdd(generatedSection); handleBack(); }}
-                  className="px-3 py-1 rounded text-xs font-medium bg-green-600/20 text-green-400 hover:bg-green-600/30"
+                  className="px-3 py-1 rounded text-xs font-medium bg-green-600/20 text-green-400 hover:bg-green-600/30 transition-colors"
                 >
                   Keep
                 </button>
                 <button
                   onClick={handleBack}
-                  className="px-3 py-1 rounded text-xs font-medium bg-white/10 text-muted-foreground hover:bg-white/20"
+                  className="px-3 py-1 rounded text-xs font-medium bg-white/10 text-muted-foreground hover:bg-white/20 transition-colors"
                 >
                   Discard
                 </button>
                 <button
                   onClick={() => suggestedType && handleGenerate(suggestedType)}
-                  className="px-3 py-1 rounded text-xs font-medium bg-white/10 text-muted-foreground hover:bg-white/20"
+                  className="px-3 py-1 rounded text-xs font-medium bg-white/10 text-muted-foreground hover:bg-white/20 transition-colors"
                 >
                   Regenerate
                 </button>
