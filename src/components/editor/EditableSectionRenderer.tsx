@@ -223,9 +223,9 @@ function SectionImagePreview({
         </button>
       </div>
       {extractError && (
-        <div className="px-3 py-2 text-xs text-red-400 bg-red-500/5 border-t border-red-500/10">
+        <p className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2 mx-3 mb-3">
           {extractError}
-        </div>
+        </p>
       )}
     </div>
   );

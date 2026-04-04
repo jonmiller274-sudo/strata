@@ -26,7 +26,7 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 - **What:** All error displays must use the standard error pill: `text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2`. Replace any inline red text, raw `text-red-400` without background, or other error formats.
 - **Files:** All editor components showing errors
 - **Test:** Every `text-red-400` in editor components is inside a `bg-red-500/10` container
-- **Status:** OPEN
+- **Status:** IN PROGRESS
 
 ### QR-04: Unify button patterns to 3 types
 - **Tier:** 1
