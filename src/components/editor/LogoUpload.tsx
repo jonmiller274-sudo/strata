@@ -118,7 +118,7 @@ export function LogoUpload({
           <X className="h-3 w-3" />
           {uploading ? "Removing..." : "Remove"}
         </button>
-        {error && <p className="text-xs text-red-400">{error}</p>}
+        {error && <p className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">{error}</p>}
       </div>
     );
   }
@@ -157,7 +157,7 @@ export function LogoUpload({
         )}
       </div>
 
-      {error && <p className="mt-1.5 text-xs text-red-400">{error}</p>}
+      {error && <p className="mt-1.5 text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">{error}</p>}
 
       <input
         ref={inputRef}
