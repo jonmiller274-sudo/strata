@@ -66,7 +66,7 @@ export function SectionEditorPanel({
                 setPendingRemap(null);
                 onPendingPreview?.(null);
               }}
-              className="px-3 py-1 rounded text-xs font-medium bg-green-600/20 text-green-400 hover:bg-green-600/30"
+              className="px-3 py-1 rounded text-xs font-medium bg-green-600/20 text-green-400 hover:bg-green-600/30 transition-colors"
             >
               Apply
             </button>
@@ -75,7 +75,7 @@ export function SectionEditorPanel({
                 setPendingRemap(null);
                 onPendingPreview?.(null);
               }}
-              className="px-3 py-1 rounded text-xs font-medium bg-white/10 text-muted-foreground hover:bg-white/20"
+              className="px-3 py-1 rounded text-xs font-medium bg-white/10 text-muted-foreground hover:bg-white/20 transition-colors"
             >
               Cancel
             </button>

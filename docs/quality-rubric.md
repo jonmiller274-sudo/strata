@@ -35,12 +35,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 - **Test:** Manual audit — every button matches one of the 3 patterns in design-system.md
 - **Status:** OPEN
 
-### QR-05: Add transition-colors to all buttons
-- **Tier:** 0
-- **What:** Every `<button>` with a hover state must have `transition-colors`
-- **Files:** All files in `src/components/editor/`
-- **Test:** `grep -r "hover:bg-" src/components/editor/ | grep -v "transition"` returns 0 results for buttons
-- **Status:** OPEN
+### ~~QR-05: Add transition-colors to all buttons~~ DONE
+- **Status:** DONE — PR #5
 
 ### QR-21: Palette consistency audit — charts and active states should use Velocity palette
 - **Tier:** 1
