@@ -12,7 +12,7 @@ Reference: `docs/design-system.md` for correct patterns.
 - **What:** Replace all `text-[11px]` with `text-xs` and all `text-[9px]` with `text-[10px]`
 - **Files:** All files in `src/components/editor/`
 - **Test:** `grep -r "text-\[11px\]\|text-\[9px\]" src/components/editor/` returns 0 results
-- **Status:** OPEN
+- **Status:** IN PROGRESS
 
 ### QR-02: Normalize border opacity to white/10 default
 - **What:** Replace `border-white/15` with `border-white/10` everywhere in editor
