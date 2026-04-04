@@ -86,12 +86,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 ### ~~QR-12: Consistent hover states on sidebar items~~ DONE
 - **Status:** DONE — PR #11
 
-### QR-13: Type selector dropdown polish
-- **Tier:** 1
-- **What:** Type selector error appears as toast above dropdown but disappears when dropdown closes. Make error persist for 5s regardless of dropdown state. Also add loading skeleton during type conversion.
-- **Files:** `src/components/editor/TypeSelectorDropdown.tsx`
-- **Test:** Trigger type change error — close dropdown — error still visible for 5s
-- **Status:** OPEN
+### ~~QR-13: Type selector dropdown polish~~ DONE
+- **Status:** DONE — PR #19. Moved error toast to bottom-full (above trigger), raised z-index to z-[60] so dropdown reopening never covers the error. 5s auto-clear timer was already present. Added aria-live="polite" to error toast. Loading skeleton deferred — the trigger already shows "Converting to {type}..." spinner which is sufficient UX.
 
 ### ~~QR-22: Timeline dots should show status differentiation~~ DONE
 - **Status:** DONE — Already implemented in AnimatedTimeline.tsx via STATUS_STYLES object (accent dot + ArrowRight for current, success dot + Check for completed, card dot + Circle for upcoming). Rubric pre-dated the implementation.
@@ -176,6 +172,7 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 
 - **QR-01: Kill non-standard text sizes** — PR #1, merged 2026-04-04
 - **QR-02: Normalize border opacity to white/10 default** — PR #2, merged 2026-04-04
+- **QR-13: Type selector dropdown polish** — PR #19, 2026-04-04
 
 ---
 

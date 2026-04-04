@@ -134,9 +134,9 @@ export function TypeSelectorDropdown({
         )}
       </button>
 
-      {/* Error toast */}
+      {/* Error toast — z-[60] ensures it appears above the dropdown (z-50) if re-opened */}
       {error && (
-        <div className="absolute top-full left-0 mt-1 z-50 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2 text-xs text-red-400 max-w-[240px]">
+        <div className="absolute bottom-full left-0 mb-1 z-[60] bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2 text-xs text-red-400 max-w-[240px]" aria-live="polite">
           {error}
         </div>
       )}
