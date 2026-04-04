@@ -90,14 +90,27 @@ export function AiChatPanel({
       {/* Message list */}
       <div className="flex-1 overflow-y-auto px-3 py-3 space-y-3">
         {messages.length === 0 && !isLoading && (
-          <div className="text-center py-8">
-            <Sparkles className="w-6 h-6 text-accent/40 mx-auto mb-2" />
-            <p className="text-xs text-muted-foreground">
-              Ask the AI co-editor to refine your content.
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">
-              It can ask clarifying questions before making changes.
-            </p>
+          <div className="py-6 px-1">
+            <div className="text-center mb-5">
+              <div className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-3">
+                <Sparkles className="w-4 h-4 text-accent/70" />
+              </div>
+              <p className="text-xs font-medium text-foreground/80">AI co-editor</p>
+              <p className="text-[10px] text-muted-foreground mt-0.5">
+                Describe what to change — it asks before rewriting.
+              </p>
+            </div>
+            <div className="space-y-1.5">
+              {chips.map((chip) => (
+                <button
+                  key={chip.label}
+                  onClick={() => onSend(chip.instruction)}
+                  className="w-full text-left px-3 py-2 rounded-lg text-xs bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-foreground border border-white/10 hover:border-white/20 transition-all"
+                >
+                  {chip.label}
+                </button>
+              ))}
+            </div>
           </div>
         )}
 
@@ -128,8 +141,8 @@ export function AiChatPanel({
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Quick-action chips */}
-      {!isLoading && (
+      {/* Quick-action chips — only shown when a conversation is in progress */}
+      {!isLoading && messages.length > 0 && (
         <div className="px-3 pb-2 flex flex-wrap gap-1.5">
           {chips.map((chip) => (
             <button

@@ -51,12 +51,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 ### ~~QR-07: Add loading states to Upload tab~~ DONE
 - **Status:** DONE — PR #13
 
-### QR-08: Add empty state to AI chat panel
-- **Tier:** 2
-- **What:** Current empty state is just text. Add: Sparkles icon (already there), 2-3 contextual quick-start prompts based on current section type, subtle visual treatment
-- **Files:** `src/components/editor/AiChatPanel.tsx`
-- **Test:** Open AI tab with no messages — see icon + quick-start suggestions
-- **Status:** OPEN
+### ~~QR-08: Add empty state to AI chat panel~~ DONE
+- **Status:** DONE — PR opened 2026-04-04. Enhanced empty state with accent icon container, section-type-specific prompt suggestions as full-width clickable rows; bottom chip strip hidden until conversation starts.
 
 ### QR-09: Add section duplicate action
 - **Tier:** 2
