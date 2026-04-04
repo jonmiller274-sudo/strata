@@ -109,9 +109,9 @@ export default function DiscoverPage() {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.4, delay: 0.4 + i * 0.05 }}
-                className="flex items-start gap-3 py-2"
+                className="flex items-center gap-3 py-1.5"
               >
-                <div className="mt-0.5 w-1 h-1 rounded-full bg-accent shrink-0" />
+                <div className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
                 <span className="text-sm text-muted">{cap}</span>
               </motion.div>
             ))}
