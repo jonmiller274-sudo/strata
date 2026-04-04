@@ -18,7 +18,7 @@ Reference: `docs/design-system.md` for correct patterns.
 - **What:** Replace `border-white/15` with `border-white/10` everywhere in editor
 - **Files:** `src/components/editor/AddSectionUpload.tsx` and any others
 - **Test:** `grep -r "border-white/15" src/components/editor/` returns 0 results
-- **Status:** OPEN
+- **Status:** IN PROGRESS
 
 ### QR-03: Unify error message pattern
 - **What:** All error displays must use the standard error pill: `text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2`. Replace any inline red text, raw `text-red-400` without background, or other error formats.
