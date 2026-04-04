@@ -15,6 +15,7 @@ import { InlineEditor } from "./InlineEditor";
 import {
   ArrowLeft,
   ImageIcon,
+  Keyboard,
   List,
   Plus,
   Sparkles,
@@ -89,6 +90,7 @@ export function SplitViewLayout({
   const [showAddSection, setShowAddSection] = useState(false);
   const [insertAtPosition, setInsertAtPosition] = useState<number | null>(null);
   const [typeChangePreview, setTypeChangePreview] = useState<Section | null>(null);
+  const [showShortcuts, setShowShortcuts] = useState(false);
 
   // Close zoom-out when section changes
   useEffect(() => {
@@ -119,8 +121,22 @@ export function SplitViewLayout({
         return;
       }
 
-      // Escape — zoom in, or close sidebar overlay, or exit split view
+      // ? — toggle keyboard shortcut help overlay
+      if (e.key === "?" && !e.metaKey && !e.ctrlKey) {
+        const tag = (e.target as HTMLElement).tagName;
+        if (tag !== "INPUT" && tag !== "TEXTAREA") {
+          e.preventDefault();
+          setShowShortcuts((v) => !v);
+          return;
+        }
+      }
+
+      // Escape — close shortcuts overlay, zoom in, close sidebar overlay, or exit split view
       if (e.key === "Escape") {
+        if (showShortcuts) {
+          setShowShortcuts(false);
+          return;
+        }
         if (sidebarOverlayOpen) {
           handleCloseSidebarOverlay();
           return;
@@ -158,6 +174,7 @@ export function SplitViewLayout({
     artifact.sections,
     selectedSection.id,
     isZoomedOut,
+    showShortcuts,
     sidebarOverlayOpen,
     onSelectSection,
     handleToggleZoom,
@@ -345,6 +362,69 @@ export function SplitViewLayout({
                     />
                   </div>
                 )}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Keyboard shortcut help overlay */}
+      <AnimatePresence>
+        {showShortcuts && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              className="absolute inset-0 bg-black/40 z-40"
+              onClick={() => setShowShortcuts(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.15 }}
+              className="absolute inset-0 flex items-center justify-center z-50 pointer-events-none"
+            >
+              <div className="bg-surface border border-white/10 rounded-xl shadow-2xl w-80 p-5 pointer-events-auto">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <Keyboard className="w-4 h-4 text-accent" />
+                    <span className="text-sm font-medium">Keyboard shortcuts</span>
+                  </div>
+                  <button
+                    aria-label="Close keyboard shortcuts"
+                    onClick={() => setShowShortcuts(false)}
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <XIcon className="w-4 h-4" />
+                  </button>
+                </div>
+                <div className="space-y-2.5">
+                  {[
+                    { keys: ["⌘", "E"], label: "Toggle zoom (overview / focus)" },
+                    { keys: ["⌘", "↑"], label: "Previous section" },
+                    { keys: ["⌘", "↓"], label: "Next section" },
+                    { keys: ["Esc"], label: "Close panel / exit section view" },
+                    { keys: ["?"], label: "Show this help" },
+                  ].map(({ keys, label }) => (
+                    <div key={label} className="flex items-center justify-between gap-4">
+                      <span className="text-xs text-muted-foreground">{label}</span>
+                      <div className="flex items-center gap-1 shrink-0">
+                        {keys.map((k) => (
+                          <kbd
+                            key={k}
+                            className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-white/10 border border-white/20 text-foreground/80"
+                          >
+                            {k}
+                          </kbd>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-[10px] text-muted-foreground/50 mt-4">Press ? or Escape to close</p>
               </div>
             </motion.div>
           </>
