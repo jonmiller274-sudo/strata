@@ -88,7 +88,7 @@ export function AiChatPanel({
       </div>
 
       {/* Message list */}
-      <div className="flex-1 overflow-y-auto px-3 py-3 space-y-3">
+      <div className="flex-1 overflow-y-auto px-3 py-3 space-y-3" aria-live="polite" aria-label="AI chat messages">
         {messages.length === 0 && !isLoading && (
           <div className="text-center py-8">
             <Sparkles className="w-6 h-6 text-accent/40 mx-auto mb-2" />
