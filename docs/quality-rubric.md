@@ -29,7 +29,7 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 - **Status:** IN PROGRESS
 
 ### ~~QR-04: Unify button patterns to 3 types~~ DONE
-- **Status:** DONE — PR #18. Fixed Apply (SectionEditorPanel), Keep (AddSection), Add Selected (MultiSectionReview) — all changed from non-standard green to Primary accent. TopBar publish toggle uses green as a status indicator (published=live), which is intentional semantic colour; left as-is (would require Tier 2 design decision).
+- **Status:** DONE — PR #15. Fixed Apply (SectionEditorPanel), Keep (AddSection), Add Selected (MultiSectionReview) — all changed from non-standard green to Primary accent. TopBar publish toggle uses green as a status indicator (published=live), which is intentional semantic colour; left as-is (would require Tier 2 design decision).
 
 ### ~~QR-05: Add transition-colors to all buttons~~ DONE
 - **Status:** DONE — PR #5
@@ -172,7 +172,7 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 
 - **QR-01: Kill non-standard text sizes** — PR #1, merged 2026-04-04
 - **QR-02: Normalize border opacity to white/10 default** — PR #2, merged 2026-04-04
-- **QR-04: Unify button patterns to 3 types** — PR #18, 2026-04-04
+- **QR-04: Unify button patterns to 3 types** — PR #15, 2026-04-04
 
 ---
 
