@@ -90,7 +90,7 @@ export function SidebarRail({
               >
                 <div className="flex flex-col items-center gap-0.5">
                   <Icon className="w-3.5 h-3.5" />
-                  <span className="text-[9px] font-medium leading-none">
+                  <span className="text-[10px] font-medium leading-none">
                     {index + 1}
                   </span>
                 </div>

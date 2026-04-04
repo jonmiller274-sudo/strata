@@ -320,8 +320,8 @@ export function AddSectionUpload({
             <p className="text-[10px] font-medium text-muted-foreground/70 uppercase tracking-wide">
               How it works
             </p>
-            <div className="flex gap-2 text-[11px] text-muted-foreground">
-              <span className="shrink-0 w-4 h-4 rounded-full bg-white/10 flex items-center justify-center text-[9px] font-medium">
+            <div className="flex gap-2 text-xs text-muted-foreground">
+              <span className="shrink-0 w-4 h-4 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-medium">
                 1
               </span>
               <span>
@@ -329,8 +329,8 @@ export function AddSectionUpload({
                 matching native section (cards, timeline, table, etc.)
               </span>
             </div>
-            <div className="flex gap-2 text-[11px] text-muted-foreground">
-              <span className="shrink-0 w-4 h-4 rounded-full bg-white/10 flex items-center justify-center text-[9px] font-medium">
+            <div className="flex gap-2 text-xs text-muted-foreground">
+              <span className="shrink-0 w-4 h-4 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-medium">
                 2
               </span>
               <span>
@@ -338,8 +338,8 @@ export function AddSectionUpload({
                 multiple interactive sections
               </span>
             </div>
-            <div className="flex gap-2 text-[11px] text-muted-foreground">
-              <span className="shrink-0 w-4 h-4 rounded-full bg-white/10 flex items-center justify-center text-[9px] font-medium">
+            <div className="flex gap-2 text-xs text-muted-foreground">
+              <span className="shrink-0 w-4 h-4 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-medium">
                 3
               </span>
               <span>
