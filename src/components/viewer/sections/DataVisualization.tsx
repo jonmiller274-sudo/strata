@@ -171,7 +171,8 @@ function BarChart({
               whileInView={{ height: `${height}%` }}
               transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
               viewport={{ once: true }}
-              className="w-full rounded-t-lg bg-accent min-h-[4px]"
+              className="w-full rounded-t-lg min-h-[4px]"
+              style={{ backgroundColor: "var(--palette-accent1, var(--color-accent))" }}
             />
             <span className="text-xs text-muted-foreground text-center truncate w-full">
               {item[xKey]}
@@ -224,8 +225,8 @@ function FunnelChart({
                 whileInView={{ width: `${width}%` }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="h-full rounded-lg bg-accent"
-                style={{ opacity: 1 - index * 0.12 }}
+                className="h-full rounded-lg"
+                style={{ backgroundColor: "var(--palette-accent1, var(--color-accent))", opacity: 1 - index * 0.12 }}
               />
             </div>
           </motion.div>

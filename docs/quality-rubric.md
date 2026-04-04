@@ -42,11 +42,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 - **Test:** `grep -r "hover:bg-" src/components/editor/ | grep -v "transition"` returns 0 results for buttons
 - **Status:** OPEN
 
-### QR-21: Palette consistency audit — charts and active states should use Velocity palette
-- **Tier:** 1
-- **What:** Audit components that render charts and highlights to ensure they prefer `--palette-accent1` through `--palette-accent5` over the default `--color-accent`. Currently the Market Sizing funnel chart renders default indigo bars even when the artifact has a custom `branding.palette`. Same for sidebar active-state highlight and the BOARD STRATEGY tag. Files to audit: `src/components/viewer/sections/DataVisualization.tsx`, `src/components/viewer/SidebarNav.tsx`, `src/components/viewer/sections/RichTextCollapsible.tsx`
-- **Test:** Open /demo (light theme, Velocity navy/teal palette). Funnel chart bars should be navy (`#1e3a5f`), not indigo. Sidebar active section should show navy highlight.
-- **Status:** OPEN
+### ~~QR-21: Palette consistency audit — charts and active states should use Velocity palette~~ DONE
+- **Status:** DONE — PR #10
 
 ---
 
