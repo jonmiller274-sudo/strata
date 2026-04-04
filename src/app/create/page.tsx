@@ -13,7 +13,6 @@ import {
   RotateCcw,
   Upload,
   FileText,
-  X,
 } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils/cn";

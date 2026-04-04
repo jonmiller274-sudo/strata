@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { getArtifactBySlug, getArtifactForEdit } from "@/lib/artifacts/actions";
+import { getArtifactForEdit } from "@/lib/artifacts/actions";
 
 export const runtime = "edge";
 export const alt = "Strata — Interactive Strategy Artifact";

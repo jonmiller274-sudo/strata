@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import type { Section, SectionType } from "@/types/artifact";
-import type { ChatMessage, ChatSuggestion, ChatScope } from "@/hooks/useAiChat";
+import type { SectionType } from "@/types/artifact";
+import type { ChatMessage, ChatScope } from "@/hooks/useAiChat";
 import { getQuickChips } from "@/hooks/useAiChat";
 import { Sparkles, Send, Loader2, Check, X, RotateCcw } from "lucide-react";
 
