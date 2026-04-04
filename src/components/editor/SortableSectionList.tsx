@@ -52,6 +52,7 @@ function InsertDivider({ onClick }: { onClick: () => void }) {
       <button
         onClick={onClick}
         className="relative mx-auto flex items-center justify-center w-5 h-5 rounded-full border border-transparent text-transparent group-hover/insert:border-accent/40 group-hover/insert:text-accent/70 hover:!border-accent hover:!text-accent hover:!bg-accent/10 transition-all"
+        aria-label="Insert section here"
       >
         <Plus className="w-3 h-3" />
       </button>
@@ -103,6 +104,7 @@ function SortableItem({
         {...attributes}
         {...listeners}
         className="opacity-0 group-hover:opacity-50 shrink-0 cursor-grab touch-none"
+        aria-label="Drag to reorder"
       >
         <GripVertical className="w-3.5 h-3.5" />
       </button>
@@ -132,6 +134,7 @@ function SortableItem({
             ? "opacity-100 text-red-400"
             : "opacity-0 group-hover:opacity-50 hover:!opacity-100 hover:text-red-400"
         }`}
+        aria-label={confirmDelete ? "Confirm delete section" : "Delete section"}
       >
         <Trash2 className="w-3.5 h-3.5" />
         {confirmDelete && <span className="text-xs ml-1">confirm?</span>}

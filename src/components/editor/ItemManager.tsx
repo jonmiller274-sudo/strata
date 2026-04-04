@@ -62,6 +62,7 @@ function SortableRow({
         {...listeners}
         className="mt-3 opacity-0 group-hover:opacity-50 shrink-0 cursor-grab touch-none"
         tabIndex={-1}
+        aria-label="Drag to reorder"
       >
         <GripVertical className="w-3.5 h-3.5" />
       </button>
@@ -71,6 +72,7 @@ function SortableRow({
           onClick={onRemove}
           className="mt-3 opacity-0 group-hover:opacity-50 hover:!opacity-100 hover:text-red-400 transition-opacity shrink-0"
           tabIndex={-1}
+          aria-label="Remove item"
         >
           <Trash2 className="w-3.5 h-3.5" />
         </button>
