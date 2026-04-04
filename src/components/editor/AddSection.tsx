@@ -281,7 +281,7 @@ export function AddSection({ documentTitle, documentSubtitle, onAdd, onAddMultip
               <div className="flex gap-2">
                 <button
                   onClick={() => { onAdd(generatedSection); handleBack(); }}
-                  className="px-3 py-1 rounded text-xs font-medium bg-green-600/20 text-green-400 hover:bg-green-600/30 transition-colors"
+                  className="px-3 py-1 rounded text-xs font-medium bg-accent text-white hover:bg-accent/80 transition-colors"
                 >
                   Keep
                 </button>
