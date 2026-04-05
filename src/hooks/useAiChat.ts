@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import type { Section, SectionType } from "@/types/artifact";
+import type { SectionType } from "@/types/artifact";
 
 export interface ChatSuggestion {
   type: "section" | "document";

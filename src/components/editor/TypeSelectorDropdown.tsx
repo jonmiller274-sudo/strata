@@ -19,7 +19,7 @@ const ALL_TYPES: SectionType[] = [
 
 interface TypeSelectorDropdownProps {
   section: Section;
-  onTypeChange: (remappedSection: Section) => void;
+  onTypeChange: (_remappedSection: Section) => void;
 }
 
 export function TypeSelectorDropdown({
