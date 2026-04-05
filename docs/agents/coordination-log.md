@@ -13,6 +13,12 @@ Read this top-to-bottom when you want to know "what happened today." Do not edit
 
 ---
 
+## 2026-04-05 (eighth run)
+
+- | quality | PR #99 | disc | tier-0 | open | Normalize text-green-400 to text-success in AiChatPanel Applied indicator
+- | quality | PR #100 | disc | tier-0 | open | Replace scrollSnapAlign inline style with snap-end utility in StrataFooter
+- | quality | PR #101 | disc | tier-0 | open | Replace inline styles in ProgressBarNav share button with Tailwind utilities
+
 ## 2026-04-05 (seventh run)
 
 - | quality | PR #72 | disc | tier-0 | open | Normalize tracking-wider → tracking-wide in viewer section labels (HubMockup, AnimatedTimeline, RichTextCollapsible)
