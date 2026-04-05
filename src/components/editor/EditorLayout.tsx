@@ -417,6 +417,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                 editor.updateSection(sectionId, () => updated)
               }
               onDeleteSection={editor.deleteSection}
+              onDuplicateSection={editor.duplicateSection}
               onReorderSections={editor.reorderSections}
               onAddSection={editor.addSection}
               onAddSections={editor.addSections}
@@ -517,6 +518,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                         selectedSectionId={editor.selectedSectionId}
                         onSelect={editor.setSelectedSectionId}
                         onDelete={editor.deleteSection}
+                        onDuplicate={editor.duplicateSection}
                         onReorder={editor.reorderSections}
                         onInsertAt={(pos) => {
                           setInsertAtPosition(pos);

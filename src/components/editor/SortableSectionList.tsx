@@ -19,7 +19,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { useState } from "react";
 import type { Section } from "@/types/artifact";
 import { SECTION_TYPE_LABELS } from "@/types/artifact";
-import { GripVertical, Plus, Trash2 } from "lucide-react";
+import { Copy, GripVertical, Plus, Trash2 } from "lucide-react";
 
 function getItemCount(section: Section): string | null {
   switch (section.type) {
@@ -64,6 +64,7 @@ interface SortableSectionListProps {
   selectedSectionId: string | null;
   onSelect: (id: string) => void;
   onDelete: (id: string) => void;
+  onDuplicate: (id: string) => void;
   onReorder: (fromIndex: number, toIndex: number) => void;
   onInsertAt?: (position: number) => void;
 }
@@ -73,11 +74,13 @@ function SortableItem({
   isSelected,
   onSelect,
   onDelete,
+  onDuplicate,
 }: {
   section: Section;
   isSelected: boolean;
   onSelect: () => void;
   onDelete: () => void;
+  onDuplicate: () => void;
 }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -116,7 +119,20 @@ function SortableItem({
           })()}
         </p>
       </div>
+      {!confirmDelete && (
+        <button
+          aria-label="Duplicate section"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDuplicate();
+          }}
+          className="opacity-0 group-hover:opacity-50 hover:!opacity-100 hover:text-accent transition-opacity"
+        >
+          <Copy className="w-3.5 h-3.5" />
+        </button>
+      )}
       <button
+        aria-label={confirmDelete ? "Confirm delete" : "Delete section"}
         onClick={(e) => {
           e.stopPropagation();
           if (confirmDelete) {
@@ -145,6 +161,7 @@ export function SortableSectionList({
   selectedSectionId,
   onSelect,
   onDelete,
+  onDuplicate,
   onReorder,
   onInsertAt,
 }: SortableSectionListProps) {
@@ -183,6 +200,7 @@ export function SortableSectionList({
                 isSelected={section.id === selectedSectionId}
                 onSelect={() => onSelect(section.id)}
                 onDelete={() => onDelete(section.id)}
+                onDuplicate={() => onDuplicate(section.id)}
               />
               {onInsertAt && <InsertDivider onClick={() => onInsertAt(index + 1)} />}
             </div>
