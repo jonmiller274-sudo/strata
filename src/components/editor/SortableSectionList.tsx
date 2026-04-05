@@ -114,7 +114,7 @@ function SortableItem({
       <button
         {...attributes}
         {...listeners}
-        className="opacity-0 group-hover:opacity-50 shrink-0 cursor-grab touch-none"
+        className="opacity-0 group-hover:opacity-50 shrink-0 cursor-grab touch-none transition-opacity"
       >
         <GripVertical className="w-3.5 h-3.5" />
       </button>
