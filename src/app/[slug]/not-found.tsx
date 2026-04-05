@@ -4,7 +4,7 @@ export default function ArtifactNotFound() {
   return (
     <div className="min-h-screen bg-[#0a0b10] flex items-center justify-center px-6">
       <div className="text-center max-w-sm">
-        <p className="text-[10px] font-medium text-[#6366f1]/60 uppercase tracking-widest mb-6">
+        <p className="text-[10px] font-medium text-[#6366f1]/60 uppercase tracking-wide mb-6">
           Strata
         </p>
         <h1 className="text-2xl font-bold text-[#e8eaf0] mb-3">
