@@ -529,7 +529,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                     <div className="p-2 border-t border-white/10 space-y-2">
                       <button
                         onClick={() => setShowAddSection(true)}
-                        className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-dashed border-white/20 text-sm text-muted-foreground hover:border-white/40 hover:text-foreground transition-colors"
+                        className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-dashed border-white/20 text-sm text-muted-foreground hover:border-white/30 hover:text-foreground transition-colors"
                       >
                         <Plus className="w-4 h-4" />
                         Add Section
@@ -537,7 +537,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                       <button
                         onClick={() => fileInputRef.current?.click()}
                         disabled={isProcessingImage}
-                        className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-dashed border-white/20 text-sm text-muted-foreground hover:border-white/40 hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-dashed border-white/20 text-sm text-muted-foreground hover:border-white/30 hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <ImageIcon className="w-4 h-4" />
                         {isProcessingImage ? "Processing..." : "Add from Image"}

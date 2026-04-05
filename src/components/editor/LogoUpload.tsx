@@ -138,7 +138,7 @@ export function LogoUpload({
         className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border border-dashed px-4 py-4 text-xs transition-colors ${
           dragOver
             ? "border-accent/60 bg-accent/10 text-accent"
-            : "border-white/20 bg-white/5 text-muted-foreground hover:border-white/40 hover:bg-white/10 hover:text-foreground"
+            : "border-white/20 bg-white/5 text-muted-foreground hover:border-white/30 hover:bg-white/10 hover:text-foreground"
         } ${uploading ? "pointer-events-none opacity-50" : ""}`}
       >
         {uploading ? (
