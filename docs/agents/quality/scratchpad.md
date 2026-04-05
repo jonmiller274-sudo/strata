@@ -10,6 +10,15 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-05 — Thirteenth run: 4 PRs (all Tier 0), all discovery
+- All rubric items still have open PRs from prior runs — went straight to discovery.
+- After 12 runs, most obvious patterns are claimed. Key strategy: look for SEMANTIC token violations (text-red-400 → text-danger, inline success color → text-success class) rather than visual patterns.
+- Found 7 instances of `hover:text-red-400` in editor (not error pills) that should use `hover:text-danger`. Error pills keep `text-red-400` per QR-03 spec — don't touch those.
+- `SectionPreviewPanel.tsx` had unused `React` default import — `memo`, `useRef`, `useEffect` imported by name directly, no `React.` usage.
+- `TierTable.tsx` ComparisonColumn had `style={{ color: "var(--color-success, #10b981)" }}` on Check icon — the PricingColumn at the bottom of the same file already used `text-success`. Wrong fallback hex (#10b981 ≠ #34d399).
+- `RichTextCollapsible.tsx` toggle button was missing `aria-expanded` — visible text changes but screen readers benefit from the explicit attribute. Not covered by PR #85 (covers ExpandableCardGrid).
+- With 65 open PRs, very important to check each pattern against existing PR titles before creating new ones. The parallel agent runs have covered most obvious issues.
+
 ### 2026-04-05 — Seventh run: 8 PRs (all Tier 0), all discovery
 - All rubric items still have open PRs from prior runs — went straight to discovery loop.
 - `tracking-wider` is still widely spread (viewer sections HubMockup/AnimatedTimeline/RichTextCollapsible, dashboard, discover page). Split into 3 PRs by context (viewer sections batch, dashboard, discover).

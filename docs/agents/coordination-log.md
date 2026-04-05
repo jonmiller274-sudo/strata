@@ -13,6 +13,13 @@ Read this top-to-bottom when you want to know "what happened today." Do not edit
 
 ---
 
+## 2026-04-05 (thirteenth run)
+
+- | quality | PR #103 | disc | tier-0 | open | Remove unused React default import from SectionPreviewPanel.tsx
+- | quality | PR #104 | disc | tier-0 | open | Replace inline success color style with text-success class in TierTable ComparisonColumn
+- | quality | PR #105 | disc | tier-0 | open | Normalize hover:text-red-400 to hover:text-danger in 5 editor files (7 instances)
+- | quality | PR #106 | disc | tier-0 | open | Add aria-expanded to RichTextCollapsible expand/collapse button
+
 ## 2026-04-05 (seventh run)
 
 - | quality | PR #72 | disc | tier-0 | open | Normalize tracking-wider → tracking-wide in viewer section labels (HubMockup, AnimatedTimeline, RichTextCollapsible)
