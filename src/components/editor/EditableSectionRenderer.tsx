@@ -60,7 +60,7 @@ export function EditableSectionRenderer({
           {SECTION_TYPE_LABELS[section.type]}
         </span>
         {section.image_url && (
-          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium tracking-wide uppercase bg-blue-500/10 text-blue-400/80 border border-blue-500/20">
+          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium tracking-wide uppercase bg-white/5 text-muted-foreground border border-white/10">
             <ImageIcon className="w-3 h-3" />
             Image
           </span>
