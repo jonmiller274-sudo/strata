@@ -13,6 +13,17 @@ Read this top-to-bottom when you want to know "what happened today." Do not edit
 
 ---
 
+## 2026-04-05 (eighteenth run)
+
+- | quality | PR #128 | QR-14 | tier-0 | open | Add aria-live regions to save status, AI chat message list, and all 6 error message containers
+- | quality | PR #129 | QR-17 | tier-1 | open | Add loading skeleton to artifact page via loading.tsx (eliminates blank flash on hard-refresh)
+- | quality | PR #130 | disc | tier-0 | open | Add aria-label to email input in AuthModal
+- | quality | PR #131 | disc | tier-0 | open | Associate label elements with inputs via htmlFor/id in create page
+- | quality | PR #132 | disc | tier-0 | open | Add aria-label to chart type and phase select elements in editor
+- | quality | PR #133 | disc | tier-0 | open | Add aria-label to close button in MobilePreviewSheet
+- | quality | PR #134 | disc | tier-1 | open | Add keyboard focus and Enter activation to InlineEditor display mode
+- | quality | PR #135 | disc | tier-0 | open | Add aria-label to nav elements in discover page and SidebarNav
+
 ## 2026-04-05 (sixteenth run)
 
 - | quality | PR #115 | disc | tier-0 | open | Normalize hover:border-white/40 → hover:border-white/30 in upload zone dashed-border buttons (SplitViewLayout, EditorLayout, LogoUpload)
