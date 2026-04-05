@@ -109,12 +109,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 
 ## Priority 5: Viewer Quality (investor-facing surface)
 
-### QR-17: Add loading skeleton to artifact page
-- **Tier:** 1
-- **What:** Show a content skeleton (pulsing gray blocks for title, subtitle, and section placeholders) while Supabase fetch completes. Currently the page is blank for 1-2 seconds.
-- **Files:** `src/app/[slug]/page.tsx` or the viewer layout component
-- **Test:** Hard-refresh an artifact page — see skeleton animation, then smooth transition to content (no blank flash)
-- **Status:** OPEN
+### ~~QR-17: Add loading skeleton to artifact page~~ DONE
+- **Status:** DONE — PR created 2026-04-05. Created `src/app/[slug]/loading.tsx` — Next.js App Router loading.tsx convention shows a pulsing skeleton (sidebar nav placeholder + 3 content blocks) while the RSC page.tsx renders. Dark theme, CSS animate-pulse, staggered delays.
 
 ### ~~QR-18: Graceful 404 for missing artifacts~~ DONE
 - **Status:** DONE — PR opened 2026-04-04. Created `src/app/[slug]/not-found.tsx` — branded dark-theme 404 with "This document doesn't exist" heading and "Create your own" CTA to sharestrata.com. `page.tsx` unchanged.
