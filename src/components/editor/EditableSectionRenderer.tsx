@@ -22,8 +22,8 @@ import { EditableHubMockup } from "./EditableHubMockup";
 interface EditableSectionRendererProps {
   section: Section;
   isSelected?: boolean;
-  onFieldChange: (path: string, value: unknown) => void;
-  onReplaceSection?: (updated: Section) => void;
+  onFieldChange: (_path: string, _value: unknown) => void;
+  onReplaceSection?: (_updated: Section) => void;
 }
 
 export function EditableSectionRenderer({
@@ -106,8 +106,8 @@ function SectionImagePreview({
   onReplaceSection,
 }: {
   section: Section;
-  onFieldChange: (path: string, value: unknown) => void;
-  onReplaceSection?: (updated: Section) => void;
+  onFieldChange: (_path: string, _value: unknown) => void;
+  onReplaceSection?: (_updated: Section) => void;
 }) {
   const [isExtracting, setIsExtracting] = useState(false);
   const [extractError, setExtractError] = useState<string | null>(null);
