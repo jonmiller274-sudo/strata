@@ -99,7 +99,7 @@ export default function DiscoverPage() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="py-12 border-t border-white/10"
         >
-          <p className="text-sm text-muted-foreground uppercase tracking-wider mb-8">
+          <p className="text-sm text-muted-foreground uppercase tracking-wide mb-8">
             What you experienced
           </p>
           <div className="grid sm:grid-cols-2 gap-x-12 gap-y-4">
