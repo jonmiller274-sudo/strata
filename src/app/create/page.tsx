@@ -461,7 +461,7 @@ export default function CreatePage() {
                 <button
                   onClick={handlePublish}
                   disabled={isPublishing}
-                  className="flex items-center gap-2 rounded-xl bg-accent px-6 py-2.5 text-sm font-semibold text-white hover:bg-accent-hover transition-colors disabled:opacity-50"
+                  className="flex items-center gap-2 rounded-xl bg-accent px-6 py-2.5 text-sm font-semibold text-white hover:bg-accent-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                   {isPublishing ? (
                     <>

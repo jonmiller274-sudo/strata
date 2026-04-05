@@ -245,7 +245,7 @@ function ArtifactSection({
                     <button
                       onClick={() => onArchive(artifact.slug)}
                       disabled={actionLoading === artifact.slug}
-                      className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-muted hover:text-foreground hover:bg-card-hover transition-colors disabled:opacity-50"
+                      className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-muted hover:text-foreground hover:bg-card-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                     >
                       {actionLoading === artifact.slug ? (
                         <Loader2 className="h-3 w-3 animate-spin" />
@@ -262,7 +262,7 @@ function ArtifactSection({
                 <button
                   onClick={() => onUnarchive(artifact.slug)}
                   disabled={actionLoading === artifact.slug}
-                  className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-accent hover:bg-card-hover transition-colors disabled:opacity-50"
+                  className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-accent hover:bg-card-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                   {actionLoading === artifact.slug ? (
                     <Loader2 className="h-3 w-3 animate-spin" />
