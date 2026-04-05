@@ -10,6 +10,13 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-05 — Twelfth run: 1 PR (Tier 0), discovery only
+- Codebase is near-exhausted for uncovered Tier-0 issues — 80+ open PRs cover nearly every file.
+- Found one new issue: stale `eslint-disable-next-line @next/next/no-img-element` comments in SidebarNav.tsx and LogoUpload.tsx. The `@next/next` ESLint plugin is NOT configured in the flat ESLint config — these disable comments cause "Definition for rule not found" errors. Removing comments fixes the errors.
+- Search strategy: `grep -rn "eslint-disable.*next/next"` to find plugin-specific disable comments when the plugin isn't in the ESLint config.
+- Raw hex colors in component SVG previews (SectionTypePreview.tsx) and `text-foreground/80` opacity variants are legitimate uses — not design system violations.
+- After 12 runs and 97 PRs, the majority of Tier-0 patterns are addressed. Future runs should verify PRs have been merged before re-scanning.
+
 ### 2026-04-05 — Seventh run: 8 PRs (all Tier 0), all discovery
 - All rubric items still have open PRs from prior runs — went straight to discovery loop.
 - `tracking-wider` is still widely spread (viewer sections HubMockup/AnimatedTimeline/RichTextCollapsible, dashboard, discover page). Split into 3 PRs by context (viewer sections batch, dashboard, discover).

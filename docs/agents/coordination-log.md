@@ -13,6 +13,10 @@ Read this top-to-bottom when you want to know "what happened today." Do not edit
 
 ---
 
+## 2026-04-05 (twelfth run)
+
+- | quality | PR #97 | disc | tier-0 | open | Remove stale @next/next/no-img-element eslint-disable comments in SidebarNav.tsx and LogoUpload.tsx
+
 ## 2026-04-05 (seventh run)
 
 - | quality | PR #72 | disc | tier-0 | open | Normalize tracking-wider → tracking-wide in viewer section labels (HubMockup, AnimatedTimeline, RichTextCollapsible)
