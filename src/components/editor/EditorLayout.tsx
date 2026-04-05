@@ -683,7 +683,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                           </button>
                         </div>
                         {/* Shimmer animation */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse" />
+                        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse" />
                       </div>
                     )}
 
@@ -711,7 +711,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                         }
                       />
                       {chat.isLoading && editor.selectedSectionId === section.id && (
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse rounded-lg" />
+                        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse rounded-lg" />
                       )}
                     </div>
                   </div>
@@ -753,7 +753,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                       Cancel
                     </button>
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse" />
+                  <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse" />
                 </div>
               )}
 
