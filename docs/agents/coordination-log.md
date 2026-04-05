@@ -13,6 +13,11 @@ Read this top-to-bottom when you want to know "what happened today." Do not edit
 
 ---
 
+## 2026-04-05 (ninth run)
+
+- | quality | PR #88 | disc | tier-0 | open | Remove non-standard default ring from chart type select in EditableDataViz
+- | quality | PR #89 | disc | tier-0 | open | Replace inline styles with Tailwind classes on section image in SectionRenderer
+
 ## 2026-04-05 (seventh run)
 
 - | quality | PR #72 | disc | tier-0 | open | Normalize tracking-wider → tracking-wide in viewer section labels (HubMockup, AnimatedTimeline, RichTextCollapsible)

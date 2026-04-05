@@ -10,6 +10,14 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-05 — Ninth run: 2 PRs (both Tier 0), all discovery
+- The codebase is now heavily covered by 50+ open PRs. Genuinely uncovered violations are rare and require deep targeted search.
+- Key gap found: `EditableDataViz.tsx` chart-type `<select>` had `ring-1 ring-white/10` as a DEFAULT ring (not focus-only). PR #76 covers inline edit rings in EditableGuidedJourney, EditableHubMockup, EditableSectionRenderer, MultiSectionReview, TypeSelectorDropdown — but not EditableDataViz. Covered by PR #88.
+- Key gap found: `SectionRenderer.tsx` had inline `style={{...}}` on `<img>` tag. PRs #64 and #65 covered ProgressBarNav and ArtifactViewer respectively, but SectionRenderer was missed. Covered by PR #89.
+- WARNING: PR #33 (disc-fix-input-focus-ring-editable-section-renderer) is OPEN but removes `font-medium` from labels in EditableSectionRenderer — this conflicts with merged PR #78 which ADDED font-medium to those same labels. Jon needs to resolve this conflict manually. Do not create a new PR for EditableSectionRenderer label patterns until #33 is closed.
+- With 50+ open PRs, the fastest search strategy: identify files NOT in any open PR's file list, then audit those files for violations.
+- `console.log` in `ai/chat/route.ts:138` is intentional cost/token telemetry — NOT a debug log. Leave it.
+
 ### 2026-04-05 — Seventh run: 8 PRs (all Tier 0), all discovery
 - All rubric items still have open PRs from prior runs — went straight to discovery loop.
 - `tracking-wider` is still widely spread (viewer sections HubMockup/AnimatedTimeline/RichTextCollapsible, dashboard, discover page). Split into 3 PRs by context (viewer sections batch, dashboard, discover).
