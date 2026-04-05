@@ -74,7 +74,7 @@ export function SectionPreviewPanel({
                 className={`rounded-lg p-4 cursor-pointer transition-all ${
                   s.id === section.id
                     ? "ring-2 ring-accent/60 bg-accent/5"
-                    : "hover:bg-white/[0.02] opacity-60 hover:opacity-80"
+                    : "hover:bg-white/5 opacity-60 hover:opacity-80"
                 }`}
                 onClick={() => {
                   onSelectSection(s.id);
