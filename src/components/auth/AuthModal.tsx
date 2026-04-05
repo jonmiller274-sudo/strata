@@ -175,7 +175,7 @@ export function AuthModal({ open, onClose, redirectTo }: AuthModalProps) {
                 onClick={handleMagicLink}
                 disabled={!email.trim() || loading}
                 className={cn(
-                  "flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-all",
+                  "flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition-all",
                   email.trim() && !loading
                     ? "bg-accent text-white hover:bg-accent-hover"
                     : "bg-card text-muted cursor-not-allowed"
