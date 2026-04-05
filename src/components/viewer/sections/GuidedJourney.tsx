@@ -283,7 +283,7 @@ function TimelineTrack({
                   key={event.id}
                   data-index={i}
                   onClick={() => onSelect(i)}
-                  className="group absolute flex flex-col items-center focus:outline-none"
+                  className="group absolute flex flex-col items-center focus:outline-none focus:ring-2 focus:ring-accent/50 rounded"
                   style={{
                     left: `${leftPct}%`,
                     top: 0,
