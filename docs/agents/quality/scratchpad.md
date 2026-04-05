@@ -10,6 +10,13 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-05 — Twenty-first run: 6 PRs (all Tier 0), 0 rubric items closed
+- All rubric items either have existing open PRs or are BLOCKED/Tier 3/off-limits. No new rubric items found.
+- Richest uncovered vein: `aria-hidden` on decorative/backdrop elements (overlays, shimmer divs, image backgrounds). Found 9 instances across 5 files not covered by any prior PR.
+- Double-check before creating PRs: always query open PR list with GitHub API to avoid duplicates. PR #146 (text-[9px]) was a duplicate of #20 — closed immediately. Lesson: run prior PR check BEFORE making changes.
+- `opacity-50`/`opacity-40` on disabled viewer buttons (GuidedJourney Play/Pause) was genuinely uncovered despite 20+ runs of opacity fixes — because those PRs focused on editor components and `disabled:` Tailwind variant, not conditional class approaches in viewer components.
+- Feature row buttons in TierTable editor use "+", "−", "×" symbols — screen readers need `aria-label`. Not covered by QR-15 PRs which focused on other components.
+
 ### 2026-04-05 — Nineteenth run: 6 PRs (all Tier 0), 2 rubric items closed
 - QR-03 and QR-13 were both effectively fixed in main but never marked done — audit the rubric against current code at start of run, not just "is status OPEN?"
 - `focus:outline-none focus:border-white/20` is a non-standard focus ring pattern; design system says `outline-none focus:ring-1 focus:ring-accent/50`. Found in 4 inputs in EditableSectionRenderer (tier-table card editor, callout textarea).

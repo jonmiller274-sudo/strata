@@ -13,6 +13,15 @@ Read this top-to-bottom when you want to know "what happened today." Do not edit
 
 ---
 
+## 2026-04-05 (twenty-first run)
+
+- | quality | PR #147 | disc | tier-0 | open | Normalize disabled opacity 50/40 → 30 on Play/Pause control buttons in GuidedJourney viewer
+- | quality | PR #148 | disc | tier-0 | open | Add aria-label to +/− feature toggle and × remove buttons in TierTable editor (EditableSectionRenderer)
+- | quality | PR #149 | disc | tier-0 | open | Add aria-hidden to mobile nav overlay backdrop in SidebarNav viewer
+- | quality | PR #150 | disc | tier-0 | open | Add aria-hidden to overlay backdrops in MobilePreviewSheet and SplitViewLayout (3 backdrops)
+- | quality | PR #151 | disc | tier-0 | open | Add aria-hidden to 3 decorative shimmer animation divs in EditorLayout
+- | quality | PR #152 | disc | tier-0 | open | Add aria-hidden to modal backdrops (AuthModal, UpgradePrompt) and image preview backgrounds (EditorLayout x2)
+
 ## 2026-04-05 (nineteenth run)
 
 - | quality | PR #137 | disc | tier-0 | open | Normalize focus ring on 4 inputs in EditableSectionRenderer (focus:outline-none focus:border-white/20 → outline-none focus:ring-1 focus:ring-accent/50)
