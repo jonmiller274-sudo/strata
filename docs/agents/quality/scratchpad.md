@@ -10,6 +10,13 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-05 — Discovery-only run: 8 PRs, all Tier 0
+- All open rubric items already had PRs from prior runs — went straight to discovery loop.
+- ESLint had 50 false-positive no-undef errors due to missing browser/node globals in config (File, FormData, URLSearchParams, AbortController, etc.). One PR fixed all 50 by adding globals to eslint.config.mjs.
+- Biggest source of warnings: callback type parameter names (path, value, section, id) in TypeScript interface prop signatures. ESLint treats them as unused vars. Fix: rename to _prefix. Applied across ~20 files in 4 batched PRs.
+- `_removed` in destructuring-to-omit pattern (DocumentSettings.tsx) is a known ESLint limitation — skip.
+- False positive on `GuidedJourneySection` import (type IS used, but ESLint's no-unused-vars doesn't understand TypeScript type imports without @typescript-eslint plugin). Skip.
+
 ### 2026-04-04 — Full rubric run: 7 PRs, all Tier 2
 - `gh` CLI not available in this environment — use GitHub REST API via curl with the PAT. Set remote URL to `https://x-access-token:<token>@github.com/...` before pushing.
 - `npm run build` requires `npm install` first if node_modules is absent (cold environment). Always check before assuming build works.
