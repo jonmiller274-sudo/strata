@@ -87,7 +87,7 @@ export function UpgradePrompt({
           {/* For now, link to a waitlist or Stripe checkout */}
           <a
             href="mailto:jon@sharestrata.com?subject=Strata%20Pro%20-%20Founding%20Member&body=I%27d%20like%20to%20upgrade%20to%20Strata%20Pro%20as%20a%20founding%20member."
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-accent px-4 py-3 text-sm font-semibold text-white hover:bg-accent-hover transition-colors"
+            className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-accent px-4 py-3 text-sm font-medium text-white hover:bg-accent-hover transition-colors"
           >
             <Sparkles className="h-4 w-4" />
             Become a founding member
