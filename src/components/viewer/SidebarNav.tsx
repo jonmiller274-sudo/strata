@@ -159,6 +159,7 @@ export function SidebarNav({ items, title, subtitle, logoUrl }: SidebarNavProps)
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
+          aria-hidden="true"
           className="fixed inset-0 z-30 bg-black/50 lg:hidden"
           onClick={() => setMobileOpen(false)}
         />
