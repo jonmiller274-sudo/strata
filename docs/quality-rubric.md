@@ -21,12 +21,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 
 ## Priority 1: Visual Consistency (systematic, no taste required)
 
-### QR-03: Unify error message pattern
-- **Tier:** 1
-- **What:** All error displays must use the standard error pill: `text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2`. Replace any inline red text, raw `text-red-400` without background, or other error formats.
-- **Files:** All editor components showing errors
-- **Test:** Every `text-red-400` in editor components is inside a `bg-red-500/10` container
-- **Status:** IN PROGRESS
+### ~~QR-03: Unify error message pattern~~ DONE
+- **Status:** DONE — All actual error message displays in editor components use the standard pill pattern (`text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2`). Remaining `text-red-400` instances are intentional: hover states on delete actions and a character-counter status indicator in AddSectionPaste — neither is an error message. Verified in main 2026-04-05 (nineteenth run).
 
 ### ~~QR-04: Unify button patterns to 3 types~~ DONE
 - **Status:** DONE — PR #15. Fixed Apply (SectionEditorPanel), Keep (AddSection), Add Selected (MultiSectionReview) — all changed from non-standard green to Primary accent. TopBar publish toggle uses green as a status indicator (published=live), which is intentional semantic colour; left as-is (would require Tier 2 design decision).
@@ -66,12 +62,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 ### ~~QR-12: Consistent hover states on sidebar items~~ DONE
 - **Status:** DONE — PR #11
 
-### QR-13: Type selector dropdown polish
-- **Tier:** 1
-- **What:** Type selector error appears as toast above dropdown but disappears when dropdown closes. Make error persist for 5s regardless of dropdown state. Also add loading skeleton during type conversion.
-- **Files:** `src/components/editor/TypeSelectorDropdown.tsx`
-- **Test:** Trigger type change error — close dropdown — error still visible for 5s
-- **Status:** OPEN
+### ~~QR-13: Type selector dropdown polish~~ DONE
+- **Status:** DONE — Verified in main 2026-04-05 (nineteenth run). Error element is rendered OUTSIDE the `{isOpen && ...}` block, so it persists regardless of dropdown state. A `clearTimeout` auto-clears after 5s. Loading spinner (Loader2) is shown in the trigger button while conversion is in progress.
 
 ### ~~QR-22: Timeline dots should show status differentiation~~ DONE
 - **Status:** DONE — Already implemented in AnimatedTimeline.tsx via STATUS_STYLES object (accent dot + ArrowRight for current, success dot + Check for completed, card dot + Circle for upcoming). Rubric pre-dated the implementation.
@@ -144,7 +136,9 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 
 - **QR-01: Kill non-standard text sizes** — PR #1, merged 2026-04-04
 - **QR-02: Normalize border opacity to white/10 default** — PR #2, merged 2026-04-04
+- **QR-03: Unify error message pattern** — verified done in main 2026-04-05 (nineteenth run)
 - **QR-04: Unify button patterns to 3 types** — PR #15, 2026-04-04
+- **QR-13: Type selector dropdown polish** — verified done in main 2026-04-05 (nineteenth run)
 
 ---
 
