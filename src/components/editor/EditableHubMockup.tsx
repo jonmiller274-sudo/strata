@@ -147,6 +147,7 @@ export function EditableHubMockup({
                     e.target.value
                   )
                 }
+                aria-label="Connection source node"
                 className="bg-white/10 rounded px-1.5 py-0.5 text-sm outline-none ring-1 ring-white/10 focus:ring-accent/50"
               >
                 {allNodes.map((n) => (
@@ -164,6 +165,7 @@ export function EditableHubMockup({
                     e.target.value
                   )
                 }
+                aria-label="Connection target node"
                 className="bg-white/10 rounded px-1.5 py-0.5 text-sm outline-none ring-1 ring-white/10 focus:ring-accent/50"
               >
                 {allNodes.map((n) => (
@@ -338,6 +340,7 @@ function NodeEditor({
         value={node.color || "#6366f1"}
         onChange={(e) => onFieldChange(`${prefix}.color`, e.target.value)}
         className="w-6 h-6 rounded cursor-pointer border-0 bg-transparent mt-0.5"
+        aria-label={`Node color for ${node.label || "node"}`}
       />
       <div className="flex-1 min-w-0 space-y-1">
         <InlineEditor

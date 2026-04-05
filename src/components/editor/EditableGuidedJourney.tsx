@@ -145,6 +145,7 @@ function PhasesEditor({
               onFieldChange(`content.phases.${i}.color`, e.target.value)
             }
             className="w-6 h-6 rounded cursor-pointer border-0 bg-transparent shrink-0"
+            aria-label={`Phase color for ${phase.name || `Phase ${i + 1}`}`}
           />
           <div className="flex-1 min-w-[120px]">
             <InlineEditor
