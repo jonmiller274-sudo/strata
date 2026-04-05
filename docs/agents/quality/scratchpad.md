@@ -10,6 +10,14 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-05 — Fourth run: 4 PRs (all Tier 0), all discovery
+- All open rubric items already had PRs from prior runs (QR-03→#17, QR-13→#19, QR-14→#6, QR-15→#7/#18, QR-16→parked, QR-17→#14). Went straight to discovery.
+- New pattern found: `tracking-wider` used across editable editor labels (EditableDataViz, EditableHubMockup, EditableGuidedJourney) — design system says `tracking-wide`. Split into 3 PRs by component.
+- Also found: `text-xs` labels instead of `text-[10px]` in EditableDataViz/EditableHubMockup labels, and missing `font-medium`.
+- `disabled:cursor-not-allowed` was missing from 6 buttons that had `disabled:opacity-*` — separate from PR #21's opacity-50→30 fix.
+- With 40+ open PRs, most issues are covered. Key strategy: look for patterns not in any open PR title. Avoid duplicating focus ring fixes (PR #33, #62), font-semibold fixes (PR #45, #50, #51, #52), aria-label fixes (PR #7, #18, #58, #60, #63).
+- ESLint `no-undef` errors are still failing on main (50 errors) — all false positives for browser/node globals. PR #34 addresses this. Don't create duplicate.
+
 ### 2026-04-05 — Third run: 13 PRs (12 Tier-0, 1 Tier-1), all discovery
 - Biggest category: font-semibold normalization. 30+ instances across editor, viewer, auth, create, dashboard. Not in design-system weight scale. Rule: headings→font-bold, buttons/labels/badges→font-medium. Split into 4 PRs by component area.
 - Raw hex violations in not-found.tsx (5) and ProgressBarNav (1) — both covered but main shows originals since PRs unmerged.
