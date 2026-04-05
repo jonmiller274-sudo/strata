@@ -186,8 +186,8 @@ function ArtifactSection({
   count: number;
   artifacts: Artifact[];
   actionLoading: string | null;
-  onArchive?: (slug: string) => void;
-  onUnarchive?: (slug: string) => void;
+  onArchive?: (_slug: string) => void;
+  onUnarchive?: (_slug: string) => void;
   isArchived?: boolean;
 }) {
   return (
