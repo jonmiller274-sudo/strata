@@ -97,7 +97,7 @@ export default function DashboardPage() {
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
           <Link href="/" className="flex items-center gap-2">
             <Layers className="h-5 w-5 text-accent" />
-            <span className="font-semibold">Strata</span>
+            <span className="font-bold">Strata</span>
           </Link>
 
           <div className="flex items-center gap-4">
@@ -125,7 +125,7 @@ export default function DashboardPage() {
             </p>
             <Link
               href="/create"
-              className="mt-4 inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-white hover:bg-accent-hover transition-colors"
+              className="mt-4 inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-medium text-white hover:bg-accent-hover transition-colors"
             >
               <Plus className="h-4 w-4" />
               Create your first artifact
