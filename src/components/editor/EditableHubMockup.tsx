@@ -26,7 +26,7 @@ export function EditableHubMockup({
 
         {/* Description */}
         <div>
-          <label className="text-xs text-muted-foreground uppercase tracking-wider mb-1 block">
+          <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide mb-1 block">
             Description
           </label>
           <InlineEditor
@@ -49,7 +49,7 @@ export function EditableHubMockup({
     <div className="space-y-5">
       {/* Center node */}
       <div>
-        <label className="text-xs text-muted-foreground uppercase tracking-wider mb-2 block">
+        <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide mb-2 block">
           Center Node
         </label>
         <NodeEditor
@@ -61,7 +61,7 @@ export function EditableHubMockup({
 
       {/* Surrounding nodes */}
       <div>
-        <label className="text-xs text-muted-foreground uppercase tracking-wider mb-2 block">
+        <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide mb-2 block">
           Surrounding Nodes
         </label>
         <ItemManager
@@ -107,7 +107,7 @@ export function EditableHubMockup({
 
       {/* Connections */}
       <div>
-        <label className="text-xs text-muted-foreground uppercase tracking-wider mb-2 block">
+        <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide mb-2 block">
           Connections
         </label>
         <ItemManager
@@ -257,7 +257,7 @@ function LayersEditor({
                 onChange={(v) =>
                   onFieldChange(`content.layers.${layerIndex}.label`, v)
                 }
-                className="text-xs font-semibold uppercase tracking-wider text-accent"
+                className="text-[10px] font-medium uppercase tracking-wide text-accent"
               />
             </div>
           </div>
@@ -303,7 +303,7 @@ function LayersEditor({
           {/* Arrow label — only for layers that have a next layer below them */}
           {layerIndex < layers!.length - 1 && (
             <div>
-              <label className="text-[10px] text-muted-foreground/60 uppercase tracking-wider mb-1 block">
+              <label className="text-[10px] font-medium text-muted-foreground/60 uppercase tracking-wide mb-1 block">
                 Arrow label
               </label>
               <InlineEditor
