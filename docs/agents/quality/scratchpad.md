@@ -10,6 +10,12 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-05 — Twentieth run: 1 PR (Tier 0), all discovery
+- With 94 open PRs in the queue, the codebase is nearly fully patched — almost every pattern I searched for was already covered by an existing open PR. This is the saturation point.
+- Key lesson: Before building ANY PR, check `git fetch origin <branch>` to see if a remote branch already exists for that fix. Several branches (e.g. `disc-normalize-tracking-widest-viewer`) existed but weren't in the coordination log because they predate the logging system.
+- Only new issue found after exhaustive scan: `p-5` on GuidedJourney event card (line 388) — not in any prior PR. All other patterns (tracking-widest, text-[9px], disabled:opacity-50) had existing open PRs.
+- At this saturation level, future runs should focus on: (1) watching for NEW commits to main that introduce violations, (2) helping merge existing PRs by fixing any conflicts, (3) checking for patterns specific to newly added features.
+
 ### 2026-04-05 — Nineteenth run: 6 PRs (all Tier 0), 2 rubric items closed
 - QR-03 and QR-13 were both effectively fixed in main but never marked done — audit the rubric against current code at start of run, not just "is status OPEN?"
 - `focus:outline-none focus:border-white/20` is a non-standard focus ring pattern; design system says `outline-none focus:ring-1 focus:ring-accent/50`. Found in 4 inputs in EditableSectionRenderer (tier-table card editor, callout textarea).

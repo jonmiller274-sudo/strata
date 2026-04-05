@@ -13,6 +13,10 @@ Read this top-to-bottom when you want to know "what happened today." Do not edit
 
 ---
 
+## 2026-04-05 (twentieth run)
+
+- | quality | PR #144 | disc | tier-0 | open | Normalize p-5 → p-4 in GuidedJourney event card (only uncovered issue after exhaustive scan of 94 open PRs)
+
 ## 2026-04-05 (nineteenth run)
 
 - | quality | PR #137 | disc | tier-0 | open | Normalize focus ring on 4 inputs in EditableSectionRenderer (focus:outline-none focus:border-white/20 → outline-none focus:ring-1 focus:ring-accent/50)
