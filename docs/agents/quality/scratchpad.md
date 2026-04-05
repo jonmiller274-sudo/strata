@@ -10,6 +10,14 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-05 — Nineteenth run: 6 PRs (all Tier 0), 2 rubric items closed
+- QR-03 and QR-13 were both effectively fixed in main but never marked done — audit the rubric against current code at start of run, not just "is status OPEN?"
+- `focus:outline-none focus:border-white/20` is a non-standard focus ring pattern; design system says `outline-none focus:ring-1 focus:ring-accent/50`. Found in 4 inputs in EditableSectionRenderer (tier-table card editor, callout textarea).
+- `disabled:opacity-50` was still lingering in TypeSelectorDropdown, EditableSectionRenderer, LogoUpload — distinct from the SplitViewLayout/EditorLayout cases which conflict with PR #115 (both issues on same lines).
+- AiChatPanel had 2 icon-only buttons without aria-label (RotateCcw clear-history, Send). The Discard button also has X icon but has text, so OK.
+- DocumentSettings color inputs had `title=` but not `aria-label`. AiChatPanel chat textarea had no accessible label at all.
+- When checking conflicts with open PRs: check which LINES each PR touches, not just which FILES.
+
 ### 2026-04-05 — Eighteenth run: 8 PRs (6 Tier 0, 2 Tier 1), 2 rubric items closed
 - QR-14 (aria-live) and QR-17 (loading skeleton) were both genuinely open — no prior PRs existed for them on current main.
 - Loading skeleton: Next.js App Router loading.tsx convention is the cleanest pattern — no changes to page.tsx, just a new file. The skeleton is a dark-theme layout with animate-pulse blocks.
