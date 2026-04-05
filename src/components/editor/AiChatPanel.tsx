@@ -243,7 +243,7 @@ function MessageBubble({
         )}
 
         {message.suggestion && message.suggestion.status === "applied" && (
-          <p className="text-[10px] text-green-400 px-1 flex items-center gap-1">
+          <p className="text-[10px] text-success px-1 flex items-center gap-1">
             <Check className="w-3 h-3" />
             Applied
           </p>
