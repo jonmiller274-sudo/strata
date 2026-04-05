@@ -316,7 +316,7 @@ export default function CreatePage() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g., Q2 Platform Vision"
-                  className="mt-1 w-full rounded-xl border border-border bg-card px-4 py-3 text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                  className="mt-1 w-full rounded-xl border border-border bg-card px-4 py-3 text-foreground placeholder:text-muted-foreground focus:border-accent/50 focus:outline-none focus:ring-1 focus:ring-accent/50"
                 />
               </div>
 

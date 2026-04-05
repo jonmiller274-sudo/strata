@@ -169,7 +169,7 @@ export function AuthModal({ open, onClose, redirectTo }: AuthModalProps) {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@company.com"
                 onKeyDown={(e) => e.key === "Enter" && handleMagicLink()}
-                className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent/50 focus:outline-none focus:ring-1 focus:ring-accent/50"
               />
               <button
                 onClick={handleMagicLink}
