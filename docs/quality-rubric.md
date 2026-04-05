@@ -65,12 +65,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 - **Test:** Click duplicate on any section — new identical section appears below with "(Copy)" suffix on title
 - **Status:** OPEN
 
-### QR-10: Keyboard shortcut discoverability
-- **Tier:** 2
-- **What:** Add a keyboard shortcut hint overlay (triggered by `?` key in split view). Shows: Cmd+E (zoom), Cmd+Arrow (navigate), Escape (back), ? (this help).
-- **Files:** `src/components/editor/SplitViewLayout.tsx` (new overlay)
-- **Test:** Press `?` in split view — see shortcut overlay. Press Escape or `?` again — dismiss.
-- **Status:** OPEN
+### ~~QR-10: Keyboard shortcut discoverability~~ DONE
+- **Status:** DONE — PR opened 2026-04-04. `?` key triggers overlay listing all 5 shortcuts; Escape or `?` again dismisses it; overlay blocked when focus is in input/textarea.
 
 ---
 
