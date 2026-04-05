@@ -75,7 +75,7 @@ export function DocumentSettings({ artifact, onUpdate }: DocumentSettingsProps) 
 
       {/* Brand section */}
       <div className="mb-4">
-        <label className="text-xs text-muted-foreground block mb-2">Brand</label>
+        <label className="text-xs font-medium text-muted-foreground block mb-2">Brand</label>
 
         {/* Logo upload */}
         <div className="mb-3">
@@ -124,7 +124,7 @@ export function DocumentSettings({ artifact, onUpdate }: DocumentSettingsProps) 
 
       {/* Layout mode */}
       <div className="mb-3">
-        <label className="text-xs text-muted-foreground block mb-1">Layout</label>
+        <label className="text-xs font-medium text-muted-foreground block mb-1">Layout</label>
         <div className="flex gap-2">
           {(["continuous", "beats"] as const).map((mode) => (
             <button
@@ -144,7 +144,7 @@ export function DocumentSettings({ artifact, onUpdate }: DocumentSettingsProps) 
 
       {/* Nav style */}
       <div className="mb-3">
-        <label className="text-xs text-muted-foreground block mb-1">Navigation</label>
+        <label className="text-xs font-medium text-muted-foreground block mb-1">Navigation</label>
         <div className="flex gap-2">
           {(["sidebar", "progress-bar"] as const).map((style) => (
             <button
@@ -164,7 +164,7 @@ export function DocumentSettings({ artifact, onUpdate }: DocumentSettingsProps) 
 
       {/* Theme */}
       <div>
-        <label className="text-xs text-muted-foreground block mb-1">Theme</label>
+        <label className="text-xs font-medium text-muted-foreground block mb-1">Theme</label>
         <div className="flex gap-2">
           {(["dark", "light"] as const).map((theme) => (
             <button
