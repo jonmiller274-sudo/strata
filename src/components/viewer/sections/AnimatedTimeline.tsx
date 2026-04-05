@@ -64,7 +64,7 @@ function VerticalStep({
 
       {/* Content */}
       <div className={cn("pb-10", isLast && "pb-0")}>
-        <span className="text-xs font-semibold uppercase tracking-wider text-accent">
+        <span className="text-xs font-semibold uppercase tracking-wide text-accent">
           {step.label}
         </span>
         <h3 className={cn("mt-1 text-lg font-semibold", styles.text)}>

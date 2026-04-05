@@ -111,7 +111,7 @@ function LayeredView({ layers, description }: { layers: HubMockupLayer[]; descri
               viewport={{ once: true, margin: "-30px" }}
             >
               <p
-                className="text-xs font-semibold uppercase tracking-wider mb-3"
+                className="text-xs font-semibold uppercase tracking-wide mb-3"
                 style={{ color }}
               >
                 {layer.label}
@@ -195,7 +195,7 @@ export function HubMockup({
 
             {connections && connections.length > 0 && (
               <div className="mt-6 rounded-xl border border-border bg-surface p-4">
-                <p className="text-xs font-semibold uppercase tracking-wider text-muted mb-3">
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted mb-3">
                   Connections
                 </p>
                 <div className="grid gap-2 md:grid-cols-2">

@@ -41,7 +41,7 @@ export function RichTextCollapsible({
     <div>
       {content.tag && (
         <span
-          className="mb-3 inline-block rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider"
+          className="mb-3 inline-block rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide"
           style={{
             color: content.tag.color || "var(--palette-accent1, var(--color-accent))",
             backgroundColor: `color-mix(in srgb, ${content.tag.color || "var(--palette-accent1, var(--color-accent))"} 12%, transparent)`,
