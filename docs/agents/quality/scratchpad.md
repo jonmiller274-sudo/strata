@@ -10,6 +10,13 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-05 — Eighteenth run: 8 PRs (6 Tier 0, 2 Tier 1), 2 rubric items closed
+- QR-14 (aria-live) and QR-17 (loading skeleton) were both genuinely open — no prior PRs existed for them on current main.
+- Loading skeleton: Next.js App Router loading.tsx convention is the cleanest pattern — no changes to page.tsx, just a new file. The skeleton is a dark-theme layout with animate-pulse blocks.
+- InlineEditor display mode was not keyboard accessible at all — no tabIndex, no role, no onKeyDown. Added role=button + tabIndex={0} + focus ring + Enter/Space handler. Tier 1 (adds keyboard interaction).
+- With 60+ open PRs still unmerged, accessibility gaps remain the richest vein. Pattern: grep for interactive non-button elements (span/div with onClick) and form inputs without aria-label.
+- nav elements without aria-label are a quick Tier 0 batch — any nav on a page should have aria-label="[purpose]".
+
 ### 2026-04-05 — Sixteenth run: 2 PRs (both Tier 0), all discovery
 - All rubric items still have open PRs. Went straight to discovery.
 - `hover:border-white/40` on upload zone dashed-border buttons is non-standard (design system ceiling is `/30` for deep hover). Uncovered by all prior PRs — the disabled-opacity PRs touched those lines but preserved the /40 hover value.
