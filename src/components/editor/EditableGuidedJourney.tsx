@@ -225,7 +225,7 @@ function EventsEditor({
             <div className="flex flex-col lg:flex-row lg:items-start gap-2 lg:gap-3">
               {/* Day number */}
               <div className="w-full lg:w-16 lg:shrink-0">
-                <label className="text-[10px] text-muted-foreground uppercase tracking-wider block mb-1">
+                <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide block mb-1">
                   Day
                 </label>
                 <input
@@ -242,7 +242,7 @@ function EventsEditor({
               </div>
               {/* Title */}
               <div className="w-full lg:flex-1 lg:min-w-0 overflow-hidden">
-                <label className="text-[10px] text-muted-foreground uppercase tracking-wider block mb-1">
+                <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide block mb-1">
                   Title
                 </label>
                 <InlineEditor
@@ -254,7 +254,7 @@ function EventsEditor({
               </div>
               {/* Phase dropdown */}
               <div className="w-full lg:w-auto lg:shrink-0 lg:max-w-[220px]">
-                <label className="text-[10px] text-muted-foreground uppercase tracking-wider block mb-1">
+                <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide block mb-1">
                   Phase
                 </label>
                 <select
@@ -283,7 +283,7 @@ function EventsEditor({
             {/* Row 2: Label + Description */}
             <div className="flex flex-col lg:flex-row gap-2 lg:gap-3">
               <div className="w-full lg:w-24 lg:shrink-0">
-                <label className="text-[10px] text-muted-foreground uppercase tracking-wider block mb-1">
+                <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide block mb-1">
                   Label
                 </label>
                 <InlineEditor
@@ -295,7 +295,7 @@ function EventsEditor({
                 />
               </div>
               <div className="w-full lg:flex-1 lg:min-w-0 overflow-hidden">
-                <label className="text-[10px] text-muted-foreground uppercase tracking-wider block mb-1">
+                <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide block mb-1">
                   Description
                 </label>
                 <InlineEditor
@@ -312,7 +312,7 @@ function EventsEditor({
             <div className="flex flex-wrap gap-3 text-xs">
               {event.product !== undefined && (
                 <div className="min-w-[100px]">
-                  <label className="text-[10px] text-muted-foreground uppercase tracking-wider block mb-1">
+                  <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide block mb-1">
                     Product
                   </label>
                   <InlineEditor
@@ -327,7 +327,7 @@ function EventsEditor({
               )}
               {event.spend_delta !== undefined && (
                 <div className="min-w-[80px]">
-                  <label className="text-[10px] text-muted-foreground uppercase tracking-wider block mb-1">
+                  <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide block mb-1">
                     Spend
                   </label>
                   <InlineEditor
