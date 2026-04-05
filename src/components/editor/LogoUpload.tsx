@@ -103,7 +103,6 @@ export function LogoUpload({
     return (
       <div className="flex items-center gap-3">
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-white/20 bg-white/5 p-1">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={logoUrl}
             alt="Logo preview"

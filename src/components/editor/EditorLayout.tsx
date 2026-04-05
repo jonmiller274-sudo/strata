@@ -226,7 +226,6 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
     }
     chat.clearHistory();
     setPendingSuggestion(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editor.selectedSectionId]);
 
   const paletteStyle: React.CSSProperties = editor.artifact.branding?.palette

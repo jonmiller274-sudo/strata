@@ -94,7 +94,6 @@ export function SidebarNav({ items, title, subtitle, logoUrl }: SidebarNavProps)
         <div className="border-b border-border px-6 py-6">
           {logoUrl && (
             <div className="mb-3">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={logoUrl} alt="" className="h-8 w-auto object-contain" />
             </div>
           )}

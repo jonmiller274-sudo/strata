@@ -34,6 +34,22 @@ export default [
         setInterval: "readonly",
         clearInterval: "readonly",
         performance: "readonly",
+        // Browser Web APIs
+        File: "readonly",
+        FileReader: "readonly",
+        FormData: "readonly",
+        URLSearchParams: "readonly",
+        AbortController: "readonly",
+        AbortSignal: "readonly",
+        navigator: "readonly",
+        // DOM types
+        DOMException: "readonly",
+        MouseEvent: "readonly",
+        Node: "readonly",
+        localStorage: "readonly",
+        // Node.js globals
+        Buffer: "readonly",
+        crypto: "readonly",
       },
     },
     rules: {
