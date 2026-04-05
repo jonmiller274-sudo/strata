@@ -135,7 +135,7 @@ export default function DiscoverPage() {
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-accent/10 mb-6">
                 <Check className="w-5 h-5 text-accent" />
               </div>
-              <h2 className="text-xl font-semibold mb-3">
+              <h2 className="text-xl font-bold mb-3">
                 You&apos;re on the list
               </h2>
               <p className="text-muted text-sm max-w-md mx-auto">
@@ -146,7 +146,7 @@ export default function DiscoverPage() {
             </motion.div>
           ) : (
             <>
-              <h2 className="text-xl font-semibold mb-2">
+              <h2 className="text-xl font-bold mb-2">
                 Interested?
               </h2>
               <p className="text-muted text-sm mb-8 max-w-md">
