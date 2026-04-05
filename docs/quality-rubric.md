@@ -139,12 +139,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 - **Test:** Visit `/nonexistent-slug` → see branded error page, not blank or generic 404
 - **Status:** OPEN
 
-### QR-19: Generate og:image for social sharing
-- **Tier:** 2
-- **What:** Add dynamic Open Graph meta tags (title, description, image) so shared artifact links show a rich preview in Slack, email, Twitter. Use Next.js `generateMetadata` with the artifact title/subtitle.
-- **Files:** `src/app/[slug]/page.tsx` (metadata), optionally `src/app/[slug]/opengraph-image.tsx`
-- **Test:** Share an artifact link in Slack → see title, description, and preview image
-- **Status:** OPEN
+### ~~QR-19: Generate og:image for social sharing~~ DONE
+- **Status:** DONE — PR opened 2026-04-04. `opengraph-image.tsx` already existed and is well-implemented. Fixed one bug: it was using `getArtifactForEdit` (no `is_published` filter) instead of `getArtifactBySlug` (public-only). OG metadata (`title`, `description`, `openGraph`, `twitter`) is set in `generateMetadata` in `page.tsx`.
 
 ### QR-20: Mobile-friendly beats navigation
 - **Tier:** 2
