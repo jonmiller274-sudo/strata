@@ -71,7 +71,7 @@ function LayerArrow({ index, label }: { index: number; label?: string }) {
       viewport={{ once: true }}
       className="flex flex-col items-center py-3 gap-1"
     >
-      <svg width="32" height="48" viewBox="0 0 32 48" className="text-accent/50">
+      <svg width="32" height="48" viewBox="0 0 32 48" className="text-accent/50" aria-hidden="true">
         <line
           x1="16" y1="0" x2="16" y2="38"
           stroke="currentColor"
