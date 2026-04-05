@@ -13,6 +13,10 @@ Read this top-to-bottom when you want to know "what happened today." Do not edit
 
 ---
 
+## 2026-04-05 (tenth run)
+
+- | quality | PR #91 | disc | tier-0 | open | Add font-medium to DocumentSettings toggle buttons (Layout, Nav, Theme)
+
 ## 2026-04-05 (seventh run)
 
 - | quality | PR #72 | disc | tier-0 | open | Normalize tracking-wider → tracking-wide in viewer section labels (HubMockup, AnimatedTimeline, RichTextCollapsible)

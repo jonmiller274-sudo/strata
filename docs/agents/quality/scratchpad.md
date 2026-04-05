@@ -10,6 +10,14 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-05 — Tenth run: 1 PR (Tier 0), discovery only
+- With 90+ open PRs covering almost everything, finding UNDUPED issues is the hard part.
+- Best strategy: look at files that are NEW or recently ADDED (last fast-forward), not files with known issues.
+- Fresh find: DocumentSettings toggle buttons (Layout/Nav/Theme) missing `font-medium` — distinct from label font-medium issues in PRs #78,#79,#84 which fixed labels, not buttons.
+- Strategy that avoids duplication: grep for very specific patterns not in any open PR title/description. "font-medium missing on buttons" vs "font-medium missing on labels" are different.
+- git push requires GitHub token in remote URL (not local proxy). Use: `git remote set-url origin https://x-access-token:<PAT>@github.com/...` then push.
+- When 90+ PRs are open, the correct answer may be "1 quality PR this run" — shipping clean, non-duplicate fixes is better than creating noise.
+
 ### 2026-04-05 — Seventh run: 8 PRs (all Tier 0), all discovery
 - All rubric items still have open PRs from prior runs — went straight to discovery loop.
 - `tracking-wider` is still widely spread (viewer sections HubMockup/AnimatedTimeline/RichTextCollapsible, dashboard, discover page). Split into 3 PRs by context (viewer sections batch, dashboard, discover).
