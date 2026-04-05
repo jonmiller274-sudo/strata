@@ -105,7 +105,7 @@ export function MultiSectionReview({
                 <p className="text-sm font-medium line-clamp-1">
                   {section.title}
                 </p>
-                <span className="text-[10px] text-accent/70 uppercase tracking-wide">
+                <span className="text-[10px] font-medium text-accent/70 uppercase tracking-wide">
                   {SECTION_TYPE_LABELS[section.type]}
                 </span>
                 {preview && (
