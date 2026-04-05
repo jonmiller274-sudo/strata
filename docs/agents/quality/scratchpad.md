@@ -10,6 +10,12 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-05 — Fourth run: 2 PRs (both Tier-0), discovery only
+- Codebase is in excellent shape from prior runs — nearly every category already has an open PR. Remaining issues were deep edge cases.
+- font-semibold sweep missed discover/page.tsx (prior PRs covered editor, viewer, auth, create, dashboard — but not discover). Always check all app/ routes explicitly.
+- Accessibility gap: color picker inputs (type="color") and bare selects need aria-label just like text inputs. Design system's "Form inputs: associated <label> or aria-label" rule covers these too — not just text/textarea.
+- When 25+ PRs are already open, scanning for duplicates is critical. Saved ~40 min by confirming all lint/font/transition issues were already covered before starting new PRs.
+
 ### 2026-04-05 — Third run: 13 PRs (12 Tier-0, 1 Tier-1), all discovery
 - Biggest category: font-semibold normalization. 30+ instances across editor, viewer, auth, create, dashboard. Not in design-system weight scale. Rule: headings→font-bold, buttons/labels/badges→font-medium. Split into 4 PRs by component area.
 - Raw hex violations in not-found.tsx (5) and ProgressBarNav (1) — both covered but main shows originals since PRs unmerged.
