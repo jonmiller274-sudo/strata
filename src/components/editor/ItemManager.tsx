@@ -60,7 +60,7 @@ function SortableRow({
       <button
         {...attributes}
         {...listeners}
-        className="mt-3 opacity-0 group-hover:opacity-50 shrink-0 cursor-grab touch-none"
+        className="mt-3 opacity-0 group-hover:opacity-50 shrink-0 cursor-grab touch-none transition-opacity"
         tabIndex={-1}
       >
         <GripVertical className="w-3.5 h-3.5" />
