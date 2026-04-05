@@ -57,7 +57,7 @@ export default function DiscoverPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Subtle top bar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/80 backdrop-blur-md">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-background/80 backdrop-blur-md">
         <div className="mx-auto max-w-3xl px-6 py-4 flex items-center justify-between">
           <Link
             href="/"
@@ -97,7 +97,7 @@ export default function DiscoverPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="py-12 border-t border-white/5"
+          className="py-12 border-t border-white/10"
         >
           <p className="text-sm text-muted-foreground uppercase tracking-wider mb-8">
             What you experienced
@@ -123,7 +123,7 @@ export default function DiscoverPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.6 }}
-          className="py-16 border-t border-white/5"
+          className="py-16 border-t border-white/10"
         >
           {submitted ? (
             <motion.div
@@ -201,7 +201,7 @@ export default function DiscoverPage() {
         </motion.section>
 
         {/* Footer — minimal */}
-        <footer className="py-12 border-t border-white/5 mb-8">
+        <footer className="py-12 border-t border-white/10 mb-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-muted-foreground">
               <Layers className="w-3.5 h-3.5" />
