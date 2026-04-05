@@ -10,6 +10,15 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-05 — Eighth run: 3 PRs (all Tier 0), all discovery
+- With 60+ open PRs covering nearly every pattern, discovery loop requires finding issues in files NOT mentioned in any existing PR title.
+- Fresh finds: `text-green-400` in AiChatPanel Applied badge (wrong; should be `text-success` per CSS variable), `style={{ scrollSnapAlign: 'end' }}` in StrataFooter (→ `snap-end`), and 3 inline styles in ProgressBarNav share button block.
+- Key search strategy for semantic color violations: `grep "text-green-\|text-blue-\|text-yellow-" src/components/editor/` catches hardcoded colours that should use design-system semantic tokens.
+- `--color-success` IS defined in `globals.css @theme`, so `text-success` works as a Tailwind v4 utility. Use it instead of `text-green-*` or `text-emerald-*`.
+- `snap-end` is a valid Tailwind utility for `scroll-snap-align: end`. Safe to use in place of inline style.
+- ProgressBarNav has 3 distinct sections: progress dots (lines 87-121), mobile pill (123-158), share button (160-203), wordmark (205-244). PR #64 covers mobile pill; share button and wordmark sections still had inline styles.
+- With so many open PRs, diminishing returns on discovery. Future runs should first check if any prior PRs have been merged and their issues re-introduced, or look at completely new files.
+
 ### 2026-04-05 — Seventh run: 8 PRs (all Tier 0), all discovery
 - All rubric items still have open PRs from prior runs — went straight to discovery loop.
 - `tracking-wider` is still widely spread (viewer sections HubMockup/AnimatedTimeline/RichTextCollapsible, dashboard, discover page). Split into 3 PRs by context (viewer sections batch, dashboard, discover).
