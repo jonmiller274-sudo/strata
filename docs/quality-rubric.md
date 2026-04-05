@@ -132,12 +132,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 - **Test:** Hard-refresh an artifact page — see skeleton animation, then smooth transition to content (no blank flash)
 - **Status:** OPEN
 
-### QR-18: Graceful 404 for missing artifacts
-- **Tier:** 2
-- **What:** Instead of Next.js default notFound(), show a branded 404 page with "This document doesn't exist" message and a CTA to visit sharestrata.com
-- **Files:** `src/app/[slug]/page.tsx`, create `src/app/[slug]/not-found.tsx`
-- **Test:** Visit `/nonexistent-slug` → see branded error page, not blank or generic 404
-- **Status:** OPEN
+### ~~QR-18: Graceful 404 for missing artifacts~~ DONE
+- **Status:** DONE — PR opened 2026-04-04. Created `src/app/[slug]/not-found.tsx` — branded dark-theme 404 with "This document doesn't exist" heading and "Create your own" CTA to sharestrata.com. `page.tsx` unchanged.
 
 ### ~~QR-19: Generate og:image for social sharing~~ DONE
 - **Status:** DONE — PR opened 2026-04-04. `opengraph-image.tsx` already existed and is well-implemented. Fixed one bug: it was using `getArtifactForEdit` (no `is_published` filter) instead of `getArtifactBySlug` (public-only). OG metadata (`title`, `description`, `openGraph`, `twitter`) is set in `generateMetadata` in `page.tsx`.
