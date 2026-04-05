@@ -64,6 +64,7 @@ export function EditableDataViz({
         <label className="text-sm text-muted-foreground">Chart type:</label>
         <select
           value={section.content.chart_type}
+          aria-label="Chart type"
           onChange={(e) =>
             onFieldChange("content.chart_type", e.target.value)
           }
