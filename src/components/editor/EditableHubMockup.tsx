@@ -147,7 +147,7 @@ export function EditableHubMockup({
                     e.target.value
                   )
                 }
-                className="bg-white/10 rounded px-1.5 py-0.5 text-sm outline-none ring-1 ring-white/10 focus:ring-accent/50"
+                className="bg-white/10 rounded px-1.5 py-0.5 text-sm outline-none focus:ring-1 focus:ring-accent/50"
               >
                 {allNodes.map((n) => (
                   <option key={n.id} value={n.id}>
@@ -164,7 +164,7 @@ export function EditableHubMockup({
                     e.target.value
                   )
                 }
-                className="bg-white/10 rounded px-1.5 py-0.5 text-sm outline-none ring-1 ring-white/10 focus:ring-accent/50"
+                className="bg-white/10 rounded px-1.5 py-0.5 text-sm outline-none focus:ring-1 focus:ring-accent/50"
               >
                 {allNodes.map((n) => (
                   <option key={n.id} value={n.id}>

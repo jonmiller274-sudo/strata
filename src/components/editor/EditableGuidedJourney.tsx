@@ -237,7 +237,7 @@ function EventsEditor({
                       parseInt(e.target.value) || 0
                     )
                   }
-                  className="w-full bg-white/10 rounded px-1.5 py-0.5 text-sm outline-none ring-1 ring-white/10 focus:ring-accent/50"
+                  className="w-full bg-white/10 rounded px-1.5 py-0.5 text-sm outline-none focus:ring-1 focus:ring-accent/50"
                 />
               </div>
               {/* Title */}
@@ -265,7 +265,7 @@ function EventsEditor({
                       e.target.value
                     )
                   }
-                  className="block w-full bg-white/10 rounded px-1.5 py-0.5 text-sm outline-none ring-1 ring-white/10 focus:ring-accent/50 truncate"
+                  className="block w-full bg-white/10 rounded px-1.5 py-0.5 text-sm outline-none focus:ring-1 focus:ring-accent/50 truncate"
                   style={{
                     borderLeft: phase
                       ? `3px solid ${phase.color}`
