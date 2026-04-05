@@ -125,7 +125,7 @@ export function AuthModal({ open, onClose, redirectTo }: AuthModalProps) {
               className={cn(
                 "mt-6 flex w-full items-center justify-center gap-3 rounded-xl border border-border bg-card px-4 py-3 text-sm font-medium transition-colors",
                 loading
-                  ? "cursor-not-allowed opacity-50"
+                  ? "cursor-not-allowed opacity-30"
                   : "hover:bg-card-hover"
               )}
             >
