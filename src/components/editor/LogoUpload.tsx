@@ -6,7 +6,7 @@ import { Upload, X, ImageIcon } from "lucide-react";
 interface LogoUploadProps {
   logoUrl?: string;
   artifactId: string;
-  onUpload: (url: string) => void;
+  onUpload: (_url: string) => void;
   onRemove: () => void;
 }
 
