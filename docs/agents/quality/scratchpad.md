@@ -10,6 +10,15 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-05 — Fifth run: 6 PRs (all Tier 0), all discovery
+- All rubric OPEN items already had open PRs from prior runs — went straight to discovery loop.
+- Good new category: inline styles that duplicate Tailwind tokens. `ProgressBarNav` mobile pill and `ArtifactViewer` beats layout/watermark both used `style={{ color: "var(--color-muted-foreground)" }}` when `text-muted-foreground` class does the same thing.
+- Auth modals (`AuthModal.tsx`, `UpgradePrompt.tsx`) both had icon-only X close buttons with no `aria-label`. Found via scanning uncovered files list.
+- `AuthModal.tsx` had `opacity-50` for loading state — should be `opacity-30`. Different issue from `disabled:opacity-50` (the PR #21 pattern) since it's a conditional class, not a `disabled:` modifier.
+- Focus ring normalization: `focus:ring-accent` (no opacity modifier) found in `AuthModal.tsx` and `create/page.tsx`. All editor components correctly used `focus:ring-accent/50`. Inconsistency was likely just copy-paste drift.
+- Three decorative SVGs needed `aria-hidden="true"`: section type preview thumbnail, Google logo in auth button, hub connector arrow.
+- Trap: Check ALL open PRs before scanning for issues — many files already have pending fixes that would create duplicate/conflicting PRs.
+
 ### 2026-04-05 — Third run: 13 PRs (12 Tier-0, 1 Tier-1), all discovery
 - Biggest category: font-semibold normalization. 30+ instances across editor, viewer, auth, create, dashboard. Not in design-system weight scale. Rule: headings→font-bold, buttons/labels/badges→font-medium. Split into 4 PRs by component area.
 - Raw hex violations in not-found.tsx (5) and ProgressBarNav (1) — both covered but main shows originals since PRs unmerged.

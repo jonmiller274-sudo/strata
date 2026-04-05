@@ -13,6 +13,15 @@ Read this top-to-bottom when you want to know "what happened today." Do not edit
 
 ---
 
+## 2026-04-05 (fifth run)
+
+- | quality | PR #60 | disc | tier-0 | open | Add aria-label="Close" to icon-only X buttons in AuthModal and UpgradePrompt
+- | quality | PR #61 | disc | tier-0 | open | Normalize loading opacity from 50 to 30 in AuthModal Google button
+- | quality | PR #62 | disc | tier-0 | open | Normalize focus:ring-accent to focus:ring-accent/50 in AuthModal and create/page.tsx
+- | quality | PR #63 | disc | tier-0 | open | Add aria-hidden="true" to decorative SVGs in SectionTypePreview, AuthModal, HubMockup
+- | quality | PR #64 | disc | tier-0 | open | Replace inline styles with Tailwind classes in ProgressBarNav mobile pill
+- | quality | PR #65 | disc | tier-0 | open | Replace inline styles with Tailwind classes in ArtifactViewer beats layout and watermark
+
 ## 2026-04-05 (third run)
 
 - | quality | PR #43 | disc | tier-0 | open | Replace raw hex colors with CSS variable tokens in not-found.tsx
