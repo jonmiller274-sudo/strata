@@ -37,9 +37,9 @@ interface SplitViewLayoutProps {
   selectedSection: Section;
   previewSection?: Section; // With AI suggestion overlay, if any
   selectedSectionIndex: number;
-  onSelectSection: (id: string) => void;
-  onFieldChange: (sectionId: string, path: string, value: unknown) => void;
-  onReplaceSection: (sectionId: string, updated: Section) => void;
+  onSelectSection: (_id: string) => void;
+  onFieldChange: (_sectionId: string, _path: string, _value: unknown) => void;
+  onReplaceSection: (_sectionId: string, updated: Section) => void;
   // Sidebar overlay props
   onDeleteSection: (id: string) => void;
   onDuplicateSection: (id: string) => void;
