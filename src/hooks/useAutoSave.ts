@@ -8,7 +8,7 @@ import type { SaveStatus } from "./useEditor";
 export function useAutoSave(
   artifact: Artifact,
   saveStatus: SaveStatus,
-  setSaveStatus: (status: SaveStatus) => void,
+  setSaveStatus: (_status: SaveStatus) => void,
   debounceMs: number = 2000
 ) {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
