@@ -131,19 +131,10 @@ export function ProgressBarNav({
           disabled={activeIndex === 0}
           aria-label="Previous section"
           className="flex items-center justify-center w-6 h-6 rounded-full text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-          style={{ color: "var(--color-muted-foreground)" }}
         >
-          <ChevronLeft style={{ width: "14px", height: "14px" }} />
+          <ChevronLeft className="w-3.5 h-3.5" />
         </button>
-        <span
-          style={{
-            fontSize: "12px",
-            fontWeight: 500,
-            color: "var(--color-foreground)",
-            minWidth: "52px",
-            textAlign: "center",
-          }}
-        >
+        <span className="text-xs font-medium text-foreground min-w-[52px] text-center">
           {activeIndex + 1} / {items.length}
         </span>
         <button
@@ -151,9 +142,8 @@ export function ProgressBarNav({
           disabled={activeIndex === items.length - 1}
           aria-label="Next section"
           className="flex items-center justify-center w-6 h-6 rounded-full text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-          style={{ color: "var(--color-muted-foreground)" }}
         >
-          <ChevronRight style={{ width: "14px", height: "14px" }} />
+          <ChevronRight className="w-3.5 h-3.5" />
         </button>
       </div>
 
