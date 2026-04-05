@@ -98,6 +98,9 @@ function Card({
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.1 }}
       viewport={{ once: true, margin: "-50px" }}
+      role="button"
+      tabIndex={0}
+      aria-expanded={card.detail ? expanded : undefined}
       className={cn(
         "group cursor-pointer rounded-2xl border border-border bg-card p-6 transition-all duration-200",
         "hover:border-accent/30 hover:bg-card-hover",
@@ -105,6 +108,12 @@ function Card({
       )}
       style={borderStyle}
       onClick={() => setExpanded(!expanded)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          setExpanded(!expanded);
+        }
+      }}
     >
       {/* Header */}
       <div className="flex items-start justify-between">
