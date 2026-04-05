@@ -10,6 +10,12 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-05 — Sixteenth run: 2 PRs (both Tier 0), all discovery
+- All rubric items still have open PRs. Went straight to discovery.
+- `hover:border-white/40` on upload zone dashed-border buttons is non-standard (design system ceiling is `/30` for deep hover). Uncovered by all prior PRs — the disabled-opacity PRs touched those lines but preserved the /40 hover value.
+- `p-5` in the keyboard shortcuts overlay was non-standard. Design system standard panel content is `p-3` or `p-4`. Only one instance — `SplitViewLayout.tsx:393`.
+- After 16 runs, the codebase is remarkably clean. Most search patterns return only instances covered by existing open PRs. The main remaining opportunity is waiting for those 60+ PRs to merge so main is clean.
+
 ### 2026-04-05 — Fifteenth run: 4 PRs (all Tier 0), all discovery
 - All rubric items still have open PRs from prior runs — went straight to discovery loop.
 - `gh` CLI unavailable; GitHub REST API via curl works fine. Set remote to PAT HTTPS URL before pushing: `git remote set-url origin https://x-access-token:<PAT>@github.com/...` (local proxy at 127.0.0.1:35667 blocks pushes with 403).
