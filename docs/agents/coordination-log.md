@@ -13,6 +13,11 @@ Read this top-to-bottom when you want to know "what happened today." Do not edit
 
 ---
 
+## 2026-04-05 (sixteenth run)
+
+- | quality | PR #115 | disc | tier-0 | open | Normalize hover:border-white/40 → hover:border-white/30 in upload zone dashed-border buttons (SplitViewLayout, EditorLayout, LogoUpload)
+- | quality | PR #116 | disc | tier-0 | open | Normalize p-5 → p-4 in keyboard shortcuts overlay container (SplitViewLayout)
+
 ## 2026-04-05 (fifteenth run)
 
 - | quality | PR #110 | disc | tier-0 | open | Normalize focus ring opacity to accent/50 in discover page inputs (3 inputs)
