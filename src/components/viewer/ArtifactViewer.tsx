@@ -164,7 +164,7 @@ export function ArtifactViewer({
               >
                 {/* Beat label */}
                 <p
-                  className="mb-6 font-mono text-xs uppercase tracking-widest"
+                  className="mb-6 font-mono text-xs uppercase tracking-wide"
                   style={{ color: "var(--color-muted-foreground)" }}
                 >
                   Beat {beatNumber} / {totalBeats}

@@ -440,7 +440,7 @@ function DetailPanel({
           }}
         >
           <div
-            className="mb-1 text-[10px] font-mono font-semibold uppercase tracking-widest"
+            className="mb-1 text-[10px] font-mono font-semibold uppercase tracking-wide"
             style={{ color }}
           >
             {event.trigger.label}
