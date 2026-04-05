@@ -37,6 +37,7 @@ export function UpgradePrompt({
       <div className="relative w-full max-w-lg rounded-2xl border border-border bg-background p-8 shadow-2xl">
         <button
           onClick={onClose}
+          aria-label="Close"
           className="absolute right-4 top-4 text-muted hover:text-foreground transition-colors"
         >
           <X className="h-5 w-5" />
