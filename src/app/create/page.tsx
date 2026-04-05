@@ -210,7 +210,7 @@ export default function CreatePage() {
 
           <div className="flex items-center gap-2">
             <Layers className="h-5 w-5 text-accent" />
-            <span className="font-semibold">Create Artifact</span>
+            <span className="font-bold">Create Artifact</span>
           </div>
 
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -268,7 +268,7 @@ export default function CreatePage() {
                     "border-border bg-card hover:border-accent/40 hover:bg-card-hover"
                   )}
                 >
-                  <h3 className="text-lg font-semibold group-hover:text-accent transition-colors">
+                  <h3 className="text-lg font-bold group-hover:text-accent transition-colors">
                     {TEMPLATE_LABELS[type]}
                   </h3>
                   <p className="mt-2 text-sm text-muted leading-relaxed">
@@ -410,7 +410,7 @@ export default function CreatePage() {
                 onClick={handleStructure}
                 disabled={!content.trim() || isStructuring}
                 className={cn(
-                  "flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-all",
+                  "flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-medium transition-all",
                   content.trim() && !isStructuring
                     ? "bg-accent text-white hover:bg-accent-hover"
                     : "bg-card text-muted cursor-not-allowed"
@@ -461,7 +461,7 @@ export default function CreatePage() {
                 <button
                   onClick={handlePublish}
                   disabled={isPublishing}
-                  className="flex items-center gap-2 rounded-xl bg-accent px-6 py-2.5 text-sm font-semibold text-white hover:bg-accent-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="flex items-center gap-2 rounded-xl bg-accent px-6 py-2.5 text-sm font-medium text-white hover:bg-accent-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                   {isPublishing ? (
                     <>
