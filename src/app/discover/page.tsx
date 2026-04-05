@@ -161,13 +161,13 @@ export default function DiscoverPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@company.com"
                   required
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm outline-none placeholder:text-muted-foreground/40 focus:border-accent/50 focus:ring-1 focus:ring-accent/30 transition-colors"
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm outline-none placeholder:text-muted-foreground/40 focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-colors"
                 />
 
                 <select
                   value={useCase}
                   onChange={(e) => setUseCase(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm outline-none text-muted-foreground focus:border-accent/50 focus:ring-1 focus:ring-accent/30 transition-colors appearance-none"
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm outline-none text-muted-foreground focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-colors appearance-none"
                 >
                   <option value="">What would you build? (optional)</option>
                   <option value="investor-deck">Investor deck</option>
@@ -184,7 +184,7 @@ export default function DiscoverPage() {
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
                   placeholder="Your role (optional)"
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm outline-none placeholder:text-muted-foreground/40 focus:border-accent/50 focus:ring-1 focus:ring-accent/30 transition-colors"
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm outline-none placeholder:text-muted-foreground/40 focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-colors"
                 />
 
                 <button
