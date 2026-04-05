@@ -46,8 +46,7 @@ export function StrataFooter({ planTier = "free", isDemoPage = false }: StrataFo
 
   return (
     <footer
-      className="border-t border-border bg-footer-bg px-6 py-16 flex items-end"
-      style={{ scrollSnapAlign: "end" }}
+      className="border-t border-border bg-footer-bg px-6 py-16 flex items-end snap-end"
     >
       <div className="mx-auto flex max-w-4xl w-full items-center justify-between">
         <a
