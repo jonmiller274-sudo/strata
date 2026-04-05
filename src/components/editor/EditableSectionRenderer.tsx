@@ -437,7 +437,7 @@ function EditableCardGrid({
                   onFieldChange(`content.cards.${i}.tags`, tags);
                 }}
                 placeholder="e.g. Series B, SaaS, B2B"
-                className="w-full bg-white/5 border border-white/10 rounded px-2 py-1 text-xs text-foreground/80 placeholder:text-muted-foreground/50 focus:outline-none focus:border-white/20"
+                className="w-full bg-white/5 border border-white/10 rounded px-2 py-1 text-xs text-foreground/80 placeholder:text-muted-foreground/50 outline-none focus:ring-1 focus:ring-accent/50"
               />
             </div>
 
@@ -455,7 +455,7 @@ function EditableCardGrid({
                     onFieldChange(`content.cards.${i}.metric`, val ? { value: val, label: card.metric?.label ?? "" } : undefined);
                   }}
                   placeholder="Value (e.g. $2.1B)"
-                  className="flex-1 bg-white/5 border border-white/10 rounded px-2 py-1 text-xs text-foreground/80 placeholder:text-muted-foreground/50 focus:outline-none focus:border-white/20"
+                  className="flex-1 bg-white/5 border border-white/10 rounded px-2 py-1 text-xs text-foreground/80 placeholder:text-muted-foreground/50 outline-none focus:ring-1 focus:ring-accent/50"
                 />
                 <input
                   type="text"
@@ -467,7 +467,7 @@ function EditableCardGrid({
                     }
                   }}
                   placeholder="Label (e.g. Valuation)"
-                  className="flex-1 bg-white/5 border border-white/10 rounded px-2 py-1 text-xs text-foreground/80 placeholder:text-muted-foreground/50 focus:outline-none focus:border-white/20"
+                  className="flex-1 bg-white/5 border border-white/10 rounded px-2 py-1 text-xs text-foreground/80 placeholder:text-muted-foreground/50 outline-none focus:ring-1 focus:ring-accent/50"
                 />
               </div>
             </div>
@@ -506,7 +506,7 @@ function EditableCardGrid({
               onChange={(e) => onFieldChange("content.callout", { ...callout, text: e.target.value })}
               rows={3}
               placeholder="Key insight tying cards together..."
-              className="w-full bg-white/5 border border-white/10 rounded px-2 py-1.5 text-sm text-foreground/80 placeholder:text-muted-foreground/50 focus:outline-none focus:border-white/20 resize-none"
+              className="w-full bg-white/5 border border-white/10 rounded px-2 py-1.5 text-sm text-foreground/80 placeholder:text-muted-foreground/50 outline-none focus:ring-1 focus:ring-accent/50 resize-none"
             />
           </div>
         ) : (
