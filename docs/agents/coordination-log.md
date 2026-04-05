@@ -13,6 +13,22 @@ Read this top-to-bottom when you want to know "what happened today." Do not edit
 
 ---
 
+## 2026-04-05 (third run)
+
+- | quality | PR #43 | disc | tier-0 | open | Replace raw hex colors with CSS variable tokens in not-found.tsx
+- | quality | PR #44 | disc | tier-0 | open | Replace raw hex bg-[#12141d]/90 with bg-surface/90 in ProgressBarNav mobile pill
+- | quality | PR #45 | disc | tier-0 | open | Normalize font-semibold to design-system weights in 4 editor components (7 instances)
+- | quality | PR #46 | disc | tier-0 | open | Remove unused X import in create/page.tsx; rename url param in LogoUpload
+- | quality | PR #47 | disc | tier-0 | open | Remove unused imports in AiChatPanel/useAiChat; rename param in TypeSelectorDropdown
+- | quality | PR #48 | disc | tier-0 | open | Rename unused callback params to _-prefix in SplitViewLayout prop types
+- | quality | PR #49 | disc | tier-0 | open | Rename unused callback params in EditableSectionRenderer prop types
+- | quality | PR #50 | disc | tier-0 | open | Normalize font-semibold to design-system weights in 10 viewer components (20 instances)
+- | quality | PR #51 | disc | tier-0 | open | Normalize font-semibold to font-medium in auth component buttons
+- | quality | PR #52 | disc | tier-0 | open | Normalize font-semibold in create and dashboard pages
+- | quality | PR #53 | disc | tier-0 | open | Add missing transition-colors to image error dismiss button in EditorLayout
+- | quality | PR #54 | disc | tier-0 | open | Add transition-opacity to drag handle buttons in SortableSectionList and ItemManager
+- | quality | PR #55 | disc | tier-1 | open | Add focus ring to GuidedJourney timeline node buttons
+
 ## 2026-04-05
 
 - | quality | PR #34 | disc | tier-0 | open | Add missing browser/node globals to ESLint config; remove stale eslint-disable comments
