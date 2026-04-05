@@ -10,9 +10,9 @@ import { Sparkles } from "lucide-react";
 interface SectionEditorPanelProps {
   section: Section;
   sectionIndex: number;
-  onFieldChange: (sectionId: string, path: string, value: unknown) => void;
-  onReplaceSection: (sectionId: string, updated: Section) => void;
-  onPendingPreview?: (section: Section | null) => void;
+  onFieldChange: (_sectionId: string, _path: string, _value: unknown) => void;
+  onReplaceSection: (_sectionId: string, _updated: Section) => void;
+  onPendingPreview?: (_section: Section | null) => void;
 }
 
 export function SectionEditorPanel({

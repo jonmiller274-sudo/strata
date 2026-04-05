@@ -5,7 +5,7 @@ import { FormattedText } from "@/components/viewer/FormattedText";
 
 interface InlineEditorProps {
   value: string;
-  onChange: (value: string) => void;
+  onChange: (_value: string) => void;
   multiline?: boolean;
   className?: string;
   placeholder?: string;

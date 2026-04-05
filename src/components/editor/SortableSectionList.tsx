@@ -62,11 +62,11 @@ function InsertDivider({ onClick }: { onClick: () => void }) {
 interface SortableSectionListProps {
   sections: Section[];
   selectedSectionId: string | null;
-  onSelect: (id: string) => void;
-  onDelete: (id: string) => void;
-  onDuplicate: (id: string) => void;
-  onReorder: (fromIndex: number, toIndex: number) => void;
-  onInsertAt?: (position: number) => void;
+  onSelect: (_id: string) => void;
+  onDelete: (_id: string) => void;
+  onDuplicate: (_id: string) => void;
+  onReorder: (_fromIndex: number, _toIndex: number) => void;
+  onInsertAt?: (_position: number) => void;
 }
 
 function SortableItem({

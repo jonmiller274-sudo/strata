@@ -29,7 +29,7 @@ const SECTION_TYPE_ICONS: Record<SectionType, LucideIcon> = {
 interface SidebarRailProps {
   sections: Section[];
   selectedSectionId: string | null;
-  onSelectSection: (id: string) => void;
+  onSelectSection: (_id: string) => void;
   onExpandSidebar: () => void;
 }
 

@@ -20,11 +20,11 @@ import { GripVertical, Trash2, Plus } from "lucide-react";
 
 interface ItemManagerProps<T> {
   items: T[];
-  getItemId: (item: T, index: number) => string;
+  getItemId: (_item: T, _index: number) => string;
   onAdd: () => void;
-  onRemove: (index: number) => void;
-  onReorder: (fromIndex: number, toIndex: number) => void;
-  renderItem: (item: T, index: number) => React.ReactNode;
+  onRemove: (_index: number) => void;
+  onReorder: (_fromIndex: number, _toIndex: number) => void;
+  renderItem: (_item: T, _index: number) => React.ReactNode;
   addLabel: string;
   minItems?: number;
   maxItems?: number;

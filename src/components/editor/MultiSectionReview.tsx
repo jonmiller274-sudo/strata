@@ -18,7 +18,7 @@ function getSectionPreview(section: Section): string {
 
 interface MultiSectionReviewProps {
   sections: Section[];
-  onConfirm: (selected: Section[]) => void;
+  onConfirm: (_selected: Section[]) => void;
   onCancel: () => void;
   onRegenerate: () => void;
 }

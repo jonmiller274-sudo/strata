@@ -10,7 +10,7 @@ interface SectionPreviewPanelProps {
   artifact: Artifact;
   isZoomedOut: boolean;
   onToggleZoom: () => void;
-  onSelectSection: (id: string) => void;
+  onSelectSection: (_id: string) => void;
 }
 
 // Memoize to avoid re-renders during rapid typing in the editor panel.
