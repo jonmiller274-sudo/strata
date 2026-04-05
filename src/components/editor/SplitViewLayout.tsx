@@ -390,7 +390,7 @@ export function SplitViewLayout({
               transition={{ duration: 0.15 }}
               className="absolute inset-0 flex items-center justify-center z-50 pointer-events-none"
             >
-              <div className="bg-surface border border-white/10 rounded-xl shadow-2xl w-80 p-5 pointer-events-auto">
+              <div className="bg-surface border border-white/10 rounded-xl shadow-2xl w-80 p-4 pointer-events-auto">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
                     <Keyboard className="w-4 h-4 text-accent" />
