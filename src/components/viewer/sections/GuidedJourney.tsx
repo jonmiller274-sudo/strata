@@ -385,7 +385,7 @@ function DetailPanel({
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
-      className="rounded-xl border bg-card p-5"
+      className="rounded-xl border bg-card p-4"
       style={{ borderColor: color + "40" }}
     >
       {/* Header */}
