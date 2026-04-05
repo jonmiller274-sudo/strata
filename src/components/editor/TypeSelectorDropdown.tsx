@@ -119,6 +119,7 @@ export function TypeSelectorDropdown({
       <button
         onClick={() => !isLoading && setIsOpen((v) => !v)}
         disabled={isLoading}
+        aria-expanded={isOpen}
         className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isLoading ? (
