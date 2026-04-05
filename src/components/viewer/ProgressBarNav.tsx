@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Share2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Share2 } from "lucide-react";
 
 interface ProgressBarNavItem {
   id: string;
@@ -75,12 +75,20 @@ export function ProgressBarNav({
     }
   }, []);
 
+  const goToPrev = useCallback(() => {
+    if (activeIndex > 0) scrollToBeat(items[activeIndex - 1].id);
+  }, [activeIndex, items, scrollToBeat]);
+
+  const goToNext = useCallback(() => {
+    if (activeIndex < items.length - 1) scrollToBeat(items[activeIndex + 1].id);
+  }, [activeIndex, items, scrollToBeat]);
+
   return (
     <>
-      {/* Progress bar — fixed top */}
+      {/* Progress bar — fixed top, hidden on mobile */}
       <div
-        className="fixed top-0 left-0 right-0 z-50"
-        style={{ height: "3px", display: "flex", gap: "3px" }}
+        className="hidden sm:flex fixed top-0 left-0 right-0 z-50"
+        style={{ height: "3px", gap: "3px" }}
         role="navigation"
         aria-label="Section progress"
       >
@@ -110,6 +118,43 @@ export function ProgressBarNav({
             />
           );
         })}
+      </div>
+
+      {/* Mobile floating pill — shown only on small screens */}
+      <div
+        className="sm:hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-3 py-2 rounded-full border border-white/10 bg-[#12141d]/90 backdrop-blur-sm shadow-lg"
+        role="navigation"
+        aria-label="Section navigation"
+      >
+        <button
+          onClick={goToPrev}
+          disabled={activeIndex === 0}
+          aria-label="Previous section"
+          className="flex items-center justify-center w-6 h-6 rounded-full text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          style={{ color: "var(--color-muted-foreground)" }}
+        >
+          <ChevronLeft style={{ width: "14px", height: "14px" }} />
+        </button>
+        <span
+          style={{
+            fontSize: "12px",
+            fontWeight: 500,
+            color: "var(--color-foreground)",
+            minWidth: "52px",
+            textAlign: "center",
+          }}
+        >
+          {activeIndex + 1} / {items.length}
+        </span>
+        <button
+          onClick={goToNext}
+          disabled={activeIndex === items.length - 1}
+          aria-label="Next section"
+          className="flex items-center justify-center w-6 h-6 rounded-full text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          style={{ color: "var(--color-muted-foreground)" }}
+        >
+          <ChevronRight style={{ width: "14px", height: "14px" }} />
+        </button>
       </div>
 
       {/* Share button — fixed top-right, below the progress bar */}

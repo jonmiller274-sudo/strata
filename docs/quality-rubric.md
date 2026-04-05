@@ -142,12 +142,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 ### ~~QR-19: Generate og:image for social sharing~~ DONE
 - **Status:** DONE — PR opened 2026-04-04. `opengraph-image.tsx` already existed and is well-implemented. Fixed one bug: it was using `getArtifactForEdit` (no `is_published` filter) instead of `getArtifactBySlug` (public-only). OG metadata (`title`, `description`, `openGraph`, `twitter`) is set in `generateMetadata` in `page.tsx`.
 
-### QR-20: Mobile-friendly beats navigation
-- **Tier:** 2
-- **What:** Progress bar nav is unreadable on mobile (3px height, no labels). On mobile, replace with a floating "Beat 3 of 7" pill with prev/next arrows, or switch to sidebar nav.
-- **Files:** `src/components/viewer/ProgressBarNav.tsx` or equivalent
-- **Test:** View beats artifact on iPhone → can navigate all sections easily
-- **Status:** OPEN
+### ~~QR-20: Mobile-friendly beats navigation~~ DONE
+- **Status:** DONE — PR opened 2026-04-04. Progress bar hidden on mobile (`hidden sm:flex`). Floating `X / Y` pill with prev/next arrows shown at bottom of screen on mobile only (`sm:hidden`). Desktop unchanged.
 
 ---
 
