@@ -130,7 +130,7 @@ export function DocumentSettings({ artifact, onUpdate }: DocumentSettingsProps) 
             <button
               key={mode}
               onClick={() => onUpdate("layout_mode", mode)}
-              className={`px-2.5 py-1 rounded text-xs transition-colors ${
+              className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
                 (artifact.layout_mode ?? "continuous") === mode
                   ? "bg-accent/20 text-accent"
                   : "bg-white/10 text-muted-foreground hover:bg-white/20"
@@ -150,7 +150,7 @@ export function DocumentSettings({ artifact, onUpdate }: DocumentSettingsProps) 
             <button
               key={style}
               onClick={() => onUpdate("nav_style", style)}
-              className={`px-2.5 py-1 rounded text-xs transition-colors ${
+              className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
                 (artifact.nav_style ?? "sidebar") === style
                   ? "bg-accent/20 text-accent"
                   : "bg-white/10 text-muted-foreground hover:bg-white/20"
@@ -170,7 +170,7 @@ export function DocumentSettings({ artifact, onUpdate }: DocumentSettingsProps) 
             <button
               key={theme}
               onClick={() => onUpdate("theme", theme)}
-              className={`px-2.5 py-1 rounded text-xs transition-colors ${
+              className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
                 artifact.theme === theme
                   ? "bg-accent/20 text-accent"
                   : "bg-white/10 text-muted-foreground hover:bg-white/20"
