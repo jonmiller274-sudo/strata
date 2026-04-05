@@ -380,7 +380,7 @@ function EditableCardGrid({
           <div className="bg-white/5 rounded-lg p-4 border border-white/10 space-y-2">
             {/* Card style toggle */}
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-[10px] text-muted-foreground uppercase tracking-wide">Style:</span>
+              <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">Style:</span>
               {(["default", "quote"] as const).map((s) => (
                 <button
                   key={s}
@@ -422,7 +422,7 @@ function EditableCardGrid({
 
             {/* Tags editor */}
             <div className="pt-1">
-              <label className="text-[10px] text-muted-foreground uppercase tracking-wide block mb-1">
+              <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide block mb-1">
                 Tags (comma-separated)
               </label>
               <input
@@ -443,7 +443,7 @@ function EditableCardGrid({
 
             {/* Metric editor */}
             <div className="pt-1">
-              <label className="text-[10px] text-muted-foreground uppercase tracking-wide block mb-1">
+              <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide block mb-1">
                 Metric
               </label>
               <div className="flex gap-2">
