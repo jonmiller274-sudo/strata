@@ -67,7 +67,7 @@ export function EditableDataViz({
           onChange={(e) =>
             onFieldChange("content.chart_type", e.target.value)
           }
-          className="bg-white/10 rounded px-2 py-1 text-sm outline-none ring-1 ring-white/10 focus:ring-accent/50"
+          className="bg-white/10 rounded px-2 py-1 text-sm outline-none focus:ring-1 focus:ring-accent/50"
         >
           {CHART_TYPES.map((ct) => (
             <option key={ct.value} value={ct.value}>
