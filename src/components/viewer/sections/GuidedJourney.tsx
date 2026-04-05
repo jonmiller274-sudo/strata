@@ -551,7 +551,7 @@ export function GuidedJourney({
             className={cn(
               "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all",
               isPlaying
-                ? "opacity-50 cursor-not-allowed bg-card border border-border text-muted"
+                ? "opacity-30 cursor-not-allowed bg-card border border-border text-muted"
                 : "bg-[var(--palette-accent1,#2fd8c8)] text-background hover:opacity-90"
             )}
           >
@@ -565,7 +565,7 @@ export function GuidedJourney({
             className={cn(
               "flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium transition-all",
               !isPlaying
-                ? "opacity-40 cursor-not-allowed text-muted"
+                ? "opacity-30 cursor-not-allowed text-muted"
                 : "hover:bg-card text-foreground"
             )}
           >
