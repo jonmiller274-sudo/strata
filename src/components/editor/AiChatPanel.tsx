@@ -171,7 +171,7 @@ export function AiChatPanel({
           <button
             onClick={handleSend}
             disabled={!input.trim() || isLoading}
-            className="p-2 text-muted-foreground hover:text-accent disabled:opacity-30 disabled:hover:text-muted-foreground transition-colors shrink-0"
+            className="p-2 text-muted-foreground hover:text-accent disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:text-muted-foreground transition-colors shrink-0"
           >
             <Send className="w-4 h-4" />
           </button>
