@@ -349,7 +349,7 @@ function TimelineTrack({
                       className={cn(
                         "mt-0.5 max-w-[80px] text-center text-[9px] leading-tight transition-colors whitespace-nowrap",
                         isActive
-                          ? "font-semibold"
+                          ? "font-bold"
                           : "text-muted opacity-50"
                       )}
                       style={isActive ? { color } : {}}
@@ -392,7 +392,7 @@ function DetailPanel({
       <div className="mb-3 flex flex-wrap items-start gap-3">
         {/* Day pill */}
         <span
-          className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold"
+          className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
           style={{ backgroundColor: color + "22", color }}
         >
           {/^(Mo|Day|Week|Month|Year|Q\d)/i.test(event.label)
@@ -440,7 +440,7 @@ function DetailPanel({
           }}
         >
           <div
-            className="mb-1 text-[10px] font-mono font-semibold uppercase tracking-widest"
+            className="mb-1 text-[10px] font-mono font-medium uppercase tracking-widest"
             style={{ color }}
           >
             {event.trigger.label}
@@ -454,7 +454,7 @@ function DetailPanel({
       {/* Spend delta */}
       {event.spend_delta && (
         <div
-          className="mt-3 text-xs font-semibold"
+          className="mt-3 text-xs font-medium"
           style={{ color: "var(--palette-accent2, #7c6df0)" }}
         >
           {event.spend_delta} self-serve spend this event
@@ -549,7 +549,7 @@ export function GuidedJourney({
             disabled={isPlaying}
             aria-label="Play journey"
             className={cn(
-              "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all",
+              "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all",
               isPlaying
                 ? "opacity-50 cursor-not-allowed bg-card border border-border text-muted"
                 : "bg-[var(--palette-accent1,#2fd8c8)] text-background hover:opacity-90"

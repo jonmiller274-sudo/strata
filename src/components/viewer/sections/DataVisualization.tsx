@@ -55,7 +55,7 @@ function StaircaseChart({ data }: { data: Array<Record<string, string | number>>
                 minWidth: "120px",
               }}
             >
-              <span className="text-sm font-semibold text-white leading-tight pr-2 drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]">
+              <span className="text-sm font-bold text-white leading-tight pr-2 drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]">
                 {item.label}
               </span>
               <span className="text-sm font-bold text-white whitespace-nowrap drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]">
@@ -89,7 +89,7 @@ function renderCalloutText(text: string) {
   const parts = text.split(/\*\*(.*?)\*\*/g);
   return parts.map((part, i) =>
     i % 2 === 1 ? (
-      <strong key={i} className="font-semibold">
+      <strong key={i} className="font-bold">
         {part}
       </strong>
     ) : (

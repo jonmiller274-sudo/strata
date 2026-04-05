@@ -143,7 +143,7 @@ function TierCard({
       )}
     >
       {highlighted && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent px-3 py-0.5 text-xs font-semibold text-white">
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent px-3 py-0.5 text-xs font-medium text-white">
           Recommended
         </div>
       )}
@@ -167,7 +167,7 @@ function TierCard({
       {column.cta && (
         <button
           className={cn(
-            "mt-6 w-full rounded-lg py-2.5 text-sm font-semibold transition-colors",
+            "mt-6 w-full rounded-lg py-2.5 text-sm font-medium transition-colors",
             highlighted
               ? "bg-accent text-white hover:bg-accent-hover"
               : "bg-card-hover text-foreground hover:bg-border"
@@ -187,7 +187,7 @@ function TierCard({
                 <X className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
               )
             ) : (
-              <span className="mt-0.5 text-xs font-semibold text-accent shrink-0">
+              <span className="mt-0.5 text-xs font-medium text-accent shrink-0">
                 {feature.included}
               </span>
             )}

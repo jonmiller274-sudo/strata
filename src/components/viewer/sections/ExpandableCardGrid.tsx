@@ -47,7 +47,7 @@ function Card({
       >
         {/* Header */}
         <div className="flex-1">
-          <h3 className="text-lg font-semibold">{card.title}</h3>
+          <h3 className="text-lg font-bold">{card.title}</h3>
           <p className={cn("mt-2 text-sm text-muted leading-relaxed", isQuote && "italic")}>
             {card.summary}
           </p>
@@ -109,7 +109,7 @@ function Card({
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <h3 className="text-lg font-semibold">{card.title}</h3>
+          <h3 className="text-lg font-bold">{card.title}</h3>
           <p className={cn("mt-2 text-sm text-muted leading-relaxed", isQuote && "italic")}>
             {card.summary}
           </p>

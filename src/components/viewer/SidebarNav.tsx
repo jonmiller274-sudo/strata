@@ -98,7 +98,7 @@ export function SidebarNav({ items, title, subtitle, logoUrl }: SidebarNavProps)
               <img src={logoUrl} alt="" className="h-8 w-auto object-contain" />
             </div>
           )}
-          <h2 className="text-sm font-semibold tracking-wide text-foreground">
+          <h2 className="text-sm font-bold tracking-wide text-foreground">
             {title}
           </h2>
           {subtitle && (

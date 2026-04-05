@@ -18,7 +18,7 @@ export function StrataFooter({ planTier = "free", isDemoPage = false }: StrataFo
           </p>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <p className="text-lg font-semibold text-foreground">
+              <p className="text-lg font-bold text-foreground">
                 Like what you see? Build yours in 30 minutes.
               </p>
               <p className="mt-1 text-sm text-muted">
@@ -27,7 +27,7 @@ export function StrataFooter({ planTier = "free", isDemoPage = false }: StrataFo
             </div>
             <a
               href="/create"
-              className="inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 shrink-0"
+              className="inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 shrink-0"
               style={{ backgroundColor: "var(--palette-accent1, var(--color-accent))" }}
             >
               <Layers className="h-4 w-4" />
