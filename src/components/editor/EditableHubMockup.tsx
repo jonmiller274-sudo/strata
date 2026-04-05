@@ -189,7 +189,7 @@ export function EditableHubMockup({
 
       {/* Description */}
       <div>
-        <label className="text-xs text-muted-foreground uppercase tracking-wider mb-1 block">
+        <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide mb-1 block">
           Description
         </label>
         <InlineEditor
