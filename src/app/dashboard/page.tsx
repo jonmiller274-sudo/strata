@@ -192,7 +192,7 @@ function ArtifactSection({
 }) {
   return (
     <div>
-      <h2 className="text-sm font-medium text-muted uppercase tracking-wider">
+      <h2 className="text-sm font-medium text-muted uppercase tracking-wide">
         {title} ({count})
       </h2>
       <div className="mt-3 space-y-2">
