@@ -113,7 +113,7 @@ export function LogoUpload({
         <button
           onClick={handleRemove}
           disabled={uploading}
-          className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
+          className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <X className="h-3 w-3" />
           {uploading ? "Removing..." : "Remove"}
