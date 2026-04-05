@@ -157,6 +157,7 @@ export default function DiscoverPage() {
               <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
                 <input
                   type="email"
+                  aria-label="Email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@company.com"
@@ -165,6 +166,7 @@ export default function DiscoverPage() {
                 />
 
                 <select
+                  aria-label="What would you build?"
                   value={useCase}
                   onChange={(e) => setUseCase(e.target.value)}
                   className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm outline-none text-muted-foreground focus:border-accent/50 focus:ring-1 focus:ring-accent/30 transition-colors appearance-none"
@@ -181,6 +183,7 @@ export default function DiscoverPage() {
 
                 <input
                   type="text"
+                  aria-label="Your role"
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
                   placeholder="Your role (optional)"
