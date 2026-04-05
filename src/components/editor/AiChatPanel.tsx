@@ -165,6 +165,7 @@ export function AiChatPanel({
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Describe what to change..."
+            aria-label="Describe what to change"
             rows={1}
             className="flex-1 bg-transparent px-3 py-2.5 text-sm outline-none placeholder:text-muted-foreground/50 resize-none max-h-24 overflow-y-auto"
           />
