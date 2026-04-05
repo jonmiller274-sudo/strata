@@ -15,7 +15,7 @@ const CHART_TYPES = [
 
 interface EditableDataVizProps {
   section: DataVizSection;
-  onFieldChange: (path: string, value: unknown) => void;
+  onFieldChange: (_path: string, _value: unknown) => void;
 }
 
 export function EditableDataViz({

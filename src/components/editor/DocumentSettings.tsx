@@ -9,7 +9,7 @@ const DEFAULT_SECONDARY = "#f59e0b";
 
 interface DocumentSettingsProps {
   artifact: Artifact;
-  onUpdate: <K extends keyof Artifact>(field: K, value: Artifact[K]) => void;
+  onUpdate: <K extends keyof Artifact>(_field: K, _value: Artifact[K]) => void;
 }
 
 export function DocumentSettings({ artifact, onUpdate }: DocumentSettingsProps) {

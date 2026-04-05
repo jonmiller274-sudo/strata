@@ -8,7 +8,7 @@ import { useState } from "react";
 
 interface EditableGuidedJourneyProps {
   section: GuidedJourneySection;
-  onFieldChange: (path: string, value: unknown) => void;
+  onFieldChange: (_path: string, _value: unknown) => void;
 }
 
 export function EditableGuidedJourney({
@@ -99,7 +99,7 @@ function PhasesEditor({
   onFieldChange,
 }: {
   section: GuidedJourneySection;
-  onFieldChange: (path: string, value: unknown) => void;
+  onFieldChange: (_path: string, _value: unknown) => void;
 }) {
   const phases = section.content.phases;
 
@@ -174,7 +174,7 @@ function EventsEditor({
   onFieldChange,
 }: {
   section: GuidedJourneySection;
-  onFieldChange: (path: string, value: unknown) => void;
+  onFieldChange: (_path: string, _value: unknown) => void;
 }) {
   const events = section.content.events;
   const phases = section.content.phases;

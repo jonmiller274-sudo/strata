@@ -6,7 +6,7 @@ import { ItemManager } from "./ItemManager";
 
 interface EditableHubMockupProps {
   section: HubMockupSection;
-  onFieldChange: (path: string, value: unknown) => void;
+  onFieldChange: (_path: string, _value: unknown) => void;
 }
 
 export function EditableHubMockup({
@@ -209,7 +209,7 @@ function LayersEditor({
   onFieldChange,
 }: {
   layers: HubMockupSection["content"]["layers"];
-  onFieldChange: (path: string, value: unknown) => void;
+  onFieldChange: (_path: string, _value: unknown) => void;
 }) {
   if (!layers) return null;
 
@@ -329,7 +329,7 @@ function NodeEditor({
 }: {
   prefix: string;
   node: { id: string; label: string; description?: string; color?: string };
-  onFieldChange: (path: string, value: unknown) => void;
+  onFieldChange: (_path: string, _value: unknown) => void;
 }) {
   return (
     <div className="flex items-start gap-3 bg-white/5 rounded-lg p-3 border border-white/10">
