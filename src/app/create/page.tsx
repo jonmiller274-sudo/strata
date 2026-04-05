@@ -316,7 +316,7 @@ export default function CreatePage() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g., Q2 Platform Vision"
-                  className="mt-1 w-full rounded-xl border border-border bg-card px-4 py-3 text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                  className="mt-1 w-full rounded-xl border border-border bg-card px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
 
@@ -393,7 +393,7 @@ export default function CreatePage() {
                   onChange={(e) => { setContent(e.target.value); if (pdfFileName) setPdfFileName(null); }}
                   placeholder="Paste your strategy notes, outlines, bullet points, docs — anything you want to turn into an interactive artifact..."
                   rows={16}
-                  className="mt-1 w-full rounded-xl border border-border bg-card px-4 py-3 text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent resize-y font-mono text-sm leading-relaxed"
+                  className="mt-1 w-full rounded-xl border border-border bg-card px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent resize-y font-mono text-sm leading-relaxed"
                 />
                 <p className="mt-1 text-xs text-muted-foreground">
                   {content.length.toLocaleString()} characters
