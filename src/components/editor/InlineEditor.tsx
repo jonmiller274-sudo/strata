@@ -55,11 +55,20 @@ export function InlineEditor({
   if (!isEditing) {
     return (
       <span
+        role="button"
+        tabIndex={0}
+        aria-label={value || placeholder}
         onClick={(e) => {
           e.stopPropagation();
           setIsEditing(true);
         }}
-        className={`block w-full cursor-text rounded transition-all hover:ring-1 hover:ring-accent/30 hover:bg-accent/5 break-words ${
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setIsEditing(true);
+          }
+        }}
+        className={`block w-full cursor-text rounded transition-all hover:ring-1 hover:ring-accent/30 hover:bg-accent/5 break-words focus:outline-none focus:ring-1 focus:ring-accent/30 ${
           !value ? "text-muted-foreground italic" : ""
         } ${className}`}
       >
