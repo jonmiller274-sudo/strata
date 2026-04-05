@@ -214,7 +214,7 @@ function TimelineTrack({
   phases: JourneyPhase[];
   activeIndex: number;
   visited: Set<number>;
-  onSelect: (index: number) => void;
+  onSelect: (_index: number) => void;
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const hasMounted = useRef(false);
