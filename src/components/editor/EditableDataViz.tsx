@@ -79,7 +79,7 @@ export function EditableDataViz({
 
       {/* Data table */}
       <div>
-        <div className="flex items-center gap-3 mb-2 text-xs text-muted-foreground uppercase tracking-wider">
+        <div className="flex items-center gap-3 mb-2 text-[10px] font-medium text-muted-foreground uppercase tracking-wide">
           <span className="flex-1 pl-8">{xKey}</span>
           <span className="w-36">{yKey}</span>
         </div>
@@ -112,7 +112,7 @@ export function EditableDataViz({
                       e.target.value
                     )
                   }
-                  className="w-full bg-white/5 border border-white/10 rounded px-2 py-1 text-sm text-right"
+                  className="w-full bg-white/5 border border-white/10 rounded px-2 py-1 text-sm text-right focus:outline-none focus:ring-1 focus:ring-accent/50"
                 />
               </div>
             </div>
@@ -122,7 +122,7 @@ export function EditableDataViz({
 
       {/* Description */}
       <div>
-        <label className="text-xs text-muted-foreground uppercase tracking-wider mb-1 block">
+        <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide mb-1 block">
           Description
         </label>
         <InlineEditor
@@ -135,7 +135,7 @@ export function EditableDataViz({
 
       {/* Callout */}
       <div>
-        <label className="text-xs text-muted-foreground uppercase tracking-wider mb-1 block">
+        <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide mb-1 block">
           Callout
         </label>
         <InlineEditor
