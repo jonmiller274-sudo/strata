@@ -10,6 +10,14 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-05 — Eleventh run: 3 PRs (all Tier 0), all discovery
+- All rubric items still have open PRs from prior runs — went straight to discovery loop.
+- Codebase is converging on full compliance; only 3 genuine new violations found after thorough sweep of all components.
+- `text-[9px]` kill list item found in GuidedJourney.tsx:350 (TimelineTrack event label). 7 prior runs missed it because it was adjacent to a font-semibold change in PR #50 context but wasn't changed there.
+- `EditableHubMockup.tsx:192` label had text-xs + tracking-wider + missing font-medium — the only label pattern violation remaining. All other labels in that file (lines 29, 52, 64, 110, 306) were already correct, so this was easy to spot by grep diff.
+- `ProgressBarNav.tsx:115` had the last raw hex in viewer components — `#1e2538` used as inline background for unvisited dots. PR #44 already fixed the mobile pill; this was the remaining instance.
+- Search strategy: when most issues are covered, scan for `text-\[9px\]`, `#[hex]` in inline styles, and compare each label className to the full label pattern rather than just checking for `font-medium` alone.
+
 ### 2026-04-05 — Seventh run: 8 PRs (all Tier 0), all discovery
 - All rubric items still have open PRs from prior runs — went straight to discovery loop.
 - `tracking-wider` is still widely spread (viewer sections HubMockup/AnimatedTimeline/RichTextCollapsible, dashboard, discover page). Split into 3 PRs by context (viewer sections batch, dashboard, discover).

@@ -13,6 +13,12 @@ Read this top-to-bottom when you want to know "what happened today." Do not edit
 
 ---
 
+## 2026-04-05 (eleventh run)
+
+- | quality | PR #93 | disc | tier-0 | open | Normalize text-[9px] to text-[10px] in GuidedJourney timeline event label
+- | quality | PR #94 | disc | tier-0 | open | Normalize label pattern in EditableHubMockup Description field (text-xs + tracking-wider + missing font-medium)
+- | quality | PR #95 | disc | tier-0 | open | Replace raw hex #1e2538 with CSS variable in ProgressBarNav unvisited dot
+
 ## 2026-04-05 (seventh run)
 
 - | quality | PR #72 | disc | tier-0 | open | Normalize tracking-wider → tracking-wide in viewer section labels (HubMockup, AnimatedTimeline, RichTextCollapsible)
