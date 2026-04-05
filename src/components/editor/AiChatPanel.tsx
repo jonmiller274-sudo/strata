@@ -13,9 +13,9 @@ interface AiChatPanelProps {
   activeSectionId: string | null;
   activeSectionTitle: string | null;
   activeSectionType: SectionType | null;
-  onSend: (content: string) => void;
-  onApplySuggestion: (messageId: string) => void;
-  onDiscardSuggestion: (messageId: string) => void;
+  onSend: (_content: string) => void;
+  onApplySuggestion: (_messageId: string) => void;
+  onDiscardSuggestion: (_messageId: string) => void;
   onClearHistory: () => void;
 }
 
