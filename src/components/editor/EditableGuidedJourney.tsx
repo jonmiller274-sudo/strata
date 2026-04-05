@@ -77,6 +77,7 @@ function CollapsiblePanel({
     <div className="border border-white/10 rounded-lg overflow-hidden">
       <button
         onClick={onToggle}
+        aria-expanded={isOpen}
         className="w-full flex items-center gap-2 px-4 py-2.5 bg-white/5 hover:bg-white/10 transition-colors text-sm font-medium"
       >
         {isOpen ? (
