@@ -254,6 +254,7 @@ export function SplitViewLayout({
                   </div>
                   <button
                     onClick={handleCloseSidebarOverlay}
+                    aria-label="Close panel"
                     className="text-muted-foreground hover:text-foreground transition-colors"
                   >
                     <XIcon className="w-4 h-4" />
