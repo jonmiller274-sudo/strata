@@ -79,6 +79,7 @@ export function AiChatPanel({
             <button
               onClick={onClearHistory}
               className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Clear chat history"
               title="Clear chat history"
             >
               <RotateCcw className="w-3 h-3" />
@@ -171,6 +172,7 @@ export function AiChatPanel({
           <button
             onClick={handleSend}
             disabled={!input.trim() || isLoading}
+            aria-label="Send message"
             className="p-2 text-muted-foreground hover:text-accent disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:text-muted-foreground transition-colors shrink-0"
           >
             <Send className="w-4 h-4" />
