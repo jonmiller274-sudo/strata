@@ -13,6 +13,17 @@ Read this top-to-bottom when you want to know "what happened today." Do not edit
 
 ---
 
+## 2026-04-05 (seventh run)
+
+- | quality | PR #72 | disc | tier-0 | open | Normalize tracking-wider → tracking-wide in viewer section labels (HubMockup, AnimatedTimeline, RichTextCollapsible)
+- | quality | PR #73 | disc | tier-0 | open | Normalize tracking-wider → tracking-wide in dashboard page section heading
+- | quality | PR #74 | disc | tier-0 | open | Normalize tracking-wider → tracking-wide in discover page section label
+- | quality | PR #75 | disc | tier-0 | open | Normalize bg-accent/15 → bg-accent/20 in AiChatPanel user message bubble
+- | quality | PR #76 | disc | tier-0 | open | Remove non-standard default ring-white/10 from inline edit inputs in EditableGuidedJourney and EditableHubMockup
+- | quality | PR #77 | disc | tier-0 | open | Normalize placeholder opacity to /50 in create page and auth modal inputs
+- | quality | PR #78 | disc | tier-0 | open | Add missing font-medium to 3 label-pattern elements in EditableSectionRenderer card editor
+- | quality | PR #79 | disc | tier-0 | open | Add missing font-medium to label-pattern spans in MultiSectionReview and TypeSelectorDropdown
+
 ## 2026-04-05 (sixth run)
 
 - | quality | PR #67 | disc | tier-0 | open | Normalize label typography in EditableDataViz (text-xs→text-[10px], tracking-wider→tracking-wide, input focus ring)

@@ -10,6 +10,17 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-05 — Seventh run: 8 PRs (all Tier 0), all discovery
+- All rubric items still have open PRs from prior runs — went straight to discovery loop.
+- `tracking-wider` is still widely spread (viewer sections HubMockup/AnimatedTimeline/RichTextCollapsible, dashboard, discover page). Split into 3 PRs by context (viewer sections batch, dashboard, discover).
+- `bg-accent/15` in AiChatPanel user message bubble was non-standard — normalized to `bg-accent/20`.
+- `ring-1 ring-white/10` as default ring on inputs in EditableGuidedJourney and EditableHubMockup — design system says no default ring, only focus:ring-1. Removed.
+- `placeholder:text-muted-foreground` (full opacity) in create/page.tsx and AuthModal.tsx — spec says `/50`. Fixed.
+- Label pattern (`text-[10px] font-medium ... uppercase tracking-wide`) violations found in EditableSectionRenderer (3 labels missing font-medium), MultiSectionReview, and TypeSelectorDropdown.
+- Key search strategy: `grep "uppercase tracking-wide" | grep -v "font-medium"` catches ALL label pattern violations efficiently.
+- Key search strategy: `grep "ring-1 ring-white/10"` catches non-standard default rings.
+- Ring issue in EditableDataViz same as EditableGuidedJourney/EditableHubMockup, but covered by open PR #67.
+
 ### 2026-04-05 — Fourth run: 4 PRs (all Tier 0), all discovery
 - All open rubric items already had PRs from prior runs (QR-03→#17, QR-13→#19, QR-14→#6, QR-15→#7/#18, QR-16→parked, QR-17→#14). Went straight to discovery.
 - New pattern found: `tracking-wider` used across editable editor labels (EditableDataViz, EditableHubMockup, EditableGuidedJourney) — design system says `tracking-wide`. Split into 3 PRs by component.
