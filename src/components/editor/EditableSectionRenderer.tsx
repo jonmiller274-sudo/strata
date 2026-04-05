@@ -396,7 +396,7 @@ function EditableCardGrid({
               ))}
             </div>
 
-            <h3 className="font-semibold">
+            <h3 className="font-bold">
               <InlineEditor
                 value={card.title}
                 onChange={(v) => onFieldChange(`content.cards.${i}.title`, v)}
@@ -638,7 +638,7 @@ function EditableTimeline({
               />
             </div>
             <div className="flex-1 bg-white/5 rounded-lg p-4 border border-white/10">
-              <h4 className="font-semibold mb-1">
+              <h4 className="font-bold mb-1">
                 <InlineEditor
                   value={step.title}
                   onChange={(v) => onFieldChange(`content.steps.${i}.title`, v)}
@@ -669,7 +669,7 @@ function EditableTimeline({
 
       {/* Pivot */}
       {section.content.pivot && (
-        <p className="text-lg font-semibold mt-4">
+        <p className="text-lg font-bold mt-4">
           <InlineEditor
             value={section.content.pivot}
             onChange={(v) => onFieldChange("content.pivot", v)}
@@ -747,7 +747,7 @@ function EditableTierTable({
             col.is_highlighted ? "border-accent/50" : "border-white/10"
           }`}
         >
-          <h4 className="font-semibold mb-1">
+          <h4 className="font-bold mb-1">
             <InlineEditor
               value={col.name}
               onChange={(v) => onFieldChange(`content.columns.${i}.name`, v)}

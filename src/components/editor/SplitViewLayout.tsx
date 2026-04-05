@@ -246,7 +246,7 @@ export function SplitViewLayout({
                   >
                     <ArrowLeft className="w-4 h-4" />
                   </Link>
-                  <div className="flex-1 min-w-0 text-sm font-semibold">
+                  <div className="flex-1 min-w-0 text-sm font-bold">
                     <InlineEditor
                       value={artifact.title}
                       onChange={(v) => onUpdateArtifactField("title", v)}

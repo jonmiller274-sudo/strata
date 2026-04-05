@@ -257,7 +257,7 @@ function LayersEditor({
                 onChange={(v) =>
                   onFieldChange(`content.layers.${layerIndex}.label`, v)
                 }
-                className="text-xs font-semibold uppercase tracking-wider text-accent"
+                className="text-xs font-medium uppercase tracking-wider text-accent"
               />
             </div>
           </div>
