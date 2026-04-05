@@ -64,6 +64,7 @@ export function MobilePreviewSheet({
               <span className="text-sm font-medium">Preview</span>
               <button
                 onClick={onClose}
+                aria-label="Close preview"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 <XIcon className="w-4 h-4" />
