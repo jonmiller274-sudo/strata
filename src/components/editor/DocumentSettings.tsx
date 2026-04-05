@@ -95,6 +95,7 @@ export function DocumentSettings({ artifact, onUpdate }: DocumentSettingsProps) 
               value={primary}
               onChange={(e) => handlePrimaryChange(e.target.value)}
               className="w-8 h-8 rounded cursor-pointer border border-white/20"
+              aria-label="Primary color"
               title="Primary color"
             />
             <span className="text-xs text-muted-foreground">Primary</span>
@@ -106,6 +107,7 @@ export function DocumentSettings({ artifact, onUpdate }: DocumentSettingsProps) 
               value={secondary}
               onChange={(e) => handleSecondaryChange(e.target.value)}
               className="w-8 h-8 rounded cursor-pointer border border-white/20"
+              aria-label="Secondary color"
               title="Secondary color"
             />
             <span className="text-xs text-muted-foreground">Secondary</span>
