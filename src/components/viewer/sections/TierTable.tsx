@@ -54,8 +54,7 @@ function ComparisonColumn({
               <li key={feature.name} className="flex items-start gap-3 text-sm">
                 {included ? (
                   <Check
-                    className="mt-0.5 h-4 w-4 shrink-0"
-                    style={{ color: "var(--color-success, #10b981)" }}
+                    className="mt-0.5 h-4 w-4 shrink-0 text-success"
                   />
                 ) : (
                   <X
