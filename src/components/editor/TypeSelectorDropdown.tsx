@@ -145,7 +145,7 @@ export function TypeSelectorDropdown({
       {isOpen && (
         <div className="absolute top-full left-0 mt-1 z-50 w-[240px] bg-background border border-white/10 rounded-lg shadow-xl overflow-hidden">
           <div className="px-3 py-2 border-b border-white/10">
-            <span className="text-[10px] text-muted-foreground uppercase tracking-wide">
+            <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">
               Change to...
             </span>
           </div>
