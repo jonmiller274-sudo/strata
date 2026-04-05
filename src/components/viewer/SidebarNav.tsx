@@ -70,6 +70,7 @@ export function SidebarNav({ items, title, subtitle, logoUrl }: SidebarNavProps)
         onClick={() => setMobileOpen(!mobileOpen)}
         className="fixed top-4 left-4 z-50 rounded-lg bg-card p-2 shadow-lg lg:hidden"
         aria-label="Toggle navigation"
+        aria-expanded={mobileOpen}
       >
         {mobileOpen ? (
           <X className="h-5 w-5 text-foreground" />
