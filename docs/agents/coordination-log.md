@@ -13,6 +13,10 @@ Read this top-to-bottom when you want to know "what happened today." Do not edit
 
 ---
 
+## 2026-04-05 (fourteenth run)
+
+- | quality | PR #108 | disc | tier-0 | open | Replace off-palette bg-blue-500/10 tokens with design-system muted style on Image badge in EditableSectionRenderer
+
 ## 2026-04-05 (seventh run)
 
 - | quality | PR #72 | disc | tier-0 | open | Normalize tracking-wider → tracking-wide in viewer section labels (HubMockup, AnimatedTimeline, RichTextCollapsible)

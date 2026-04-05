@@ -10,6 +10,12 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-05 — Fourteenth run: 1 PR (Tier 0), all discovery
+- After 13 runs and 100+ open PRs, almost all patterns are covered. Thorough search across all src files found only one genuine new issue.
+- Found `bg-blue-500/10 text-blue-400/80 border border-blue-500/20` in EditableSectionRenderer.tsx:63 (Image badge) — raw Tailwind blue colors not in the design system palette. Replaced with `bg-white/5 text-muted-foreground border border-white/10`.
+- Key lesson: When the codebase is saturated with open PRs, the only reliable new pattern sources are: (1) off-palette Tailwind colors (`bg-blue-`, `text-blue-`, etc.), (2) newly added files/components that haven't been through quality passes, (3) patterns involving CSS custom properties with arbitrary Tailwind notation. Search strategy: `grep -rn "bg-blue-\|text-blue-\|bg-cyan-\|bg-pink-\|bg-rose-"` surfaces non-palette colors quickly.
+- With 100+ PRs open, creating duplicate PRs risks merge conflicts. Always scan ALL open PR titles before writing code.
+
 ### 2026-04-05 — Seventh run: 8 PRs (all Tier 0), all discovery
 - All rubric items still have open PRs from prior runs — went straight to discovery loop.
 - `tracking-wider` is still widely spread (viewer sections HubMockup/AnimatedTimeline/RichTextCollapsible, dashboard, discover page). Split into 3 PRs by context (viewer sections batch, dashboard, discover).
