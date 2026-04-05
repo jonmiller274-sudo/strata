@@ -10,6 +10,15 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-05 — Seventeenth run: 8 PRs (all Tier 0), all discovery
+- Context window ran out mid-run; resumed cleanly by reading git log to confirm committed state, extracting PAT from remote URL in git config, and continuing from last committed branch.
+- Primary theme: ARIA accessibility sweep. Found 5 files with missing `aria-expanded` (collapsible panels, dropdowns, mobile toggles) and 2 files with missing `aria-pressed` (publish toggle, document settings toggle groups).
+- Removed dead `container` variable in ArtifactViewer.tsx scroll handler — assigned `scrollContainerRef.current ?? window` but then used `window` directly. Comment on the next line explained why; safe to delete.
+- Removed 2 debug `console.log` calls from `updateArtifact` in actions.ts — `console.error` on failure path preserved. Not covered by PR #40 (which only touched discover/page.tsx).
+- Key search: `grep -r "aria-pressed\|aria-expanded" --include="*.tsx" -l` to find files that have them, then `grep -L` equivalent (manual check) to find files that should have them but don't.
+- ARIA `aria-pressed` targets: any button that acts as a toggle (publish/draft, layout mode, nav style, theme) — all 3 DocumentSettings button groups had matching `aria-pressed` attributes already in the viewer but not in the editor component.
+- After 17 runs with 75+ open PRs, the most reliable strategy is: (1) find a broad category (ARIA, dead vars, debug logs), (2) systematically check every component in that category, (3) cross-reference each file against the full open PR list before committing.
+
 ### 2026-04-05 — Sixteenth run: 2 PRs (both Tier 0), all discovery
 - All rubric items still have open PRs. Went straight to discovery.
 - `hover:border-white/40` on upload zone dashed-border buttons is non-standard (design system ceiling is `/30` for deep hover). Uncovered by all prior PRs — the disabled-opacity PRs touched those lines but preserved the /40 hover value.

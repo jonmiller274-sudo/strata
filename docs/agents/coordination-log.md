@@ -13,6 +13,17 @@ Read this top-to-bottom when you want to know "what happened today." Do not edit
 
 ---
 
+## 2026-04-05 (seventeenth run)
+
+- | quality | PR #118 | disc | tier-0 | open | Remove dead container variable in ArtifactViewer.tsx scroll handler
+- | quality | PR #119 | disc | tier-0 | open | Rename index→_index in GuidedJourney TimelineTrack onSelect callback type
+- | quality | PR #120 | disc | tier-0 | open | Add aria-expanded to CollapsiblePanel toggle in EditableGuidedJourney
+- | quality | PR #121 | disc | tier-0 | open | Add aria-expanded to TypeSelectorDropdown trigger button
+- | quality | PR #122 | disc | tier-0 | open | Add aria-expanded to SidebarNav mobile hamburger button
+- | quality | PR #123 | disc | tier-0 | open | Remove debug console.log calls from updateArtifact in actions.ts
+- | quality | PR #124 | disc | tier-0 | open | Add aria-pressed to TopBar publish toggle button
+- | quality | PR #125 | disc | tier-0 | open | Add aria-pressed to DocumentSettings toggle button groups (Layout/Nav/Theme)
+
 ## 2026-04-05 (sixteenth run)
 
 - | quality | PR #115 | disc | tier-0 | open | Normalize hover:border-white/40 → hover:border-white/30 in upload zone dashed-border buttons (SplitViewLayout, EditorLayout, LogoUpload)
