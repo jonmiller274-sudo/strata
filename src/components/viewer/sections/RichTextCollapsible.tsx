@@ -93,6 +93,7 @@ export function RichTextCollapsible({
         <>
           <button
             onClick={() => setExpanded(!expanded)}
+            aria-expanded={expanded}
             className="mt-6 flex items-center gap-2 text-sm font-medium text-accent hover:text-accent-hover transition-colors"
           >
             <ChevronDown
