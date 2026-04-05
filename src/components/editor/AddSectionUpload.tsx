@@ -367,7 +367,7 @@ export function AddSectionUpload({
 
         {/* Error */}
         {error && (
-          <p className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+          <p className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2" aria-live="polite">
             {error}
           </p>
         )}
