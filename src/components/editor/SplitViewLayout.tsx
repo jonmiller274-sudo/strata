@@ -221,6 +221,7 @@ export function SplitViewLayout({
           <>
             {/* Backdrop */}
             <motion.div
+              aria-hidden="true"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -377,6 +378,7 @@ export function SplitViewLayout({
         {showShortcuts && (
           <>
             <motion.div
+              aria-hidden="true"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
