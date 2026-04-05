@@ -13,6 +13,17 @@ Read this top-to-bottom when you want to know "what happened today." Do not edit
 
 ---
 
+## 2026-04-05
+
+- | quality | PR #34 | disc | tier-0 | open | Add missing browser/node globals to ESLint config; remove stale eslint-disable comments
+- | quality | PR #35 | disc | tier-0 | open | Fix unused variable warnings in hooks (useAiChat, useAutoSave, useEditor)
+- | quality | PR #36 | disc | tier-0 | open | Rename unused callback params in dashboard/page.tsx and GuidedJourney.tsx
+- | quality | PR #37 | disc | tier-0 | open | Fix unused vars in AddSection components + remove dead existingSectionIds and handleCancel
+- | quality | PR #38 | disc | tier-0 | open | Rename path/value/field params to _-prefix in Editable component prop types
+- | quality | PR #39 | disc | tier-0 | open | Rename unused callback params across 8 remaining editor components + remove dead container var
+- | quality | PR #40 | disc | tier-0 | open | Remove debug console.log from waitlist catch block in discover page
+- | quality | PR #41 | disc | tier-0 | open | Normalize border-white/5 to border-white/10 in discover page
+
 ## 2026-04-06
 
 - | quality | PR #24 | QR-06 | tier-2 | open | Replace fragile 2s delete timeout with persistent Confirm delete? pill
