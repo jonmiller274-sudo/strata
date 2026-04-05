@@ -158,10 +158,7 @@ export function ProgressBarNav({
       </div>
 
       {/* Share button — fixed top-right, below the progress bar */}
-      <div
-        className="fixed z-50"
-        style={{ top: "10px", right: "16px" }}
-      >
+      <div className="fixed top-2.5 right-4 z-50">
         <button
           onClick={async () => {
             try {
@@ -181,23 +178,11 @@ export function ProgressBarNav({
           aria-label="Copy link to clipboard"
         >
           {copied ? (
-            <span
-              style={{
-                fontSize: "11px",
-                color: "var(--color-success, #22c55e)",
-                fontWeight: 500,
-              }}
-            >
+            <span className="text-xs font-medium text-success">
               Copied!
             </span>
           ) : (
-            <Share2
-              style={{
-                width: "14px",
-                height: "14px",
-                color: "var(--color-muted-foreground)",
-              }}
-            />
+            <Share2 className="w-3.5 h-3.5 text-muted-foreground" />
           )}
         </button>
       </div>
