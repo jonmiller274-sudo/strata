@@ -216,7 +216,7 @@ function SectionImagePreview({
         )}
         <button
           onClick={() => onFieldChange("image_url", undefined)}
-          className="flex items-center gap-1 px-2 py-1.5 rounded-md text-xs text-muted-foreground hover:text-red-400 transition-colors ml-auto"
+          className="flex items-center gap-1 px-2 py-1.5 rounded-md text-xs text-muted-foreground hover:text-danger transition-colors ml-auto"
         >
           <XIcon className="w-3 h-3" />
           Remove image
@@ -496,7 +496,7 @@ function EditableCardGrid({
               ))}
               <button
                 onClick={() => onFieldChange("content.callout", undefined)}
-                className="ml-auto text-xs text-muted-foreground hover:text-red-400 transition-colors"
+                className="ml-auto text-xs text-muted-foreground hover:text-danger transition-colors"
               >
                 Remove
               </button>
@@ -784,7 +784,7 @@ function EditableTierTable({
                 </span>
                 <button
                   onClick={() => handleRemoveFeature(i, j)}
-                  className="opacity-0 group-hover/feat:opacity-50 hover:!opacity-100 hover:text-red-400 transition-opacity text-xs"
+                  className="opacity-0 group-hover/feat:opacity-50 hover:!opacity-100 hover:text-danger transition-opacity text-xs"
                 >
                   ×
                 </button>

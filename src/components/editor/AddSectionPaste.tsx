@@ -137,7 +137,7 @@ export function AddSectionPaste({
         <div className="flex items-center justify-between">
           <span
             className={`text-[10px] ${
-              overLimit ? "text-red-400" : "text-muted-foreground"
+              overLimit ? "text-danger" : "text-muted-foreground"
             }`}
           >
             {charCount.toLocaleString()} / {MAX_CHARS.toLocaleString()} chars

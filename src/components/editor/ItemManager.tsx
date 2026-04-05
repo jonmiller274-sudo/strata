@@ -69,7 +69,7 @@ function SortableRow({
       {canRemove && (
         <button
           onClick={onRemove}
-          className="mt-3 opacity-0 group-hover:opacity-50 hover:!opacity-100 hover:text-red-400 transition-opacity shrink-0"
+          className="mt-3 opacity-0 group-hover:opacity-50 hover:!opacity-100 hover:text-danger transition-opacity shrink-0"
           tabIndex={-1}
         >
           <Trash2 className="w-3.5 h-3.5" />

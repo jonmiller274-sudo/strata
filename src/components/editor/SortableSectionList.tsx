@@ -154,7 +154,7 @@ function SortableItem({
         className={`flex items-center gap-1 rounded px-1.5 py-0.5 transition-all ${
           confirmDelete
             ? "opacity-100 bg-red-500/10 text-red-400 border border-red-500/20"
-            : "opacity-0 group-hover:opacity-50 hover:!opacity-100 hover:text-red-400 border border-transparent"
+            : "opacity-0 group-hover:opacity-50 hover:!opacity-100 hover:text-danger border border-transparent"
         }`}
       >
         <Trash2 className="w-3.5 h-3.5 shrink-0" />
