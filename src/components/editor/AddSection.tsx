@@ -30,8 +30,8 @@ const MODE_TABS: { id: AddSectionMode; label: string; icon: typeof Pencil; disab
 interface AddSectionProps {
   documentTitle: string;
   documentSubtitle?: string;
-  onAdd: (section: Section) => void;
-  onAddMultiple?: (sections: Section[]) => void;
+  onAdd: (_section: Section) => void;
+  onAddMultiple?: (_sections: Section[]) => void;
   onCancel: () => void;
 }
 

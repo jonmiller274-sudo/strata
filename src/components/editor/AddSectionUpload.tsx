@@ -14,7 +14,7 @@ type UploadState = "idle" | "processing" | "review";
 interface AddSectionUploadProps {
   documentTitle: string;
   documentSubtitle?: string;
-  onAddMultiple: (sections: Section[]) => void;
+  onAddMultiple: (_sections: Section[]) => void;
   onCancel: () => void;
 }
 

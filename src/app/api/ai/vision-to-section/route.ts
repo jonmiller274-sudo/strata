@@ -121,9 +121,7 @@ export async function POST(req: NextRequest) {
     if (!section.id || typeof section.id !== "string") {
       section.id = `vision-${Date.now()}`;
     }
-    // Check for ID collision with existing sections
-    const existingSectionIds = (context?.existingSectionTypes ?? []);
-    // Client sends section types, not IDs — but we can't know IDs server-side.
+    // Client sends section types, not IDs — can't check collisions server-side.
     // Add timestamp suffix to guarantee uniqueness.
     section.id = `${section.id}-${Date.now().toString(36)}`;
 
