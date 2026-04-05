@@ -211,7 +211,7 @@ function MessageBubble({
         <div
           className={`rounded-lg px-3 py-2 text-sm ${
             isUser
-              ? "bg-accent/15 text-foreground"
+              ? "bg-accent/20 text-foreground"
               : "bg-white/5 text-foreground"
           }`}
         >
