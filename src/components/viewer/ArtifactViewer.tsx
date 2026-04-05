@@ -83,8 +83,6 @@ export function ArtifactViewer({
       }
     };
 
-    // Attach to the scroll container if available, otherwise window
-    const container = scrollContainerRef.current ?? window;
     // scrollIntoView works relative to the viewport, so window keydown is fine
     window.addEventListener("keydown", handleKeyDown);
     return () => {
