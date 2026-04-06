@@ -10,7 +10,7 @@ const MAX_CHARS = 50_000;
 interface AddSectionPasteProps {
   documentTitle: string;
   documentSubtitle?: string;
-  onAddMultiple: (sections: Section[]) => void;
+  onAddMultiple: (_sections: Section[]) => void;
   onCancel: () => void;
 }
 
@@ -89,15 +89,6 @@ export function AddSectionPaste({
       abortRef.current = null;
     }
   }, [content, isGenerating, documentTitle, documentSubtitle]);
-
-  const handleCancel = useCallback(() => {
-    if (abortRef.current) {
-      abortRef.current.abort();
-      abortRef.current = null;
-    }
-    setIsGenerating(false);
-    onCancel();
-  }, [onCancel]);
 
   // Multi-section review mode
   if (generatedSections) {
