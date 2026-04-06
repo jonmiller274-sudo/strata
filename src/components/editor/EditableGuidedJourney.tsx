@@ -259,6 +259,7 @@ function EventsEditor({
                 </label>
                 <select
                   value={event.phase_id}
+                  aria-label="Phase"
                   onChange={(e) =>
                     onFieldChange(
                       `content.events.${i}.phase_id`,
