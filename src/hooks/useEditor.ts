@@ -29,7 +29,7 @@ export function useEditor(initialArtifact: Artifact) {
 
   // Replace an entire section by ID
   const updateSection = useCallback(
-    (sectionId: string, updater: (s: Section) => Section) => {
+    (sectionId: string, updater: (_s: Section) => Section) => {
       setArtifact((prev) => ({
         ...prev,
         sections: prev.sections.map((s) =>
