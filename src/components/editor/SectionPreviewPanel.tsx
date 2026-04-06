@@ -1,6 +1,6 @@
 "use client";
 
-import React, { memo, useRef, useEffect } from "react";
+import { memo, useRef, useEffect } from "react";
 import type { Section, Artifact } from "@/types/artifact";
 import { SectionRenderer } from "@/components/viewer/SectionRenderer";
 import { Maximize2, Minimize2 } from "lucide-react";
