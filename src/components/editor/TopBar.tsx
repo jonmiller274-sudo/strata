@@ -56,6 +56,7 @@ export function TopBar({
       {/* Publish toggle */}
       <button
         onClick={onPublishToggle}
+        aria-pressed={isPublished}
         className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
           isPublished
             ? "bg-green-600/20 text-green-400 hover:bg-green-600/30"
