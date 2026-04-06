@@ -662,6 +662,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                       <div className="relative rounded-xl border border-dashed border-accent/40 bg-accent/5 p-8 mb-8 overflow-hidden">
                         {pendingImagePreview && (
                           <div
+                            aria-hidden="true"
                             className="absolute inset-0 bg-cover bg-center opacity-10"
                             style={{ backgroundImage: `url(${pendingImagePreview})` }}
                           />
@@ -735,6 +736,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
                 <div className="relative rounded-xl border border-dashed border-accent/40 bg-accent/5 p-8 overflow-hidden">
                   {pendingImagePreview && (
                     <div
+                      aria-hidden="true"
                       className="absolute inset-0 bg-cover bg-center opacity-10"
                       style={{ backgroundImage: `url(${pendingImagePreview})` }}
                     />
