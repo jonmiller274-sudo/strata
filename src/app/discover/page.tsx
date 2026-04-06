@@ -47,7 +47,6 @@ export default function DiscoverPage() {
       if (!res.ok) throw new Error("Failed to submit");
     } catch {
       // Silently succeed even if API isn't ready yet — don't block the UX
-      console.log("Waitlist submission:", { email, role, useCase });
     }
 
     setSubmitted(true);
