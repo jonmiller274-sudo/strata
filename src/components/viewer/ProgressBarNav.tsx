@@ -112,7 +112,7 @@ export function ProgressBarNav({
                   ? "linear-gradient(90deg, var(--palette-accent1, #2fd8c8), var(--palette-accent2, #7c6df0))"
                   : isVisited
                   ? "var(--palette-accent1, #2fd8c8)"
-                  : "#1e2538",
+                  : "var(--color-card-hover, #1f2333)",
                 opacity: isVisited ? 0.55 : 1,
               }}
             />
