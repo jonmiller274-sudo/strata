@@ -1,0 +1,53 @@
+name: Usability Test
+
+on:
+  schedule:
+    - cron: '0 11 * * *'  # 6:00 AM ET daily
+  workflow_dispatch:
+    inputs:
+      scenario_ids:
+        description: 'Comma-separated scenario IDs to run (blank = daily rotation)'
+        required: false
+      target_url:
+        description: 'URL to test against'
+        required: false
+        default: 'https://sharestrata.com'
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  usability-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm ci --prefix tests/usability
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+        working-directory: tests/usability
+      - name: Run usability scenarios
+        env:
+          TARGET_URL: ${{ inputs.target_url || 'https://sharestrata.com' }}
+          SCENARIO_IDS: ${{ inputs.scenario_ids || '' }}
+          RUN_DATE: ${{ github.event.schedule && 'scheduled' || 'manual' }}
+        run: npx tsx src/runner.ts
+        working-directory: tests/usability
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: usability-screenshots-${{ github.run_id }}
+          path: tests/usability/output/screenshots/
+          retention-days: 30
+      - name: File findings as GitHub Issue
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx tsx src/file-findings.ts
+        working-directory: tests/usability

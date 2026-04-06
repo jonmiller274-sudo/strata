@@ -1,0 +1,6 @@
+# Ephemeral per-run data — screenshots and findings JSON
+# These are uploaded as GitHub Actions artifacts, not committed
+screenshots/
+findings/
+*.png
+*.json

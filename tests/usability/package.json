@@ -1,0 +1,21 @@
+{
+  "name": "strata-usability-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Automated usability testing for Strata — runs daily, surfaces friction and bugs",
+  "scripts": {
+    "test": "npx tsx src/runner.ts",
+    "file-findings": "npx tsx src/file-findings.ts"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.52.0",
+    "playwright": "^1.52.0",
+    "tsx": "^4.19.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/uuid": "^10.0.0",
+    "typescript": "^5.7.0"
+  }
+}
