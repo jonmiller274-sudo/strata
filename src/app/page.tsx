@@ -26,6 +26,7 @@ import {
 import Link from "next/link";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { AuthModal } from "@/components/auth/AuthModal";
+import { CompetitiveSection } from "@/components/landing/CompetitiveSection";
 
 const sectionTypes = [
   {
@@ -278,6 +279,9 @@ export default function HomePage() {
           </motion.div>
         </motion.div>
       </section>
+
+      {/* Competitive section — "You've done this before" */}
+      <CompetitiveSection />
 
       {/* Problem statement */}
       <section className="relative py-24 px-6">
