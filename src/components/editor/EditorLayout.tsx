@@ -597,7 +597,7 @@ export function EditorLayout({ initialArtifact }: { initialArtifact: Artifact })
             <div className="sticky top-0 z-20 mx-auto max-w-4xl px-6 pt-3">
               <div className="flex items-center gap-2 rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-2.5 text-sm text-red-400">
                 <span className="flex-1">{imageError}</span>
-                <button onClick={() => setImageError(null)} className="text-red-400/60 hover:text-red-400 transition-colors">
+                <button onClick={() => setImageError(null)} aria-label="Dismiss image error" className="text-red-400/60 hover:text-red-400 transition-colors">
                   <XIcon className="w-4 h-4" />
                 </button>
               </div>
