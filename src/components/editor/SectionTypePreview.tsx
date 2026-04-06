@@ -9,7 +9,7 @@ interface SectionTypePreviewProps {
 export function SectionTypePreview({ type }: SectionTypePreviewProps) {
   return (
     <div className="w-full h-[56px] rounded bg-white/5 flex items-center justify-center overflow-hidden">
-      <svg viewBox="0 0 120 56" className="w-full h-full" fill="none">
+      <svg viewBox="0 0 120 56" className="w-full h-full" fill="none" aria-hidden="true">
         {previews[type]}
       </svg>
     </div>
