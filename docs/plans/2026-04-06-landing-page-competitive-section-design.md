@@ -207,12 +207,12 @@ The existing landing page has a "Section Types" showcase and a "How It Works" st
 
 ---
 
-## Open Questions
+## Decisions (Resolved 2026-04-06)
 
-1. **Should the embedded artifact be the existing `/demo` data or a purpose-built mini-artifact?** A smaller, tighter artifact (5 sections, not 8) might be more effective in a constrained viewport.
-2. **Do we name the tools explicitly ("Google Slides") or keep it suggestive ("a 47-slide deck")?** Current design names them — it's bolder and more specific. But could feel confrontational to someone who loves Notion.
-3. **Should the "Know they read it" line stay if analytics aren't built yet?** It's a tease, not a promise. But could create expectations.
+1. **Mini-artifact with 5 sections.** Purpose-built `landing-demo` with QBR/sales proposal content. Sections: Executive Summary (rich text expand/collapse), Persona Cards (clickable grid), Timeline (animated), Metrics Dashboard (animated counters), Tier Table (comparison).
+2. **Name all tools explicitly.** Google Slides, Google Docs, Canva, Gamma, Notion, ChatGPT — all by name. No hedging.
+3. **Keep "Know they read it."** Sell the vision. Analytics is Phase 2 and it's coming.
 
 ---
 
-*Approved by Jon on 2026-04-06. Ready for implementation.*
+*Approved by Jon on 2026-04-06. All open questions resolved. Ready for implementation.*
