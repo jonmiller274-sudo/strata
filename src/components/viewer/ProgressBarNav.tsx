@@ -122,7 +122,7 @@ export function ProgressBarNav({
 
       {/* Mobile floating pill — shown only on small screens */}
       <div
-        className="sm:hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-3 py-2 rounded-full border border-white/10 bg-[#12141d]/90 backdrop-blur-sm shadow-lg"
+        className="sm:hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-3 py-2 rounded-full border border-white/10 bg-surface/90 backdrop-blur-sm shadow-lg"
         role="navigation"
         aria-label="Section navigation"
       >
