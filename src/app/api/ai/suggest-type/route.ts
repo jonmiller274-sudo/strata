@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { generateJSON } from "@/lib/ai/generate";
 import type { SectionType } from "@/types/artifact";
 
+export const maxDuration = 60;
+
 const VALID_TYPES: SectionType[] = [
   "rich-text",
   "expandable-cards",

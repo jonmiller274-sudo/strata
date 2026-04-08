@@ -3,6 +3,8 @@ import { generateJSON } from "@/lib/ai/generate";
 import { buildRewritePrompt } from "@/lib/ai/prompts/rewrite";
 import type { Section } from "@/types/artifact";
 
+export const maxDuration = 60;
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();

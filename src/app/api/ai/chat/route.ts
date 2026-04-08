@@ -3,6 +3,8 @@ import { getAnthropicClient } from "@/lib/ai/anthropic-client";
 import { createClient } from "@/lib/supabase/server";
 import type { Section } from "@/types/artifact";
 
+export const maxDuration = 60;
+
 // Uses Sonnet 4 for editing — same model as rewrite endpoints
 const CHAT_MODEL = "claude-sonnet-4-20250514";
 const INPUT_PRICE_PER_1M = 3;

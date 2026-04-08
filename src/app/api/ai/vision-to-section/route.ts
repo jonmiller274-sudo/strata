@@ -5,6 +5,8 @@ import { buildVisionSectionPrompt } from "@/lib/ai/prompts/vision-section";
 import { createClient } from "@/lib/supabase/server";
 import type { SectionType } from "@/types/artifact";
 
+export const maxDuration = 60;
+
 const ALLOWED_MIME_TYPES: ImageMediaType[] = [
   "image/png",
   "image/jpeg",

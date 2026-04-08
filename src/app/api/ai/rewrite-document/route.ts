@@ -3,6 +3,8 @@ import { generateJSON } from "@/lib/ai/generate";
 import { buildDocumentRewritePrompt } from "@/lib/ai/prompts/rewrite-document";
 import type { Artifact, Section } from "@/types/artifact";
 
+export const maxDuration = 60;
+
 interface RewriteDocumentRequest {
   artifact: Pick<Artifact, "title" | "subtitle" | "sections">;
   instruction: string;

@@ -3,6 +3,8 @@ import { generateJSON } from "@/lib/ai/generate";
 import { buildRemapPrompt } from "@/lib/ai/prompts/remap-section";
 import type { Section, SectionType } from "@/types/artifact";
 
+export const maxDuration = 60;
+
 const VALID_TYPES: SectionType[] = [
   "rich-text",
   "expandable-cards",

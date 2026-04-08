@@ -3,6 +3,8 @@ import { generateJSON } from "@/lib/ai/generate";
 import { buildStructurePrompt } from "@/lib/ai/prompts/structure";
 import type { TemplateType } from "@/types/artifact";
 
+export const maxDuration = 60;
+
 /** Strip markdown fences or surrounding text from AI response before JSON.parse */
 function extractJSON(text: string): string {
   // Strip markdown code fences: ```json ... ``` or ``` ... ```

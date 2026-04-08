@@ -214,7 +214,7 @@ Full research documents are at: `/Users/JonMiller/Downloads/strata-research-pack
 ```
 NEXT_PUBLIC_SUPABASE_URL     # Supabase project URL
 SUPABASE_SERVICE_ROLE_KEY    # Server-side Supabase key (never expose to client)
-OPENAI_API_KEY               # GPT-4.1-mini for AI structuring
+ANTHROPIC_API_KEY            # Anthropic Claude for AI structuring, rewriting, chat
 NEXT_PUBLIC_APP_URL           # Production URL (https://strata-docs.vercel.app)
 ```
 
