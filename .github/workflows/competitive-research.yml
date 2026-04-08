@@ -82,7 +82,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            BRANCH="competitive-research/update-$(date +%Y%m%d)"
+            BRANCH="competitive-research/update-$(date +%Y%m%d-%H%M%S)"
             git checkout -b "$BRANCH"
             git commit -m "Competitive Research: ${{ steps.mode.outputs.mode }} $(date +%Y-%m-%d)"
             git push -u origin "$BRANCH"
