@@ -107,7 +107,7 @@ export function SidebarNav({ items, title, subtitle, logoUrl }: SidebarNavProps)
         </div>
 
         {/* Navigation items */}
-        <nav className="flex-1 overflow-y-auto px-3 py-4">
+        <nav aria-label="Document sections" className="flex-1 overflow-y-auto px-3 py-4">
           <ul className="space-y-1">
             {items.map((item, index) => (
               <li key={item.id}>
