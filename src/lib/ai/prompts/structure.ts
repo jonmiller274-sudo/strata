@@ -3,7 +3,7 @@ import type { TemplateType } from "@/types/artifact";
 export const SECTION_SCHEMA = `
 Each section must have:
 - "id": a unique kebab-case string (e.g., "market-overview")
-- "type": one of "rich-text", "expandable-cards", "timeline", "tier-table", "metric-dashboard", "data-viz", "hub-mockup", "guided-journey"
+- "type": one of "rich-text", "expandable-cards", "timeline", "tier-table", "metric-dashboard", "data-viz", "hub-mockup", "guided-journey", "comparison-matrix", "hero-stats", "call-to-action"
 - "title": section heading shown in sidebar nav
 - "subtitle": optional brief description
 - "content": type-specific content object (see below)
@@ -149,41 +149,123 @@ IMPORTANT: If the image shows a TOP-DOWN HIERARCHY (Company > Division > Product
   "interval_ms": 3000
 }
 Note: guided-journey is an interactive animated timeline with counters that update per event. Each event belongs to a phase and sets counter values. Phases define color-coded segments. Counters animate between values as the user steps through events. Use for customer journeys, revenue expansion stories, adoption paths.
+
+9. "comparison-matrix" content:
+{
+  "columns": [{ "id": "unique-id", "label": "Column Name", "highlight": true }],
+  "rows": [
+    { "id": "row-id", "label": "Feature Name", "description": "Optional detail", "values": [true, false, "Custom text"] }
+  ],
+  "verdict": { "label": "Score", "values": ["4/4", "1/4"] }
+}
+Notes: values array must match columns order. true=checkmark, false=dash. Use for competitive scorecards, feature comparisons, vendor evaluations.
+
+10. "hero-stats" content:
+{
+  "stats": [
+    { "id": "stat-id", "value": "40%+", "label": "face deactivation", "sublabel": "Optional context", "color": "#hex" }
+  ],
+  "layout": "row"
+}
+Notes: 2-4 stats maximum. Values are display strings (NOT numbers). Use for bold headline numbers that need maximum visual impact. Do NOT use metric-dashboard when you need pure visual punch.
+
+11. "call-to-action" content:
+{
+  "headline": "The key ask or takeaway in one sentence",
+  "value": "$3M",
+  "value_context": "Less than 0.04% of annual bookings",
+  "items": ["10,000 cameras", "Rideshare drivers first", "2-3 pilot cities"],
+  "style": "bold"
+}
+Notes: Use as the closing section for proposals, pitches, and asks. Keep headline to one line. The value should be unmissable. style: "bold" for proposals, "subtle" for softer CTAs.
 `;
 
 const TEMPLATE_GUIDANCE: Record<TemplateType, string> = {
-  "platform-vision": `Create a Platform Vision artifact. Suggested sections:
-1. rich-text: Executive overview of the platform vision
-2. hub-mockup: How products/capabilities connect in the platform
-3. expandable-cards: Individual product/capability deep-dives
-4. timeline: Platform evolution roadmap
-5. metric-dashboard: Key platform metrics and targets
-6. rich-text: Strategic rationale and market positioning`,
+  "partnership-proposal": `Create a Partnership Proposal artifact.
+TONE: Persuasive and concise. Short declarative statements. Minimize prose. Every section should have a clear takeaway.
+Suggested sections:
+1. rich-text: Brief partnership thesis — why now, why together (2-3 paragraphs MAX)
+2. hero-stats: 2-4 headline numbers that justify the partnership
+3. comparison-matrix: Side-by-side capabilities or competitive coverage
+4. expandable-cards: What each party brings (2 cards, one per partner)
+5. timeline: Partnership rollout or pilot milestones
+6. metric-dashboard: Investment model and projected returns
+7. call-to-action: The specific ask — investment, commitment, next step`,
 
-  "customer-journey": `Create a Customer Journey artifact. Suggested sections:
-1. rich-text: Journey overview and key insight
-2. timeline: Step-by-step customer journey (the core of this artifact)
-3. expandable-cards: Persona profiles or touchpoint details
-4. metric-dashboard: Conversion metrics at each stage
-5. data-viz: Funnel visualization
-6. rich-text: Key learnings and next steps`,
+  "sales-proposal": `Create a Sales Proposal artifact.
+TONE: Persuasive and evidence-based. Lead with the customer's problem, then your solution. Punchy, not narrative.
+Suggested sections:
+1. rich-text: Customer problem and proposed solution (concise)
+2. hero-stats: Key proof points (ROI, time saved, cost reduction)
+3. comparison-matrix: Your solution vs alternatives or status quo
+4. expandable-cards: Solution components or product capabilities
+5. metric-dashboard: Pricing and expected outcomes
+6. timeline: Implementation timeline
+7. call-to-action: Next steps and pricing summary`,
 
-  "gtm-strategy": `Create a Go-to-Market Strategy artifact. Suggested sections:
+  "investor-deck": `Create an Investor Deck artifact.
+TONE: Narrative with data support. Tell the story of the opportunity, backed by metrics.
+Suggested sections:
+1. rich-text: Vision and market thesis
+2. hero-stats: Traction metrics (ARR, users, growth rate)
+3. expandable-cards: Product or market segments
+4. data-viz: Market sizing or growth charts
+5. hub-mockup: Platform architecture or ecosystem
+6. timeline: Milestones achieved and roadmap ahead
+7. metric-dashboard: Key financials and targets
+8. call-to-action: The raise — amount, use of funds, terms`,
+
+  "board-deck": `Create a Board Deck artifact.
+TONE: Strategic and analytical. Progressive disclosure — summary first, detail on expand.
+Suggested sections:
+1. rich-text: Executive summary with key decisions needed
+2. metric-dashboard: Quarterly KPIs and performance vs targets
+3. data-viz: Revenue, growth, or pipeline charts
+4. expandable-cards: Strategic initiatives status
+5. timeline: Key milestones and upcoming priorities
+6. rich-text: Risks, asks, and discussion topics`,
+
+  "qbr": `Create a QBR / Business Review artifact.
+TONE: Data-forward. Lead with metrics, support with narrative. Scorecard style.
+Suggested sections:
+1. hero-stats: Top-line performance numbers
+2. metric-dashboard: Detailed KPIs with change indicators
+3. data-viz: Trend charts (revenue, pipeline, conversion)
+4. expandable-cards: Account highlights or deal reviews
+5. comparison-matrix: Performance vs targets or vs prior quarter
+6. timeline: Action items and next quarter priorities
+7. rich-text: Key learnings and strategic adjustments`,
+
+  "team-update": `Create a Team / Company Update artifact.
+TONE: Clear and motivating. Narrative with highlights. Accessible to all levels.
+Suggested sections:
+1. rich-text: What happened and why it matters
+2. hero-stats: Key wins or milestones (2-3 numbers)
+3. expandable-cards: Team or project highlights
+4. timeline: What's coming next
+5. rich-text: Shoutouts, asks, or closing thoughts`,
+
+  "gtm-strategy": `Create a Go-to-Market Strategy artifact.
+TONE: Analytical with narrative framing. Data-backed positioning.
+Suggested sections:
 1. rich-text: Market thesis and positioning
-2. expandable-cards: Target segments/ICPs
-3. timeline: GTM rollout plan
-4. data-viz: Market sizing or channel performance
-5. tier-table: Pricing strategy
-6. metric-dashboard: GTM targets and KPIs
-7. rich-text: Competitive differentiation`,
+2. expandable-cards: Target segments or ICPs
+3. hero-stats: Market size and opportunity metrics
+4. timeline: GTM rollout plan with milestones
+5. data-viz: Market sizing or channel performance
+6. tier-table: Pricing strategy
+7. metric-dashboard: GTM targets and KPIs
+8. comparison-matrix: Competitive positioning`,
 
-  "product-roadmap": `Create a Product Roadmap artifact. Suggested sections:
-1. rich-text: Product vision and strategy
+  "product-roadmap": `Create a Product Roadmap artifact.
+TONE: Clear and structured. Timeline-driven. Balance vision with specifics.
+Suggested sections:
+1. rich-text: Product vision and strategy context
 2. timeline: Multi-quarter build plan with milestones
-3. expandable-cards: Feature/initiative deep-dives
+3. expandable-cards: Feature or initiative deep-dives
 4. hub-mockup: How features connect to the overall product
 5. metric-dashboard: Success metrics and targets
-6. rich-text: What we're cutting and why`,
+6. hero-stats: Key product metrics or adoption numbers`,
 };
 
 export function buildStructurePrompt(templateType: TemplateType): string {

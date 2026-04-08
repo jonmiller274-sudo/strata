@@ -9,6 +9,9 @@ import { MetricDashboard } from "./sections/MetricDashboard";
 import { DataVisualization } from "./sections/DataVisualization";
 import { HubMockup } from "./sections/HubMockup";
 import { GuidedJourney } from "./sections/GuidedJourney";
+import { ComparisonMatrix } from "./sections/ComparisonMatrix";
+import { HeroStats } from "./sections/HeroStats";
+import { CallToAction } from "./sections/CallToAction";
 
 const SECTION_COMPONENTS: Record<
   Section["type"],
@@ -26,6 +29,9 @@ const SECTION_COMPONENTS: Record<
   "data-viz": DataVisualization as React.ComponentType<{ section: never }>,
   "hub-mockup": HubMockup as React.ComponentType<{ section: never }>,
   "guided-journey": GuidedJourney as React.ComponentType<{ section: never }>,
+  "comparison-matrix": ComparisonMatrix as React.ComponentType<{ section: never }>,
+  "hero-stats": HeroStats as React.ComponentType<{ section: never }>,
+  "call-to-action": CallToAction as React.ComponentType<{ section: never }>,
 };
 
 export function SectionRenderer({ section }: { section: Section }) {

@@ -18,7 +18,8 @@ import {
 import Link from "next/link";
 import { cn } from "@/lib/utils/cn";
 import type { Artifact, Section, TemplateType } from "@/types/artifact";
-import { TEMPLATE_LABELS, TEMPLATE_DESCRIPTIONS } from "@/types/artifact";
+import { TEMPLATE_LABELS, TEMPLATE_DESCRIPTIONS, TEMPLATE_CATEGORIES } from "@/types/artifact";
+import type { TemplateCategory } from "@/types/artifact";
 import { ArtifactViewer } from "@/components/viewer/ArtifactViewer";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { UpgradePrompt } from "@/components/auth/UpgradePrompt";
@@ -26,12 +27,6 @@ import { useAuth } from "@/components/auth/AuthProvider";
 
 type Step = "template" | "content" | "preview";
 
-const TEMPLATES: TemplateType[] = [
-  "platform-vision",
-  "customer-journey",
-  "gtm-strategy",
-  "product-roadmap",
-];
 
 export default function CreatePage() {
   const router = useRouter();
@@ -79,7 +74,21 @@ export default function CreatePage() {
         body: formData,
       });
 
-      const data = await res.json();
+      const pdfContentType = res.headers.get("content-type");
+      if (!pdfContentType?.includes("application/json")) {
+        setError("AI service timed out — please try again");
+        setPdfFileName(null);
+        return;
+      }
+
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        setError("AI service timed out — please try again");
+        setPdfFileName(null);
+        return;
+      }
 
       if (!res.ok) {
         setError(data.error || "Failed to extract text from PDF");
@@ -112,7 +121,19 @@ export default function CreatePage() {
         body: JSON.stringify({ content, templateType }),
       });
 
-      const data = await res.json();
+      const structureContentType = res.headers.get("content-type");
+      if (!structureContentType?.includes("application/json")) {
+        setError("AI service timed out — please try again");
+        return;
+      }
+
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        setError("AI service timed out — please try again");
+        return;
+      }
 
       if (!res.ok) {
         setError(data.error || "Failed to structure content");
@@ -252,32 +273,46 @@ export default function CreatePage() {
               Choose a template
             </h1>
             <p className="mt-2 text-muted">
-              Pick the type of strategic artifact you want to create.
+              Pick the type of document you want to create.
             </p>
 
-            <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2">
-              {TEMPLATES.map((type) => (
-                <button
-                  key={type}
-                  onClick={() => {
-                    setTemplateType(type);
-                    setStep("content");
-                  }}
-                  className={cn(
-                    "group flex flex-col items-start rounded-2xl border p-6 text-left transition-all",
-                    "border-border bg-card hover:border-accent/40 hover:bg-card-hover"
-                  )}
-                >
-                  <h3 className="text-lg font-bold group-hover:text-accent transition-colors">
-                    {TEMPLATE_LABELS[type]}
-                  </h3>
-                  <p className="mt-2 text-sm text-muted leading-relaxed">
-                    {TEMPLATE_DESCRIPTIONS[type]}
-                  </p>
-                  <span className="mt-4 flex items-center gap-1 text-xs font-medium text-accent opacity-0 group-hover:opacity-100 transition-opacity">
-                    Select <ArrowRight className="h-3 w-3" />
-                  </span>
-                </button>
+            <div className="mt-8 space-y-10">
+              {(Object.entries(TEMPLATE_CATEGORIES) as [string, TemplateCategory][]).map(([, category]) => (
+                <div key={category.label}>
+                  <div className="mb-4">
+                    <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">
+                      {category.label}
+                    </h2>
+                    <p className="mt-0.5 text-sm text-muted/70">
+                      {category.description}
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {category.templates.map((type) => (
+                      <button
+                        key={type}
+                        onClick={() => {
+                          setTemplateType(type);
+                          setStep("content");
+                        }}
+                        className={cn(
+                          "group flex flex-col items-start rounded-2xl border p-6 text-left transition-all",
+                          "border-border bg-card hover:border-accent/40 hover:bg-card-hover"
+                        )}
+                      >
+                        <h3 className="text-lg font-bold group-hover:text-accent transition-colors">
+                          {TEMPLATE_LABELS[type]}
+                        </h3>
+                        <p className="mt-2 text-sm text-muted leading-relaxed">
+                          {TEMPLATE_DESCRIPTIONS[type]}
+                        </p>
+                        <span className="mt-4 flex items-center gap-1 text-xs font-medium text-accent opacity-0 group-hover:opacity-100 transition-opacity">
+                          Select <ArrowRight className="h-3 w-3" />
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           </div>

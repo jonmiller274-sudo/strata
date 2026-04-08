@@ -19,6 +19,7 @@ const MAX_BASE64_LENGTH = Math.ceil((5 * 1024 * 1024 * 4) / 3);
 const VALID_SECTION_TYPES: SectionType[] = [
   "rich-text", "expandable-cards", "timeline", "tier-table",
   "metric-dashboard", "data-viz", "hub-mockup", "guided-journey",
+  "comparison-matrix", "hero-stats", "call-to-action",
 ];
 
 /** Strip markdown fences or surrounding text from AI response before JSON.parse */

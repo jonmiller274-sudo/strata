@@ -38,6 +38,9 @@ ${SECTION_SCHEMA}
   - If the items have substantial hidden detail: use display_mode "expandable" (default)
   - If there is a strong synthesis theme across all cards, include a callout
 - Paragraphs, executive summaries, key insights → "rich-text"
+- Feature comparisons, competitive scorecards, side-by-side tables → "comparison-matrix"
+- Large bold numbers, headline stats, key metrics in big text → "hero-stats"
+- Calls to action, asks, investment amounts, closing statements → "call-to-action"
 
 ## RULES
 - Extract ALL visible text, numbers, and data from the image — do not summarize or omit

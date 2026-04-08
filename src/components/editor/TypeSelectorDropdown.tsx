@@ -15,6 +15,9 @@ const ALL_TYPES: SectionType[] = [
   "data-viz",
   "hub-mockup",
   "guided-journey",
+  "comparison-matrix",
+  "hero-stats",
+  "call-to-action",
 ];
 
 interface TypeSelectorDropdownProps {
@@ -97,7 +100,17 @@ export function TypeSelectorDropdown({
           throw new Error(errMsg);
         }
 
-        const data = await res.json();
+        const contentType = res.headers.get("content-type");
+        if (!contentType?.includes("application/json")) {
+          throw new Error("AI service timed out — please try again");
+        }
+
+        let data;
+        try {
+          data = await res.json();
+        } catch {
+          throw new Error("AI service timed out — please try again");
+        }
         onTypeChange(data.section as Section);
       } catch (err) {
         const msg =

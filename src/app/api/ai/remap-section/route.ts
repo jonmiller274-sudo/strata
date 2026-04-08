@@ -14,6 +14,9 @@ const VALID_TYPES: SectionType[] = [
   "data-viz",
   "hub-mockup",
   "guided-journey",
+  "comparison-matrix",
+  "hero-stats",
+  "call-to-action",
 ];
 
 function extractJSON(text: string): string {
@@ -57,6 +60,16 @@ function validateContentShape(
       if (!Array.isArray(content.events)) return "guided-journey requires content.events array";
       if (!Array.isArray(content.phases)) return "guided-journey requires content.phases array";
       if (!Array.isArray(content.counters)) return "guided-journey requires content.counters array";
+      break;
+    case "comparison-matrix":
+      if (!Array.isArray(content.columns)) return "comparison-matrix requires content.columns array";
+      if (!Array.isArray(content.rows)) return "comparison-matrix requires content.rows array";
+      break;
+    case "hero-stats":
+      if (!Array.isArray(content.stats)) return "hero-stats requires content.stats array";
+      break;
+    case "call-to-action":
+      if (typeof content.headline !== "string") return "call-to-action requires content.headline string";
       break;
   }
   return null;

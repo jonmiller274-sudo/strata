@@ -10,6 +10,9 @@ import type {
   TimelineSection,
   TierTableSection,
   GuidedJourneySection,
+  ComparisonMatrixSection,
+  HeroStatsSection,
+  CallToActionSection,
 } from "@/types/artifact";
 import { SECTION_TYPE_LABELS } from "@/types/artifact";
 import { SectionRenderer } from "@/components/viewer/SectionRenderer";
@@ -45,6 +48,9 @@ export function EditableSectionRenderer({
     "guided-journey",
     "data-viz",
     "hub-mockup",
+    "comparison-matrix",
+    "hero-stats",
+    "call-to-action",
   ].includes(section.type);
 
   if (!hasCustomRenderer) {
@@ -257,6 +263,12 @@ function EditableContent({
       return <EditableDataViz section={section} onFieldChange={onFieldChange} />;
     case "hub-mockup":
       return <EditableHubMockup section={section} onFieldChange={onFieldChange} />;
+    case "comparison-matrix":
+      return <EditableComparisonMatrix section={section as ComparisonMatrixSection} onFieldChange={onFieldChange} />;
+    case "hero-stats":
+      return <EditableHeroStats section={section as HeroStatsSection} onFieldChange={onFieldChange} />;
+    case "call-to-action":
+      return <EditableCallToAction section={section as CallToActionSection} onFieldChange={onFieldChange} />;
     default:
       return <SectionRenderer section={section} />;
   }
@@ -802,5 +814,393 @@ function EditableTierTable({
         </div>
       )}
     />
+  );
+}
+
+function EditableComparisonMatrix({
+  section,
+  onFieldChange,
+}: {
+  section: ComparisonMatrixSection;
+  onFieldChange: (path: string, value: unknown) => void;
+}) {
+  const { columns, rows, verdict } = section.content;
+
+  const handleAddRow = () => {
+    const newRow = {
+      id: crypto.randomUUID(),
+      label: "New Row",
+      description: "",
+      values: columns.map(() => false as boolean | string | number),
+    };
+    onFieldChange("content.rows", [...rows, newRow]);
+  };
+
+  const handleRemoveRow = (index: number) => {
+    onFieldChange("content.rows", rows.filter((_, i) => i !== index));
+  };
+
+  const handleReorderRows = (from: number, to: number) => {
+    const updated = [...rows];
+    const [moved] = updated.splice(from, 1);
+    updated.splice(to, 0, moved);
+    onFieldChange("content.rows", updated);
+  };
+
+  const handleAddColumn = () => {
+    const newCol = { id: crypto.randomUUID(), label: "New Column" };
+    const updatedCols = [...columns, newCol];
+    const updatedRows = rows.map((row) => ({
+      ...row,
+      values: [...row.values, false as boolean | string | number],
+    }));
+    onFieldChange("content.columns", updatedCols);
+    onFieldChange("content.rows", updatedRows);
+  };
+
+  const handleRemoveColumn = (colIndex: number) => {
+    if (columns.length <= 1) return;
+    const updatedCols = columns.filter((_, i) => i !== colIndex);
+    const updatedRows = rows.map((row) => ({
+      ...row,
+      values: row.values.filter((_, i) => i !== colIndex),
+    }));
+    onFieldChange("content.columns", updatedCols);
+    onFieldChange("content.rows", updatedRows);
+  };
+
+  const cycleValue = (rowIndex: number, colIndex: number) => {
+    const current = rows[rowIndex].values[colIndex];
+    let next: boolean | string | number;
+    if (current === true) next = false;
+    else if (current === false) next = "—";
+    else next = true;
+    const updatedValues = [...rows[rowIndex].values];
+    updatedValues[colIndex] = next;
+    onFieldChange(`content.rows.${rowIndex}.values`, updatedValues);
+  };
+
+  const renderCellValue = (val: boolean | string | number) => {
+    if (val === true) return <span className="text-green-400 font-bold text-sm">&#10003;</span>;
+    if (val === false) return <span className="text-muted-foreground text-sm">&#8212;</span>;
+    return <span className="text-xs text-foreground/70">{String(val)}</span>;
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Column headers */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Columns</span>
+          <button
+            onClick={handleAddColumn}
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            + Add column
+          </button>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {columns.map((col, ci) => (
+            <div key={col.id} className="flex items-center gap-1 bg-white/5 rounded-lg px-2 py-1.5 border border-white/10">
+              <span className="text-xs font-medium">
+                <InlineEditor
+                  value={col.label}
+                  onChange={(v) => onFieldChange(`content.columns.${ci}.label`, v)}
+                />
+              </span>
+              {columns.length > 1 && (
+                <button
+                  onClick={() => handleRemoveColumn(ci)}
+                  aria-label={`Remove column ${col.label}`}
+                  className="text-muted-foreground hover:text-red-400 transition-colors text-xs ml-1"
+                >
+                  ×
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Rows */}
+      <ItemManager
+        items={rows}
+        getItemId={(row) => row.id}
+        onAdd={handleAddRow}
+        onRemove={handleRemoveRow}
+        onReorder={handleReorderRows}
+        addLabel="Add row"
+        minItems={1}
+        renderItem={(row, ri) => (
+          <div className="bg-white/5 rounded-lg p-3 border border-white/10 space-y-2">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <div className="flex-1">
+                <span className="text-sm font-medium">
+                  <InlineEditor
+                    value={row.label}
+                    onChange={(v) => onFieldChange(`content.rows.${ri}.label`, v)}
+                  />
+                </span>
+                <div className="text-xs text-muted-foreground mt-0.5">
+                  <InlineEditor
+                    value={row.description || ""}
+                    onChange={(v) => onFieldChange(`content.rows.${ri}.description`, v)}
+                    placeholder="Add description..."
+                  />
+                </div>
+              </div>
+              <div className="flex gap-2 flex-wrap">
+                {columns.map((col, ci) => (
+                  <button
+                    key={col.id}
+                    onClick={() => cycleValue(ri, ci)}
+                    title={`Toggle ${col.label} — click to cycle checkmark / dash / text`}
+                    className="flex flex-col items-center gap-0.5 px-2 py-1 rounded bg-white/5 hover:bg-white/10 transition-colors border border-white/10 min-w-[48px]"
+                  >
+                    <span className="text-[9px] text-muted-foreground/60 truncate max-w-[48px]">{col.label}</span>
+                    {renderCellValue(row.values[ci] ?? false)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      />
+
+      {/* Verdict row */}
+      <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+        <label className="text-xs text-muted-foreground block mb-2">Verdict row (optional summary row)</label>
+        {verdict ? (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-medium">
+                <InlineEditor
+                  value={verdict.label}
+                  onChange={(v) => onFieldChange("content.verdict.label", v)}
+                  placeholder="Verdict"
+                />
+              </span>
+              <button
+                onClick={() => onFieldChange("content.verdict", undefined)}
+                className="ml-auto text-xs text-muted-foreground hover:text-red-400 transition-colors"
+              >
+                Remove
+              </button>
+            </div>
+            {verdict.values.map((val, vi) => (
+              <div key={vi} className="flex items-center gap-2">
+                <span className="text-[10px] text-muted-foreground w-20 truncate">{columns[vi]?.label}</span>
+                <input
+                  type="text"
+                  value={val}
+                  onChange={(e) => {
+                    const updated = [...verdict.values];
+                    updated[vi] = e.target.value;
+                    onFieldChange("content.verdict.values", updated);
+                  }}
+                  className="flex-1 bg-white/5 border border-white/10 rounded px-2 py-0.5 text-xs text-foreground/80 placeholder:text-muted-foreground/50 focus:outline-none focus:border-white/20"
+                  placeholder="e.g. Best choice"
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <button
+            onClick={() =>
+              onFieldChange("content.verdict", {
+                label: "Verdict",
+                values: columns.map(() => ""),
+              })
+            }
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            + Add verdict row
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function EditableHeroStats({
+  section,
+  onFieldChange,
+}: {
+  section: HeroStatsSection;
+  onFieldChange: (path: string, value: unknown) => void;
+}) {
+  const { stats, layout = "row" } = section.content;
+
+  const handleAdd = () => {
+    if (stats.length >= 6) return;
+    const newStat = {
+      id: crypto.randomUUID(),
+      value: "0",
+      label: "New Stat",
+      sublabel: "",
+    };
+    onFieldChange("content.stats", [...stats, newStat]);
+  };
+
+  const handleRemove = (index: number) => {
+    onFieldChange("content.stats", stats.filter((_, i) => i !== index));
+  };
+
+  const handleReorder = (from: number, to: number) => {
+    const updated = [...stats];
+    const [moved] = updated.splice(from, 1);
+    updated.splice(to, 0, moved);
+    onFieldChange("content.stats", updated);
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Layout toggle */}
+      <div className="flex items-center gap-2">
+        <span className="text-xs text-muted-foreground">Layout:</span>
+        {(["row", "stacked"] as const).map((l) => (
+          <button
+            key={l}
+            onClick={() => onFieldChange("content.layout", l)}
+            className={`px-2.5 py-1 rounded text-xs transition-colors capitalize ${
+              layout === l
+                ? "bg-accent/20 text-accent"
+                : "bg-white/10 text-muted-foreground hover:bg-white/20"
+            }`}
+          >
+            {l === "row" ? "Row" : "Stacked"}
+          </button>
+        ))}
+      </div>
+
+      <ItemManager
+        items={stats}
+        getItemId={(stat) => stat.id}
+        onAdd={handleAdd}
+        onRemove={handleRemove}
+        onReorder={handleReorder}
+        addLabel="Add stat"
+        minItems={1}
+        maxItems={6}
+        renderItem={(stat, i) => (
+          <div className="bg-white/5 rounded-lg p-4 border border-white/10 space-y-1">
+            <p className="text-3xl font-bold text-accent">
+              <InlineEditor
+                value={stat.value}
+                onChange={(v) => onFieldChange(`content.stats.${i}.value`, v)}
+                placeholder="e.g. $3M"
+              />
+            </p>
+            <p className="text-sm font-medium">
+              <InlineEditor
+                value={stat.label}
+                onChange={(v) => onFieldChange(`content.stats.${i}.label`, v)}
+              />
+            </p>
+            <p className="text-xs text-muted-foreground">
+              <InlineEditor
+                value={stat.sublabel || ""}
+                onChange={(v) => onFieldChange(`content.stats.${i}.sublabel`, v)}
+                placeholder="Add sublabel..."
+              />
+            </p>
+          </div>
+        )}
+      />
+    </div>
+  );
+}
+
+function EditableCallToAction({
+  section,
+  onFieldChange,
+}: {
+  section: CallToActionSection;
+  onFieldChange: (path: string, value: unknown) => void;
+}) {
+  const { headline, value, value_context, items = [], style = "bold" } = section.content;
+
+  return (
+    <div className="space-y-4">
+      {/* Style toggle */}
+      <div className="flex items-center gap-2">
+        <span className="text-xs text-muted-foreground">Style:</span>
+        {(["bold", "subtle"] as const).map((s) => (
+          <button
+            key={s}
+            onClick={() => onFieldChange("content.style", s)}
+            className={`px-2.5 py-1 rounded text-xs transition-colors capitalize ${
+              style === s
+                ? "bg-accent/20 text-accent"
+                : "bg-white/10 text-muted-foreground hover:bg-white/20"
+            }`}
+          >
+            {s === "bold" ? "Bold" : "Subtle"}
+          </button>
+        ))}
+      </div>
+
+      {/* Headline */}
+      <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+        <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide block mb-1">Headline</label>
+        <p className={`font-bold ${style === "bold" ? "text-2xl" : "text-xl"}`}>
+          <InlineEditor
+            value={headline}
+            onChange={(v) => onFieldChange("content.headline", v)}
+            multiline
+            placeholder="Your key call to action..."
+          />
+        </p>
+      </div>
+
+      {/* Hero value */}
+      <div className="bg-white/5 rounded-lg p-4 border border-white/10 space-y-2">
+        <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide block">Hero Value</label>
+        <p className="text-3xl font-bold text-accent">
+          <InlineEditor
+            value={value || ""}
+            onChange={(v) => onFieldChange("content.value", v)}
+            placeholder="Big number like $3M..."
+          />
+        </p>
+        <p className="text-sm text-muted-foreground">
+          <InlineEditor
+            value={value_context || ""}
+            onChange={(v) => onFieldChange("content.value_context", v)}
+            placeholder="Supporting context..."
+          />
+        </p>
+      </div>
+
+      {/* Items (bullet points) */}
+      <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+        <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide block mb-2">
+          Items (comma-separated bullet points)
+        </label>
+        <input
+          type="text"
+          value={items.join(", ")}
+          onChange={(e) => {
+            const raw = e.target.value;
+            const parsed = raw
+              .split(",")
+              .map((t) => t.trim())
+              .filter(Boolean);
+            onFieldChange("content.items", parsed);
+          }}
+          placeholder="e.g. No setup fees, 14-day trial, Cancel anytime"
+          className="w-full bg-white/5 border border-white/10 rounded px-2 py-1 text-xs text-foreground/80 placeholder:text-muted-foreground/50 focus:outline-none focus:border-white/20"
+        />
+        {items.length > 0 && (
+          <ul className="mt-2 space-y-1">
+            {items.map((item, i) => (
+              <li key={i} className="text-xs text-foreground/70 flex items-center gap-1">
+                <span className="text-accent">&#8226;</span> {item}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
   );
 }

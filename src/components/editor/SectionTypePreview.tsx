@@ -118,4 +118,45 @@ const previews: Record<SectionType, React.ReactNode> = {
       <rect x="54" y="40" width="16" height="2" rx="1" fill={muted} />
     </>
   ),
+  "comparison-matrix": (
+    <>
+      <rect x="36" y="6" width="28" height="5" rx="1.5" fill={bar} opacity="0.5" />
+      <rect x="72" y="6" width="28" height="5" rx="1.5" fill={text} />
+      <line x1="8" y1="16" x2="112" y2="16" stroke={muted} strokeWidth="0.8" />
+      <rect x="8" y="20" width="22" height="3" rx="1.5" fill={text} />
+      <rect x="36" y="20" width="28" height="3" rx="1.5" fill={bar} opacity="0.4" />
+      <rect x="72" y="20" width="28" height="3" rx="1.5" fill={muted} />
+      <line x1="8" y1="28" x2="112" y2="28" stroke={muted} strokeWidth="0.6" />
+      <rect x="8" y="32" width="22" height="3" rx="1.5" fill={text} />
+      <rect x="36" y="32" width="28" height="3" rx="1.5" fill={bar} opacity="0.4" />
+      <rect x="72" y="32" width="28" height="3" rx="1.5" fill={muted} />
+      <line x1="8" y1="40" x2="112" y2="40" stroke={muted} strokeWidth="0.6" />
+      <rect x="8" y="44" width="22" height="3" rx="1.5" fill={text} opacity="0.5" />
+      <rect x="36" y="44" width="28" height="3" rx="1.5" fill={bar} opacity="0.7" />
+    </>
+  ),
+  "hero-stats": (
+    <>
+      <rect x="10" y="12" width="22" height="32" rx="3" fill={muted} />
+      <rect x="38" y="12" width="22" height="32" rx="3" fill={muted} />
+      <rect x="66" y="12" width="22" height="32" rx="3" fill={muted} />
+      <rect x="94" y="12" width="22" height="32" rx="3" fill={muted} />
+      <text x="21" y="32" textAnchor="middle" fontSize="9" fontWeight="bold" fill={bar}>8.2</text>
+      <text x="49" y="32" textAnchor="middle" fontSize="9" fontWeight="bold" fill={bar}>94%</text>
+      <text x="77" y="32" textAnchor="middle" fontSize="9" fontWeight="bold" fill={bar}>3x</text>
+      <text x="105" y="32" textAnchor="middle" fontSize="9" fontWeight="bold" fill={bar}>47</text>
+      <rect x="13" y="37" width="16" height="2" rx="1" fill={text} />
+      <rect x="41" y="37" width="16" height="2" rx="1" fill={text} />
+      <rect x="69" y="37" width="16" height="2" rx="1" fill={text} />
+      <rect x="97" y="37" width="16" height="2" rx="1" fill={text} />
+    </>
+  ),
+  "call-to-action": (
+    <>
+      <rect x="8" y="8" width="104" height="40" rx="4" fill={bar} opacity="0.08" stroke={bar} strokeWidth="0.8" strokeOpacity="0.4" />
+      <rect x="28" y="16" width="64" height="6" rx="2" fill={bar} opacity="0.4" />
+      <rect x="36" y="26" width="48" height="3" rx="1.5" fill={text} />
+      <rect x="42" y="32" width="36" height="3" rx="1.5" fill={text} opacity="0.6" />
+    </>
+  ),
 };

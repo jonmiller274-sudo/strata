@@ -16,6 +16,9 @@ const SECTION_TYPES: { type: SectionType; label: string; description: string }[]
   { type: "data-viz", label: "Chart", description: "Data visualization" },
   { type: "hub-mockup", label: "Hub Diagram", description: "Hub-and-spoke connections" },
   { type: "guided-journey", label: "Journey", description: "Interactive guided journey" },
+  { type: "comparison-matrix", label: "Comparison", description: "Side-by-side comparison table" },
+  { type: "hero-stats", label: "Stats", description: "Bold headline numbers" },
+  { type: "call-to-action", label: "CTA", description: "Full-width call to action" },
 ];
 
 type AddSectionStep = "describe" | "confirm" | "generating" | "review";
@@ -72,7 +75,16 @@ export function AddSection({ documentTitle, documentSubtitle, onAdd, onAddMultip
       });
 
       if (!res.ok) throw new Error("Failed to suggest type");
-      const data = await res.json();
+      const contentType = res.headers.get("content-type");
+      if (!contentType?.includes("application/json")) {
+        throw new Error("AI service timed out — please try again");
+      }
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error("AI service timed out — please try again");
+      }
       setSuggestedType(data.type);
     } catch {
       setSuggestedType(null);
@@ -110,7 +122,18 @@ export function AddSection({ documentTitle, documentSubtitle, onAdd, onAddMultip
         }
         throw new Error(errMsg);
       }
-      const data = await res.json();
+
+      const contentType = res.headers.get("content-type");
+      if (!contentType?.includes("application/json")) {
+        throw new Error("AI service timed out — please try again");
+      }
+
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error("AI service timed out — please try again");
+      }
 
       let section = data.artifact?.sections?.[0];
       if (!section && data.artifact?.type && data.artifact?.content) {

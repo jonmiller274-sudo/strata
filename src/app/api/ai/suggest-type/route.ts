@@ -13,6 +13,9 @@ const VALID_TYPES: SectionType[] = [
   "data-viz",
   "hub-mockup",
   "guided-journey",
+  "comparison-matrix",
+  "hero-stats",
+  "call-to-action",
 ];
 
 export async function POST(req: NextRequest) {
@@ -39,6 +42,9 @@ Type descriptions:
 - data-viz: Charts and data visualizations
 - hub-mockup: Hub-and-spoke diagrams showing connections
 - guided-journey: Interactive day-by-day journey with counters
+- comparison-matrix: Side-by-side comparison table with checkmarks for competitive scorecards
+- hero-stats: 2-4 large bold headline numbers for maximum visual impact
+- call-to-action: Full-width ask block with a bold number or sentence
 
 Return ONLY a JSON object: { "type": "<type>", "confidence": <0-1> }`;
 

@@ -12,6 +12,9 @@ import {
   Network,
   Route,
   Menu,
+  Columns2,
+  Hash,
+  Megaphone,
   type LucideIcon,
 } from "lucide-react";
 
@@ -24,6 +27,9 @@ const SECTION_TYPE_ICONS: Record<SectionType, LucideIcon> = {
   "data-viz": LineChart,
   "hub-mockup": Network,
   "guided-journey": Route,
+  "comparison-matrix": Columns2,
+  "hero-stats": Hash,
+  "call-to-action": Megaphone,
 };
 
 interface SidebarRailProps {

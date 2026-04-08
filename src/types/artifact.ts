@@ -46,7 +46,10 @@ export type SectionType =
   | "metric-dashboard"
   | "data-viz"
   | "hub-mockup"
-  | "guided-journey";
+  | "guided-journey"
+  | "comparison-matrix"
+  | "hero-stats"
+  | "call-to-action";
 
 export const SECTION_TYPE_LABELS: Record<SectionType, string> = {
   "rich-text": "Rich Text",
@@ -57,6 +60,9 @@ export const SECTION_TYPE_LABELS: Record<SectionType, string> = {
   "data-viz": "Chart",
   "hub-mockup": "Hub",
   "guided-journey": "Journey",
+  "comparison-matrix": "Comparison",
+  "hero-stats": "Stats",
+  "call-to-action": "CTA",
 };
 
 export type Section =
@@ -67,7 +73,10 @@ export type Section =
   | MetricDashboardSection
   | DataVizSection
   | HubMockupSection
-  | GuidedJourneySection;
+  | GuidedJourneySection
+  | ComparisonMatrixSection
+  | HeroStatsSection
+  | CallToActionSection;
 
 // Base fields shared by all sections
 interface SectionBase {
@@ -285,28 +294,122 @@ export interface JourneyEvent {
   counter_values: Record<string, number>; // counter_id → value
 }
 
+// ===== 9. Comparison Matrix =====
+export interface ComparisonMatrixSection extends SectionBase {
+  type: "comparison-matrix";
+  content: {
+    columns: ComparisonColumn[];
+    rows: ComparisonRow[];
+    verdict?: {
+      label: string;
+      values: string[];
+    };
+  };
+}
+
+export interface ComparisonColumn {
+  id: string;
+  label: string;
+  highlight?: boolean;
+}
+
+export interface ComparisonRow {
+  id: string;
+  label: string;
+  description?: string;
+  values: (boolean | string | number)[];
+}
+
+// ===== 10. Hero Stats =====
+export interface HeroStatsSection extends SectionBase {
+  type: "hero-stats";
+  content: {
+    stats: HeroStat[];
+    layout?: "row" | "stacked";
+  };
+}
+
+export interface HeroStat {
+  id: string;
+  value: string;
+  label: string;
+  sublabel?: string;
+  color?: string;
+}
+
+// ===== 11. Call to Action =====
+export interface CallToActionSection extends SectionBase {
+  type: "call-to-action";
+  content: {
+    headline: string;
+    value?: string;
+    value_context?: string;
+    items?: string[];
+    style?: "bold" | "subtle";
+  };
+}
+
 // ===== Template Types =====
 
 export type TemplateType =
-  | "platform-vision"
-  | "customer-journey"
+  | "partnership-proposal"
+  | "sales-proposal"
+  | "investor-deck"
+  | "board-deck"
+  | "qbr"
+  | "team-update"
   | "gtm-strategy"
   | "product-roadmap";
 
 export const TEMPLATE_LABELS: Record<TemplateType, string> = {
-  "platform-vision": "Platform Vision",
-  "customer-journey": "Customer Journey",
+  "partnership-proposal": "Partnership Proposal",
+  "sales-proposal": "Sales Proposal",
+  "investor-deck": "Investor Deck",
+  "board-deck": "Board Deck",
+  qbr: "QBR / Business Review",
+  "team-update": "Team / Company Update",
   "gtm-strategy": "Go-to-Market Strategy",
   "product-roadmap": "Product Roadmap",
 };
 
 export const TEMPLATE_DESCRIPTIONS: Record<TemplateType, string> = {
-  "platform-vision":
-    "Show how all your products and capabilities tie together into a unified platform.",
-  "customer-journey":
-    "Walk through the experience from first touch to fully embedded, day by day.",
+  "partnership-proposal":
+    "Convince a partner to invest in a joint initiative with punchy data and a clear ask.",
+  "sales-proposal":
+    "Pitch your product or service to a prospective customer with compelling evidence.",
+  "investor-deck":
+    "Raise funding or update existing investors on traction, vision, and financials.",
+  "board-deck":
+    "Deliver a quarterly board update with strategic context and key decisions.",
+  qbr: "Review quarterly performance with metrics, wins, and action items.",
+  "team-update":
+    "Share progress, priorities, and context with your team or company.",
   "gtm-strategy":
     "Map out how you reach, convert, and expand with your target customers.",
   "product-roadmap":
     "Communicate what you're building, when, and why — across quarters and teams.",
+};
+
+export interface TemplateCategory {
+  label: string;
+  description: string;
+  templates: TemplateType[];
+}
+
+export const TEMPLATE_CATEGORIES: Record<string, TemplateCategory> = {
+  persuade: {
+    label: "Persuade",
+    description: "Proposals, pitches, and sales materials",
+    templates: ["partnership-proposal", "sales-proposal"],
+  },
+  report: {
+    label: "Report",
+    description: "Reviews, updates, and performance tracking",
+    templates: ["qbr", "board-deck", "team-update"],
+  },
+  plan: {
+    label: "Plan",
+    description: "Strategy, roadmaps, and go-to-market",
+    templates: ["gtm-strategy", "product-roadmap", "investor-deck"],
+  },
 };
