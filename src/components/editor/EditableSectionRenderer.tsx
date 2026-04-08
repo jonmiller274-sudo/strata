@@ -772,6 +772,7 @@ function EditableTierTable({
               <li key={`${feat.name}-${j}`} className="group/feat text-sm flex items-center gap-2">
                 <button
                   onClick={() => handleToggleIncluded(i, j)}
+                  aria-label={feat.included ? "Mark feature as not included" : "Mark feature as included"}
                   className="text-xs w-4 text-center hover:text-accent transition-colors"
                 >
                   {feat.included ? "+" : "−"}
@@ -784,6 +785,7 @@ function EditableTierTable({
                 </span>
                 <button
                   onClick={() => handleRemoveFeature(i, j)}
+                  aria-label="Remove feature"
                   className="opacity-0 group-hover/feat:opacity-50 hover:!opacity-100 hover:text-red-400 transition-opacity text-xs"
                 >
                   ×
