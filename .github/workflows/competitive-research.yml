@@ -1,0 +1,93 @@
+name: Competitive Research
+
+on:
+  schedule:
+    - cron: '0 13 * * 1'     # Monday 8 AM ET (self-audit)
+    - cron: '0 14 1 * *'     # 1st of month 9 AM ET (market monitor)
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Run mode: self-audit, market-monitor, or both'
+        required: false
+        default: 'self-audit'
+      target_url:
+        description: 'URL to test (self-audit only)'
+        required: false
+        default: 'https://sharestrata.com'
+
+permissions:
+  issues: write
+  contents: write
+
+jobs:
+  competitive-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci --prefix scripts/competitive-research
+
+      - name: Install Playwright (self-audit only)
+        if: >-
+          github.event_name == 'workflow_dispatch' && (inputs.mode == 'self-audit' || inputs.mode == 'both')
+          || github.event.schedule == '0 13 * * 1'
+        run: npx playwright install --with-deps chromium
+        working-directory: scripts/competitive-research
+
+      - name: Determine mode
+        id: mode
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "mode=${{ inputs.mode || 'self-audit' }}" >> $GITHUB_OUTPUT
+          elif [ "${{ github.event.schedule }}" = "0 13 * * 1" ]; then
+            echo "mode=self-audit" >> $GITHUB_OUTPUT
+          else
+            echo "mode=market-monitor" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run competitive research
+        env:
+          TARGET_URL: ${{ inputs.target_url || 'https://sharestrata.com' }}
+          MODE: ${{ steps.mode.outputs.mode }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          REPO_ROOT: ${{ github.workspace }}
+        run: npx tsx src/runner.ts
+        working-directory: scripts/competitive-research
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: competitive-screenshots-${{ github.run_id }}
+          path: scripts/competitive-research/output/screenshots/
+          retention-days: 30
+          if-no-files-found: ignore
+
+      - name: Commit state changes
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/agents/competitive-researcher/ docs/agents/coordination-log.md
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            BRANCH="competitive-research/update-$(date +%Y%m%d)"
+            git checkout -b "$BRANCH"
+            git commit -m "Competitive Research: ${{ steps.mode.outputs.mode }} $(date +%Y-%m-%d)"
+            git push -u origin "$BRANCH"
+            gh pr create \
+              --title "Competitive Research ${{ steps.mode.outputs.mode }} $(date +%Y-%m-%d)" \
+              --label competitive-research \
+              --label tier-0 \
+              --body "Automated competitive research run. State files only. Risk-free."
+          fi
