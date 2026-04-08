@@ -52,9 +52,12 @@ See [docs/quality-rubric.md](../docs/quality-rubric.md) for the rubric used by a
 
 ---
 
-## Discovery and Digest Labels
+## Agent-Specific Labels
 
 | Label | Source | Behavior |
 |-------|--------|---------|
 | `discovery` | Discovery agent | Adds rubric items — does not auto-merge |
 | `digest` | Director agent | Daily summary PR — auto-merges after CI (treat as tier-0) |
+| `pm-briefing` | PM Agent | Evening briefing files — auto-merges after CI (treat as tier-0) |
+| `competitive-research` | Competitive Researcher | Snapshots + state files — auto-merges after CI (treat as tier-0) |
+| `usability-test` | Usability Tester | Findings filed as Issues, not PRs |
