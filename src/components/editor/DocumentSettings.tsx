@@ -132,6 +132,7 @@ export function DocumentSettings({ artifact, onUpdate }: DocumentSettingsProps) 
             <button
               key={mode}
               onClick={() => onUpdate("layout_mode", mode)}
+              aria-pressed={(artifact.layout_mode ?? "continuous") === mode}
               className={`px-2.5 py-1 rounded text-xs transition-colors ${
                 (artifact.layout_mode ?? "continuous") === mode
                   ? "bg-accent/20 text-accent"
@@ -152,6 +153,7 @@ export function DocumentSettings({ artifact, onUpdate }: DocumentSettingsProps) 
             <button
               key={style}
               onClick={() => onUpdate("nav_style", style)}
+              aria-pressed={(artifact.nav_style ?? "sidebar") === style}
               className={`px-2.5 py-1 rounded text-xs transition-colors ${
                 (artifact.nav_style ?? "sidebar") === style
                   ? "bg-accent/20 text-accent"
@@ -172,6 +174,7 @@ export function DocumentSettings({ artifact, onUpdate }: DocumentSettingsProps) 
             <button
               key={theme}
               onClick={() => onUpdate("theme", theme)}
+              aria-pressed={artifact.theme === theme}
               className={`px-2.5 py-1 rounded text-xs transition-colors ${
                 artifact.theme === theme
                   ? "bg-accent/20 text-accent"
