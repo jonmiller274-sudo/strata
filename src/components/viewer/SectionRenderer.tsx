@@ -47,17 +47,11 @@ export function SectionRenderer({ section }: { section: Section }) {
           <img
             src={section.image_url}
             alt={section.title || "Section image"}
-            style={{
-              display: "block",
-              /* Use intrinsic width up to container max — never upscale.
-                 On retina Macs, screenshots are captured at 2x device pixels.
-                 Displaying at natural CSS width means 1 source pixel = 1 CSS pixel
-                 = 2 physical pixels, which is perfectly sharp. Forcing width: 100%
-                 would upscale small screenshots and cause blurriness. */
-              maxWidth: "100%",
-              width: "auto",
-              height: "auto",
-            } as React.CSSProperties}
+            // block + max-w-full: intrinsic width up to container max — never upscale.
+            // On retina Macs screenshots are 2x device pixels; displaying at natural
+            // CSS width keeps 1 source pixel = 1 CSS pixel = 2 physical pixels (sharp).
+            // Forcing w-full would upscale small screenshots and cause blurriness.
+            className="block max-w-full w-auto h-auto"
           />
         </div>
       )}
