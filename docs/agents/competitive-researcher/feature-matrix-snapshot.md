@@ -13,10 +13,10 @@ Each row has: claim, how to verify, expected result, and current status.
 
 | ID | Capability | Strata Claim | Verification Method | Expected Result | Status |
 |----|-----------|-------------|--------------------|-----------------| -------|
-| SA-01 | Non-linear navigation (sidebar) | Yes | Navigate to /demo, check sidebar is visible and clickable | Sidebar present, section links work | untested |
-| SA-02 | Progressive disclosure (expand/collapse) | Yes (animated) | Navigate to /demo, find expandable cards, click to expand | Cards expand with animation on click | untested |
-| SA-03 | Animated timelines | Yes (native component) | Navigate to /demo, find timeline section, verify animation | Timeline section animates on scroll/click | untested |
-| SA-04 | Metric dashboards | Yes (native component) | Navigate to /demo, find metrics section, verify counters | Metric cards visible with animated counters | untested |
+| SA-01 | Non-linear navigation (sidebar) | Yes | Navigate to /demo, check sidebar is visible and clickable | Sidebar present, section links work | partial |
+| SA-02 | Progressive disclosure (expand/collapse) | Yes (animated) | Navigate to /demo, find expandable cards, click to expand | Cards expand with animation on click | partial |
+| SA-03 | Animated timelines | Yes (native component) | Navigate to /demo, find timeline section, verify animation | Timeline section animates on scroll/click | pass |
+| SA-04 | Metric dashboards | Yes (native component) | Navigate to /demo, find metrics section, verify counters | Metric cards visible with animated counters | fail |
 | SA-05 | Comparison/tier tables | Yes (native component) | Navigate to /demo, find tier/comparison section | Tier table renders with interactive elements | untested |
 | SA-06 | AI content structuring from upload | Yes (core feature) | Navigate to /create, verify PDF upload UI exists | Upload zone visible, accepts files | untested |
 | SA-07 | Mobile-responsive output | Yes | Navigate to /demo at 390x844 viewport | No overflow, readable text, functional nav | untested |
