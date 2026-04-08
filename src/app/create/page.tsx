@@ -308,10 +308,11 @@ export default function CreatePage() {
 
             <div className="mt-8 space-y-4">
               <div>
-                <label className="text-sm font-medium text-muted">
+                <label htmlFor="create-title" className="text-sm font-medium text-muted">
                   Title (optional — AI will generate one if blank)
                 </label>
                 <input
+                  id="create-title"
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
@@ -385,10 +386,11 @@ export default function CreatePage() {
 
               {/* Raw content textarea */}
               <div>
-                <label className="text-sm font-medium text-muted">
+                <label htmlFor="create-content" className="text-sm font-medium text-muted">
                   Raw content
                 </label>
                 <textarea
+                  id="create-content"
                   value={content}
                   onChange={(e) => { setContent(e.target.value); if (pdfFileName) setPdfFileName(null); }}
                   placeholder="Paste your strategy notes, outlines, bullet points, docs — anything you want to turn into an interactive artifact..."
