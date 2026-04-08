@@ -161,15 +161,12 @@ export function ArtifactViewer({
                 }}
               >
                 {/* Beat label */}
-                <p
-                  className="mb-6 font-mono text-xs uppercase tracking-widest"
-                  style={{ color: "var(--color-muted-foreground)" }}
-                >
+                <p className="mb-6 font-mono text-xs uppercase tracking-widest text-muted-foreground">
                   Beat {beatNumber} / {totalBeats}
                 </p>
 
                 {/* Section content — constrained width */}
-                <div style={{ maxWidth: "900px", width: "100%" }}>
+                <div className="max-w-[900px] w-full">
                   <SectionRenderer section={section} />
                 </div>
 
@@ -177,17 +174,10 @@ export function ArtifactViewer({
                 {!isLast && (
                   <div
                     aria-hidden="true"
-                    style={{
-                      position: "absolute",
-                      bottom: "32px",
-                      left: "50%",
-                      animation: "bounce-hint 2s ease-in-out infinite",
-                      color: "var(--color-muted-foreground)",
-                    }}
+                    className="absolute bottom-8 left-1/2 text-muted-foreground"
+                    style={{ animation: "bounce-hint 2s ease-in-out infinite" }}
                   >
-                    <ChevronDown
-                      style={{ width: "20px", height: "20px", opacity: 0.5 }}
-                    />
+                    <ChevronDown className="w-5 h-5 opacity-50" />
                   </div>
                 )}
               </section>
@@ -205,8 +195,8 @@ export function ArtifactViewer({
             rel="noopener noreferrer"
             className={`fixed bottom-4 left-2 sm:left-4 z-40 flex items-center gap-1.5 px-2 py-1 rounded-full bg-card border border-border shadow-sm transition-opacity ${hideWatermark ? "opacity-0 pointer-events-none" : "opacity-80 hover:opacity-100"}`}
           >
-            <Layers className="h-4 w-4" style={{ color: "var(--color-muted-foreground)" }} />
-            <span className="text-xs font-medium" style={{ color: "var(--color-muted-foreground)" }}>
+            <Layers className="h-4 w-4 text-muted-foreground" />
+            <span className="text-xs font-medium text-muted-foreground">
               Strata
             </span>
           </a>
