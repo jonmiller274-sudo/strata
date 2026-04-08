@@ -87,12 +87,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 
 ## Priority 4: Accessibility
 
-### QR-14: ARIA live regions for dynamic content
-- **Tier:** 0
-- **What:** Add `aria-live="polite"` to: save status indicator, AI chat message list, error messages, loading states
-- **Files:** `TopBar.tsx` (save status), `AiChatPanel.tsx` (messages), all error containers
-- **Test:** Screen reader announces save status changes and new chat messages
-- **Status:** OPEN
+### ~~QR-14: ARIA live regions for dynamic content~~ DONE
+- **Status:** DONE — PR #QR-14. Added `aria-live="polite"` to save status in TopBar, message list in AiChatPanel, and all 6 error message containers in editor components.
 
 ### QR-15: ARIA labels on all icon-only buttons
 - **Tier:** 0

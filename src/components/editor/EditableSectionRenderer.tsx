@@ -223,7 +223,7 @@ function SectionImagePreview({
         </button>
       </div>
       {extractError && (
-        <p className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2 mx-3 mb-3">
+        <p className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2 mx-3 mb-3" aria-live="polite">
           {extractError}
         </p>
       )}

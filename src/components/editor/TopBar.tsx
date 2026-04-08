@@ -26,7 +26,7 @@ export function TopBar({
   return (
     <div className="h-10 border-b border-white/10 flex items-center justify-end px-4 gap-4 shrink-0">
       {/* Save status */}
-      <span className="text-xs text-muted-foreground">
+      <span className="text-xs text-muted-foreground" aria-live="polite" aria-atomic="true">
         {saveStatus === "saved" && "Saved"}
         {saveStatus === "saving" && "Saving..."}
         {saveStatus === "unsaved" && "Unsaved changes"}
