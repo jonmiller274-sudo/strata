@@ -97,6 +97,7 @@ export function DocumentSettings({ artifact, onUpdate }: DocumentSettingsProps) 
               className="w-8 h-8 rounded cursor-pointer border border-white/20"
               aria-label="Primary color"
               title="Primary color"
+              aria-label="Primary color"
             />
             <span className="text-xs text-muted-foreground">Primary</span>
           </div>
@@ -109,6 +110,7 @@ export function DocumentSettings({ artifact, onUpdate }: DocumentSettingsProps) 
               className="w-8 h-8 rounded cursor-pointer border border-white/20"
               aria-label="Secondary color"
               title="Secondary color"
+              aria-label="Secondary color"
             />
             <span className="text-xs text-muted-foreground">Secondary</span>
           </div>
