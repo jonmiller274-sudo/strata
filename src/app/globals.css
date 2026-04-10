@@ -18,6 +18,9 @@
   --color-accent-hover: #818cf8;
   --color-accent-muted: #4f46e520;
 
+  /* Dual-color accent system (for comparison, phases, emphasis) */
+  --color-accent-secondary: #14b8a6; /* teal — contrast accent for emphasis, The Ask, highlights */
+
   /* Semantic */
   --color-success: #34d399;
   --color-warning: #fbbf24;
@@ -61,6 +64,7 @@
   --color-footer-bg: #f3f4f6;
   --color-footer-text: #9ca3af;
   --color-accent-muted: #6366f110;
+  --color-accent-secondary: #0d9488; /* slightly darker teal for light backgrounds */
 }
 
 /* ===== Base styles ===== */
@@ -74,6 +78,33 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== CTA "The Ask" — theme-adaptive dark emphasis box ===== */
+.cta-the-ask {
+  background: rgba(255, 255, 255, 0.06);
+  border-left: 3px solid var(--color-accent-secondary);
+  box-shadow:
+    0 0 80px rgba(20, 184, 166, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+[data-theme="light"] .cta-the-ask {
+  background: linear-gradient(135deg, #0f1029 0%, #161340 50%, #0f1029 100%);
+  border-left: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 10px 40px rgba(15, 16, 41, 0.15),
+    0 0 60px rgba(20, 184, 166, 0.08);
+}
+
+/* Light theme text overrides for dark-bg The Ask box */
+[data-theme="light"] .cta-the-ask .cta-ask-text {
+  color: #ffffff;
+}
+
+[data-theme="light"] .cta-the-ask .cta-ask-muted {
+  color: rgba(255, 255, 255, 0.6);
 }
 
 /* ===== Custom animations ===== */

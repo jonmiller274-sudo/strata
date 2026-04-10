@@ -8,21 +8,24 @@ import { cn } from "@/lib/utils/cn";
 const STATUS_STYLES = {
   completed: {
     dot: "bg-success border-success",
+    iconClass: "text-white",
     icon: Check,
     line: "bg-success",
     text: "text-foreground",
   },
   current: {
     dot: "bg-accent border-accent",
+    iconClass: "text-white",
     icon: ArrowRight,
     line: "bg-accent",
     text: "text-foreground",
   },
   upcoming: {
-    dot: "bg-card border-border",
+    dot: "bg-transparent border-accent/40",
+    iconClass: "text-accent/70",
     icon: Circle,
-    line: "bg-border",
-    text: "text-muted",
+    line: "bg-accent/20",
+    text: "text-foreground/90",
   },
 };
 
@@ -55,7 +58,7 @@ function VerticalStep({
             styles.dot
           )}
         >
-          <Icon className="h-4 w-4 text-white" />
+          <Icon className={cn("h-4 w-4", styles.iconClass)} />
         </div>
         {!isLast && (
           <div className={cn("mt-2 w-0.5 flex-1", styles.line)} />
@@ -63,7 +66,7 @@ function VerticalStep({
       </div>
 
       {/* Content */}
-      <div className={cn("pb-10", isLast && "pb-0")}>
+      <div className={cn("pb-8", isLast && "pb-0")}>
         <span className="text-xs font-semibold uppercase tracking-wider text-accent">
           {step.label}
         </span>

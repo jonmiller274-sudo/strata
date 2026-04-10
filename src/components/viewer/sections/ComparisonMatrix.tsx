@@ -8,9 +8,9 @@ import { cn } from "@/lib/utils/cn";
 function CellValue({ value }: { value: boolean | string | number }) {
   if (typeof value === "boolean") {
     return value ? (
-      <Check className="h-4 w-4 text-success mx-auto" />
+      <Check className="h-4 w-4 text-success mx-auto" strokeWidth={3} />
     ) : (
-      <span className="text-muted-foreground text-sm select-none">—</span>
+      <X className="h-4 w-4 text-danger/50 mx-auto" strokeWidth={2.5} />
     );
   }
   return <span className="text-sm font-medium text-foreground">{value}</span>;

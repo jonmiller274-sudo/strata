@@ -23,6 +23,14 @@ All colors come from CSS variables in `globals.css`. Never use raw hex in compon
 | `accent-hover` | `#818cf8` | Accent hover state |
 | `accent-muted` | `#4f46e520` | Subtle accent fill |
 
+### Dual-Color Accent System
+| Token | Dark Theme | Light Theme | Use |
+|-------|-----------|-------------|-----|
+| `accent` | `#6366f1` (indigo) | `#6366f1` | Primary brand/action — buttons, highlights, active states |
+| `accent-secondary` | `#14b8a6` (teal) | `#0d9488` | Contrast accent — emphasis, The Ask CTA, stat highlights, comparison accents |
+
+The dual-color system creates visual contrast between primary structure (indigo) and emphasis/highlights (teal). Use `accent` for interactive UI elements and structural highlights. Use `accent-secondary` for content emphasis — deal terms, key numbers, checkmarks in proposal sections.
+
 ### Status Colors
 | Color | Value | Use |
 |-------|-------|-----|
@@ -224,6 +232,41 @@ bg-white/10 ring-1 ring-accent/50 rounded
 - Escape: close/cancel current context
 - Enter: confirm/submit
 - Custom shortcuts: show in `title` attribute tooltip
+
+---
+
+## Viewer Section Patterns
+
+These patterns define the visual treatment for section types in the document viewer. They apply to both dark and light themes.
+
+### CTA "The Ask" Variant (`style: "the-ask"`)
+The highest-impact closing section for proposals and deals. Uses theme-adaptive styling via `.cta-the-ask` CSS class in `globals.css`.
+
+**Dark theme treatment:**
+- Background: `rgba(255, 255, 255, 0.06)` (subtle elevated surface)
+- Left border: 3px solid `accent-secondary` (teal)
+- Value text: `accent-secondary` (teal), `text-5xl md:text-7xl font-extrabold`
+- Body text: `foreground` (white-ish), items as vertical list with teal checkmarks
+
+**Light theme treatment:**
+- Background: dark gradient (`#0f1029` → `#161340` → `#0f1029`) — inverts to create dark-on-light contrast
+- Border: 1px `rgba(255, 255, 255, 0.1)` all around (no left border)
+- Value text: `accent-secondary` (teal), same sizing
+- Body text: white, items as vertical list with teal checkmarks
+
+**Design principle:** Emphasis through contrast. Dark theme elevates the surface; light theme inverts the background. Both create a visual "stop and read this" moment.
+
+### Design Principles (from nexar-proposals DNA)
+
+These principles guide all viewer section styling:
+
+1. **Contrast hierarchy** — Create visual rhythm by alternating emphasis levels. Dark boxes on light pages, elevated surfaces on dark pages. Not everything should be the same visual weight.
+
+2. **Colored structural borders** — 3px left borders for emphasis callouts, 3px top borders on cards for categorization. Borders communicate structure without taking up space.
+
+3. **Typography authority** — Uppercase labels with letter-spacing (`text-[10px] uppercase tracking-wide`) for metadata. Large bold numbers for stats. Clear weight hierarchy (extrabold → bold → medium → normal).
+
+4. **Intentional whitespace** — Sections breathe. Cards align on a grid. Padding is generous on desktop (`px-8 py-10` minimum for emphasis sections). Never cramped.
 
 ---
 

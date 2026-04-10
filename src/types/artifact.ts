@@ -200,6 +200,7 @@ export interface MetricCard {
     value: string;
   };
   description?: string;
+  highlight?: boolean; // Visual emphasis — the "hero" metric in the set (larger value, accent border)
 }
 
 // ===== 6. Data Visualization =====
@@ -345,7 +346,7 @@ export interface CallToActionSection extends SectionBase {
     value?: string;
     value_context?: string;
     items?: string[];
-    style?: "bold" | "subtle";
+    style?: "bold" | "subtle" | "the-ask";
   };
 }
 

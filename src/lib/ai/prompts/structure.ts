@@ -80,11 +80,14 @@ Omit display_mode, style, and callout when not applicable — they are all optio
       "prefix": "$",
       "suffix": "%",
       "description": "Brief context for this metric",
-      "change": { "direction": "up" | "down" | "neutral", "value": "+15%" }
+      "change": { "direction": "up" | "down" | "neutral", "value": "+15%" },
+      "highlight": true
     }
   ]
 }
-Note: only set numeric_value for numbers under 10000 that should animate. For formatted values like "$1M", just use the value string.
+Notes:
+- only set numeric_value for numbers under 10000 that should animate. For formatted values like "$1M", just use the value string.
+- highlight: When comparing metrics (e.g., your price vs competitor price), mark ONE metric as highlight: true — the "hero" number that tells the winning story. It renders with a larger value, accent border, and teal color. Use this for cost comparisons, win metrics, and any dashboard where one number is the protagonist. Omit highlight when all metrics are equal in importance.
 
 6. "data-viz" content:
 {
@@ -175,14 +178,19 @@ Notes: 2-4 stats maximum. Values are display strings (NOT numbers). Use for bold
   "value": "$3M",
   "value_context": "Less than 0.04% of annual bookings",
   "items": ["10,000 cameras", "Rideshare drivers first", "2-3 pilot cities"],
-  "style": "bold"
+  "style": "the-ask"
 }
-Notes: Use as the closing section for proposals, pitches, and asks. Keep headline to one line. The value should be unmissable. style: "bold" for proposals, "subtle" for softer CTAs.
+Notes: Use as the closing section for proposals, pitches, and asks. Keep headline to one line. The value should be unmissable.
+Style options:
+- "the-ask": Use for deal terms, investment asks, pricing proposals — dark elevated box with large dominant number and vertical deal terms with checkmarks. This is the HIGHEST IMPACT style. Use when the content contains a specific monetary ask, investment amount, pricing, or clear deal structure.
+- "bold": Standard high-contrast CTA with accent background. Use for next steps, general calls to action, or takeaways without a specific monetary value.
+- "subtle": Low-contrast CTA for softer closes — summaries, "in conclusion" sections, or documents that don't end with an ask.
 `;
 
 const TEMPLATE_GUIDANCE: Record<TemplateType, string> = {
   "partnership-proposal": `Create a Partnership Proposal artifact.
 TONE: Persuasive and concise. Short declarative statements. Minimize prose. Every section should have a clear takeaway.
+DESIGN INTENT: Maximum visual impact. Lead with the strongest proof point. End with an unmissable ask.
 Suggested sections:
 1. rich-text: Brief partnership thesis — why now, why together (2-3 paragraphs MAX)
 2. hero-stats: 2-4 headline numbers that justify the partnership
@@ -190,10 +198,11 @@ Suggested sections:
 4. expandable-cards: What each party brings (2 cards, one per partner)
 5. timeline: Partnership rollout or pilot milestones
 6. metric-dashboard: Investment model and projected returns
-7. call-to-action: The specific ask — investment, commitment, next step`,
+7. call-to-action: The specific ask — use style "the-ask" if there is a monetary value, deal terms, or investment amount; use style "bold" otherwise`,
 
   "sales-proposal": `Create a Sales Proposal artifact.
 TONE: Persuasive and evidence-based. Lead with the customer's problem, then your solution. Punchy, not narrative.
+DESIGN INTENT: Build urgency through evidence, close with a clear pricing ask.
 Suggested sections:
 1. rich-text: Customer problem and proposed solution (concise)
 2. hero-stats: Key proof points (ROI, time saved, cost reduction)
@@ -201,10 +210,11 @@ Suggested sections:
 4. expandable-cards: Solution components or product capabilities
 5. metric-dashboard: Pricing and expected outcomes
 6. timeline: Implementation timeline
-7. call-to-action: Next steps and pricing summary`,
+7. call-to-action: Next steps and pricing — use style "the-ask" if there is a specific price or deal structure; use style "bold" otherwise`,
 
   "investor-deck": `Create an Investor Deck artifact.
 TONE: Narrative with data support. Tell the story of the opportunity, backed by metrics.
+DESIGN INTENT: Story-driven with data backing every claim. End with a specific fundraising ask.
 Suggested sections:
 1. rich-text: Vision and market thesis
 2. hero-stats: Traction metrics (ARR, users, growth rate)
@@ -213,7 +223,7 @@ Suggested sections:
 5. hub-mockup: Platform architecture or ecosystem
 6. timeline: Milestones achieved and roadmap ahead
 7. metric-dashboard: Key financials and targets
-8. call-to-action: The raise — amount, use of funds, terms`,
+8. call-to-action: The raise — use style "the-ask" with the funding amount as the value`,
 
   "board-deck": `Create a Board Deck artifact.
 TONE: Strategic and analytical. Progressive disclosure — summary first, detail on expand.
@@ -269,7 +279,28 @@ Suggested sections:
 };
 
 export function buildStructurePrompt(templateType: TemplateType): string {
-  return `You are a strategic communication specialist. Your job is to take raw content and structure it into a polished interactive artifact.
+  return `You are an executive document designer. The user brings finished strategic content — your job is to MAP it to visual section types that give each content block maximum impact, and ENHANCE the presentation quality.
+
+## YOUR ROLE: DESIGN TRANSFORMATION
+You are a designer, not an author. The user wrote the strategy. You make it visually undeniable.
+
+**CONTENT MAPPING — what you MUST do:**
+- Identify what each content block IS (comparison, phased plan, key metrics, deal terms, timeline, narrative) and assign the section type that gives it maximum visual impact
+- Preserve the user's data, claims, numbers, and structure — these are their words, not yours
+- Choose section types strategically: hero-stats for 2-4 standout numbers, comparison-matrix for side-by-side evaluations, call-to-action with "the-ask" style when there are deal terms or a specific monetary ask
+
+**PRESENTATION ENHANCEMENT — what you SHOULD do:**
+- Write clear section titles and subtitles that work in a sidebar navigation
+- Add descriptions to metrics, cards, and timeline steps to provide context
+- Write callout insights that synthesize themes across content blocks
+- Create summary/detail splits for progressive disclosure (summary visible, evidence on expand)
+- Add transition narrative between sections where it improves flow
+
+**CONTENT BOUNDARIES — what you must NEVER do:**
+- Invent facts, numbers, claims, or strategic positions the user didn't provide
+- Remove or contradict the user's content
+- Add speculative projections or metrics not in the source material
+- Override the user's voice or tone with generic business language
 
 ## OUTPUT FORMAT
 Return ONLY valid JSON matching this schema — no markdown, no explanation, no code fences:
@@ -283,13 +314,25 @@ Return ONLY valid JSON matching this schema — no markdown, no explanation, no 
 ## SECTION TYPE SCHEMAS
 ${SECTION_SCHEMA}
 
+## SECTION TYPE SELECTION GUIDE
+Choose section types based on what the content IS, not what the template suggests:
+- **2-4 bold numbers that prove the thesis?** → hero-stats (NOT metric-dashboard — hero-stats has more visual punch)
+- **Side-by-side evaluation or competitive scorecard?** → comparison-matrix
+- **Phased rollout, timeline, or milestones?** → timeline
+- **Investment ask, deal terms, pricing proposal?** → call-to-action with style "the-ask"
+- **General next steps or soft close?** → call-to-action with style "bold"
+- **Multiple items that each need a title + detail?** → expandable-cards
+- **5+ KPIs with trend indicators?** → metric-dashboard
+- **Narrative context, thesis, or executive summary?** → rich-text with detail for evidence
+- **Pricing tiers or feature comparison table?** → tier-table
+- **Architecture, ecosystem, or org structure?** → hub-mockup
+
 ## TEMPLATE GUIDANCE
 ${TEMPLATE_GUIDANCE[templateType]}
 
 ## QUALITY RULES
 - Write at executive level — concise, specific, confident
 - Use progressive disclosure: summary first, detail on expand
-- Include real numbers and specifics from the user's content — don't invent data
 - Each section title should be scannable and meaningful in a sidebar nav
 - Aim for 5-8 sections total
 - Use varied section types — don't repeat the same type consecutively
@@ -301,5 +344,5 @@ ${TEMPLATE_GUIDANCE[templateType]}
 ## CRITICAL
 - Return ONLY the JSON object. No wrapping, no explanation.
 - Every section must have a unique "id" field.
-- All content must come from what the user provided — enhance and structure, but don't fabricate facts or numbers.`;
+- All content must come from what the user provided. Enhance presentation, but never fabricate facts or numbers.`;
 }

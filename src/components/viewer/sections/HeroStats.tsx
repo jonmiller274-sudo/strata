@@ -20,7 +20,7 @@ function StatCard({
       transition={{ duration: 0.4, delay: index * 0.1 }}
       viewport={{ once: true, margin: "-50px" }}
       className={cn(
-        "flex flex-col items-center justify-center text-center rounded-2xl border border-border bg-card p-6",
+        "flex flex-col items-center justify-center text-center rounded-2xl border border-border bg-card p-7 md:p-8",
         stacked && "w-full"
       )}
     >
@@ -30,9 +30,9 @@ function StatCard({
       >
         {stat.value}
       </span>
-      <span className="mt-2 text-sm text-muted font-medium">{stat.label}</span>
+      <span className="mt-3 text-sm text-foreground/90 font-medium">{stat.label}</span>
       {stat.sublabel && (
-        <span className="mt-1 text-xs text-muted/70">{stat.sublabel}</span>
+        <span className="mt-2 text-xs text-muted leading-relaxed">{stat.sublabel}</span>
       )}
     </motion.div>
   );

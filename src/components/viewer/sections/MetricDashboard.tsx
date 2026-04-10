@@ -64,25 +64,43 @@ function MetricCardComponent({
     neutral: "text-muted",
   };
 
+  const isHighlighted = metric.highlight === true;
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       whileInView={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.4, delay: index * 0.1 }}
       viewport={{ once: true, margin: "-50px" }}
-      className="rounded-2xl border border-border bg-card p-6"
+      className={cn(
+        "rounded-2xl p-6",
+        isHighlighted
+          ? "border-2 border-accent-secondary/50 bg-accent-secondary/[0.04] shadow-[0_0_40px_rgba(20,184,166,0.08)]"
+          : "border border-border bg-card"
+      )}
     >
-      <p className="text-xs sm:text-sm font-medium text-muted line-clamp-2">{metric.label}</p>
+      <p
+        className={cn(
+          "text-xs sm:text-sm font-medium line-clamp-2",
+          isHighlighted ? "text-accent-secondary" : "text-muted"
+        )}
+      >
+        {metric.label}
+      </p>
 
       <div className="mt-2">
         <span
           className={cn(
             "block font-bold tabular-nums break-words",
-            metric.value.length <= 4
-              ? "text-3xl"
-              : metric.value.length <= 8
-                ? "text-2xl"
-                : "text-lg"
+            isHighlighted && "text-accent-secondary",
+            (() => {
+              const len = metric.value.length;
+              if (isHighlighted) {
+                // Bump up one tier when highlighted
+                return len <= 4 ? "text-4xl" : len <= 8 ? "text-3xl" : "text-xl";
+              }
+              return len <= 4 ? "text-3xl" : len <= 8 ? "text-2xl" : "text-lg";
+            })()
           )}
         >
           {metric.numeric_value != null && metric.numeric_value <= 9999 ? (
