@@ -46,6 +46,14 @@ function AnimatedCounter({ value, duration = 1.5 }: { value: number; duration?: 
   return <span ref={ref}>{count}</span>;
 }
 
+function getValueSizeClass(valueLength: number, isHighlighted: boolean): string {
+  if (isHighlighted) {
+    // Highlighted metrics render one tier larger
+    return valueLength <= 4 ? "text-4xl" : valueLength <= 8 ? "text-3xl" : "text-xl";
+  }
+  return valueLength <= 4 ? "text-3xl" : valueLength <= 8 ? "text-2xl" : "text-lg";
+}
+
 function MetricCardComponent({
   metric,
   index,
@@ -65,6 +73,7 @@ function MetricCardComponent({
   };
 
   const isHighlighted = metric.highlight === true;
+  const valueSizeClass = getValueSizeClass(metric.value.length, isHighlighted);
 
   return (
     <motion.div
@@ -92,15 +101,8 @@ function MetricCardComponent({
         <span
           className={cn(
             "block font-bold tabular-nums break-words",
-            isHighlighted && "text-accent-secondary",
-            (() => {
-              const len = metric.value.length;
-              if (isHighlighted) {
-                // Bump up one tier when highlighted
-                return len <= 4 ? "text-4xl" : len <= 8 ? "text-3xl" : "text-xl";
-              }
-              return len <= 4 ? "text-3xl" : len <= 8 ? "text-2xl" : "text-lg";
-            })()
+            valueSizeClass,
+            isHighlighted && "text-accent-secondary"
           )}
         >
           {metric.numeric_value != null && metric.numeric_value <= 9999 ? (
