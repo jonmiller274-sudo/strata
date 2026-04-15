@@ -6,6 +6,9 @@ Persistent memory for the Competitive Researcher agent.
 
 ## Self-Audit Rotation Log
 
+### 2026-04-13
+Checks run: SA-01, SA-02, SA-03, SA-04. Gaps found: 3.
+
 *Append after each self-audit run. Format: date, checks run, findings.*
 
 ---
