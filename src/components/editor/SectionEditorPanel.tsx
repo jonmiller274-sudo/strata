@@ -5,7 +5,7 @@ import type { Section } from "@/types/artifact";
 import { SECTION_TYPE_LABELS } from "@/types/artifact";
 import { EditableSectionRenderer } from "./EditableSectionRenderer";
 import { TypeSelectorDropdown } from "./TypeSelectorDropdown";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Loader2 } from "lucide-react";
 
 interface SectionEditorPanelProps {
   section: Section;
@@ -24,6 +24,7 @@ export function SectionEditorPanel({
 }: SectionEditorPanelProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [pendingRemap, setPendingRemap] = useState<Section | null>(null);
+  const [isRemapping, setIsRemapping] = useState(false);
 
   // Scroll to top when switching sections
   useEffect(() => {
@@ -50,6 +51,7 @@ export function SectionEditorPanel({
               setPendingRemap(remapped);
               onPendingPreview?.(remapped);
             }}
+            onLoadingChange={setIsRemapping}
           />
         </div>
 
@@ -83,12 +85,28 @@ export function SectionEditorPanel({
         )}
 
         {/* Editable section content */}
-        <EditableSectionRenderer
-          section={section}
-          isSelected={true}
-          onFieldChange={(path, value) => onFieldChange(section.id, path, value)}
-          onReplaceSection={(updated) => onReplaceSection(section.id, updated)}
-        />
+        {isRemapping ? (
+          <div className="space-y-3 animate-pulse" aria-label="Converting section type" aria-busy="true">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Loader2 className="w-3 h-3 animate-spin" />
+              <span>Remapping content...</span>
+            </div>
+            <div className="h-6 bg-white/5 rounded w-3/4" />
+            <div className="h-4 bg-white/5 rounded w-full" />
+            <div className="h-4 bg-white/5 rounded w-5/6" />
+            <div className="h-4 bg-white/5 rounded w-4/5" />
+            <div className="h-20 bg-white/5 rounded w-full mt-4" />
+            <div className="h-4 bg-white/5 rounded w-2/3" />
+            <div className="h-4 bg-white/5 rounded w-3/4" />
+          </div>
+        ) : (
+          <EditableSectionRenderer
+            section={section}
+            isSelected={true}
+            onFieldChange={(path, value) => onFieldChange(section.id, path, value)}
+            onReplaceSection={(updated) => onReplaceSection(section.id, updated)}
+          />
+        )}
       </div>
     </div>
   );

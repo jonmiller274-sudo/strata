@@ -10,6 +10,12 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-15 — Twenty-second run: 2 PRs (1 Tier 0, 1 Tier 1), 2 rubric items closed
+- QR-15 (icon-only aria-labels): after 21 previous runs, only 2 buttons remained — `ItemManager.tsx` drag handle (GripVertical) and remove (Trash2). All others in editor had been fixed. Comprehensive grep + manual file review was the right approach; don't trust the initial agent report alone.
+- QR-13 (loading skeleton): the 5s error persistence timer was present since the original implementation — the rubric description was outdated. The actual missing piece was the loading skeleton during AI remap. Solution: `onLoadingChange` prop on TypeSelectorDropdown → `isRemapping` state in SectionEditorPanel → animate-pulse skeleton replaces EditableSectionRenderer content.
+- GitHub PAT in ~/.zshrc (`GITHUB_PERSONAL_ACCESS_TOKEN`) was expired — use `gh` CLI directly for all GitHub operations; it uses keyring auth which stays valid.
+- With all rubric items now closed or blocked, the next work should focus on discovering new quality issues via codebase audit or waiting for planning session (QR-24, QR-16).
+
 ### 2026-04-05 — Nineteenth run: 6 PRs (all Tier 0), 2 rubric items closed
 - QR-03 and QR-13 were both effectively fixed in main but never marked done — audit the rubric against current code at start of run, not just "is status OPEN?"
 - `focus:outline-none focus:border-white/20` is a non-standard focus ring pattern; design system says `outline-none focus:ring-1 focus:ring-accent/50`. Found in 4 inputs in EditableSectionRenderer (tier-table card editor, callout textarea).

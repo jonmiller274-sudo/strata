@@ -62,12 +62,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 ### ~~QR-12: Consistent hover states on sidebar items~~ DONE
 - **Status:** DONE — PR #11
 
-### QR-13: Type selector dropdown polish
-- **Tier:** 1
-- **What:** Type selector error appears as toast above dropdown but disappears when dropdown closes. Make error persist for 5s regardless of dropdown state. Also add loading skeleton during type conversion.
-- **Files:** `src/components/editor/TypeSelectorDropdown.tsx`
-- **Test:** Trigger type change error — close dropdown — error still visible for 5s
-- **Status:** OPEN
+### ~~QR-13: Type selector dropdown polish~~ DONE
+- **Status:** DONE — PR #194. Added `onLoadingChange` prop to `TypeSelectorDropdown` and pulsing skeleton in `SectionEditorPanel` during AI remap. Error persistence (5s timer) was already present in original implementation.
 
 ### ~~QR-22: Timeline dots should show status differentiation~~ DONE
 - **Status:** DONE — Already implemented in AnimatedTimeline.tsx via STATUS_STYLES object (accent dot + ArrowRight for current, success dot + Check for completed, card dot + Circle for upcoming). Rubric pre-dated the implementation.
@@ -90,12 +86,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 ### ~~QR-14: ARIA live regions for dynamic content~~ DONE
 - **Status:** DONE — PR #QR-14. Added `aria-live="polite"` to save status in TopBar, message list in AiChatPanel, and all 6 error message containers in editor components.
 
-### QR-15: ARIA labels on all icon-only buttons
-- **Tier:** 0
-- **What:** Every button that contains only an icon (no text) must have `aria-label`. Audit all editor components.
-- **Files:** All files in `src/components/editor/`
-- **Test:** `grep -r "className=.*w-[34].*h-[34]" src/components/editor/ | grep "<button"` — every match has `aria-label`
-- **Status:** OPEN
+### ~~QR-15: ARIA labels on all icon-only buttons~~ DONE
+- **Status:** DONE — PR #193. Added `aria-label="Drag to reorder"` and `aria-label="Remove item"` to the GripVertical drag handle and Trash2 remove buttons in `ItemManager.tsx`. All other icon-only buttons in editor components already had aria-labels.
 
 ---
 

@@ -11,6 +11,11 @@ Format:
 
 ---
 
+## 2026-04-15
+
+- PR #194 | QR-13 | tier-1 | open | Add loading skeleton to section editor during type conversion
+- PR #193 | QR-15 | tier-0 | open | Add aria-label to drag handle and remove buttons in ItemManager
+
 ## 2026-04-04
 
 - PR #2 | QR-02 | tier-1 | merged | Unified editor button patterns to 3 standard variants
