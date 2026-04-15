@@ -60,6 +60,7 @@ function SortableRow({
       <button
         {...attributes}
         {...listeners}
+        aria-label="Drag to reorder"
         className="mt-3 opacity-0 group-hover:opacity-50 shrink-0 cursor-grab touch-none transition-opacity"
         tabIndex={-1}
       >
@@ -69,6 +70,7 @@ function SortableRow({
       {canRemove && (
         <button
           onClick={onRemove}
+          aria-label="Remove item"
           className="mt-3 opacity-0 group-hover:opacity-50 hover:!opacity-100 hover:text-red-400 transition-opacity shrink-0"
           tabIndex={-1}
         >
