@@ -23,11 +23,13 @@ const ALL_TYPES: SectionType[] = [
 interface TypeSelectorDropdownProps {
   section: Section;
   onTypeChange: (remappedSection: Section) => void;
+  onLoadingChange?: (loading: boolean) => void;
 }
 
 export function TypeSelectorDropdown({
   section,
   onTypeChange,
+  onLoadingChange,
 }: TypeSelectorDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -74,6 +76,7 @@ export function TypeSelectorDropdown({
     async (targetType: SectionType) => {
       setIsOpen(false);
       setIsLoading(true);
+      onLoadingChange?.(true);
       setPendingType(targetType);
       setError(null);
 
@@ -118,10 +121,11 @@ export function TypeSelectorDropdown({
         setError(msg);
       } finally {
         setIsLoading(false);
+        onLoadingChange?.(false);
         setPendingType(null);
       }
     },
-    [section, onTypeChange]
+    [section, onTypeChange, onLoadingChange]
   );
 
   const otherTypes = ALL_TYPES.filter((t) => t !== section.type);
