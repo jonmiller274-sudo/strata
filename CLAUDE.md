@@ -229,31 +229,44 @@ Keep infrastructure boring. Ship in 4 weeks.
 
 ---
 
-## Autonomous Agent Workflow
+## Autonomous Agent System
 
-A scheduled remote agent runs every 2 hours, making quality improvements and creating PRs for Jon to review.
+Six agents operate autonomously to maintain quality, monitor competition, and keep Jon informed. Each agent has a standalone prompt file in `docs/agents/`.
+
+### Agent Registry
+
+| Agent | Prompt | Execution | Schedule | Status |
+|-------|--------|-----------|----------|--------|
+| **Quality Engineer** | `docs/agents/quality-engineer-prompt.md` | Scheduled task | Every 2h (8AM-8PM ET) | Active |
+| **Discovery** | `docs/agents/discovery-prompt.md` | Scheduled task | Every 4h | Active |
+| **Director** | `docs/agents/director-prompt.md` | Scheduled task | Daily 7 AM ET | Active |
+| **PM Agent** | `docs/agents/pm-prompt.md` | GitHub Actions | Daily 6 PM ET | Active |
+| **Competitive Researcher** | `docs/agents/competitive-researcher-prompt.md` | GitHub Actions | Mon 8AM + 1st of month | Active |
+| **Usability Tester** | `.github/workflows/usability-test.yml` | GitHub Actions | Daily 6 AM ET | Active |
+
+### Execution Models
+- **Scheduled tasks** (Quality Engineer, Discovery, Director): Cloud-hosted Claude Code sessions that run on a cron schedule. Managed via `~/.claude/scheduled-tasks/`.
+- **GitHub Actions** (PM, Competitive Researcher, Usability Tester): TypeScript runners in `scripts/` triggered by GitHub Actions cron workflows.
 
 ### Reference Documents
 - **Design system:** `docs/design-system.md` — visual patterns, colors, typography, buttons, states
 - **Quality rubric:** `docs/quality-rubric.md` — prioritized work queue with pass/fail tests
+- **Agent coordination:** `docs/agents/README.md` — full registry, tier system, coordination protocol
 - **Quality Engineer advisor:** `~/.claude/skills/personal/advisors/quality-engineer.md`
 
-### How It Works
-1. Agent reads quality-rubric.md, picks the highest-priority OPEN item
-2. Reads design-system.md for the correct pattern
-3. Makes the fix on a new branch (`quality/QR-XX-short-description`)
-4. Runs `npm run build` — must pass with 0 errors
-5. Creates a PR with plain-English title and description
-6. Moves to the next item on the next cycle
+### Tier System & Auto-Merge
+- **Tier 0:** Zero-risk (docs, state files, spacing, ARIA labels) — auto-merges every 3 min
+- **Tier 1:** Visual polish, multi-file consistency — auto-merges after 15 min review window
+- **Tier 2:** Behavior changes, design-system additions — held for Jon's review (2h window)
+- **Tier 3:** Structural changes, design direction — never auto-merges, needs planning session
 
-### Agent Scope (can do WITHOUT Jon's approval)
+### Agent Scope (Quality Engineer — can do WITHOUT Jon's approval)
 - Fix visual inconsistencies (per design-system.md)
 - Add missing interaction states (loading, error, empty, success)
 - Improve accessibility (ARIA labels, keyboard support)
 - Fix TypeScript warnings
 - Unify component patterns to match design system
 - Performance improvements with no behavior change
-- Update landing page to reflect existing features (QR-16)
 
 ### Needs Planning Session (CANNOT do alone)
 - New features or capabilities
@@ -264,16 +277,13 @@ A scheduled remote agent runs every 2 hours, making quality improvements and cre
 - Changes to the quality rubric or design system themselves
 - Landing page copy/messaging/positioning changes
 
-### PR Requirements
-- One focused improvement per PR (atomic, self-contained)
-- Branch name: `quality/QR-XX-short-description`
-- Plain-English title (e.g., "Unify all editor buttons to 3 standard patterns")
-- Description includes: what changed, why, which rubric item, files modified
-- Build must pass (`npm run build` with 0 errors)
-- Mark the rubric item as DONE after PR is merged
+### How to Pause/Resume Agents
+- **Scheduled tasks:** Use `mcp__scheduled-tasks__update_scheduled_task` with `enabled: false/true`
+- **GitHub Actions:** Disable/enable the workflow in GitHub repo Settings → Actions
+- **Emergency stop:** Add `veto` label to any PR to prevent auto-merge
 
-### Current Priority: Quality Over Features
-The feature roadmap (docs/features/hardcoded-features-audit.md) is **frozen**. No new features until the quality rubric is complete. The autonomous agent only polishes existing capabilities to enterprise grade. New features happen in planning sessions with Jon.
+### Current Priority: Features
+Quality rubric Phase 1 is complete (22/24 items done). Remaining polish items (QR-13, QR-15) are handled by the Quality Engineer agent. Focus has shifted to features — see `docs/features/hardcoded-features-audit.md` for the roadmap.
 
 ---
 
@@ -305,4 +315,4 @@ Combine findings from both reviews into a single report. Fix critical issues bef
 
 ---
 
-*Last updated: 2026-04-04*
+*Last updated: 2026-04-15*

@@ -1,5 +1,8 @@
 # Strata Editor Quality Rubric
 
+**Phase 1 Status: COMPLETE (2026-04-15)**
+22 of 24 items done. Remaining: QR-13 (type selector polish, Tier 1), QR-15 (ARIA audit, Tier 0), QR-24 (Hub Diagram, Tier 3 — blocked on design decision). Quality Engineer agent handles QR-13 and QR-15 automatically. Focus has shifted to features — see `docs/features/hardcoded-features-audit.md`.
+
 The autonomous agent works through this list top-to-bottom. Each item has a measurable pass/fail test. Mark items DONE by moving them to the Completed section at the bottom.
 
 Reference: `docs/design-system.md` for correct patterns.
