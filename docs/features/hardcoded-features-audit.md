@@ -1,6 +1,9 @@
 # Hardcoded Features Audit — Investor Deck Editing Session (Apr 3, 2026)
 
-Every feature below was performed via custom Supabase scripts because the product UI doesn't support it. These represent the **real editing workflow** for customers building important documents — not the creation happy path.
+**Phase A Status: SHIPPED (verified 2026-04-15)**
+F1 (add at position), F2 (delete), F5 (reorder) are all implemented in the product UI. See verification notes below each feature.
+
+Every feature below was originally performed via custom Supabase scripts because the product UI didn't support it. These represent the **real editing workflow** for customers building important documents — not the creation happy path.
 
 ---
 
@@ -10,11 +13,13 @@ Every feature below was performed via custom Supabase scripts because the produc
 **What we did manually:** `add-investor-deck-beats.mjs` — prepended 2 new beats to the top of the deck. `add-ready-to-scale-beat.mjs` — inserted a beat at position 4 (middle of the deck).
 **What the user needs in UI:** "Add section" button that lets you insert a new beat at any position — top, bottom, or between existing beats. Pick a section type, enter content, done.
 **Priority:** P0 — blocks all real usage. Users can't add content without this.
+**Status: SHIPPED** — `addSection(section, position?)` in `useEditor.ts`. Insert dividers ("+" buttons) between every section in sidebar. Verified 2026-04-15: 9 insert divider buttons in DOM, `onInsertAt` wired to `EditorLayout.tsx:523`.
 
 ### F2: Delete Beats (Including Non-Adjacent)
 **What we did manually:** `remove-beats-10-11.mjs` — deleted beats 7, 10, and 11 in one operation (non-adjacent indices).
 **What the user needs in UI:** Select one or more beats and delete them. Confirmation dialog. Remaining beats auto-renumber.
 **Priority:** P0 — can't clean up or iterate without delete.
+**Status: SHIPPED** — `deleteSection(id)` in `useEditor.ts`. Trash icon on each section with 2-click confirmation (click trash → "Confirm delete?" appears → click to confirm). Verified 2026-04-15: 8 delete buttons with proper ARIA labels, Escape key dismisses confirmation.
 
 ### F3: Change Section Type
 **What we did manually:** `upgrade-investor-deck-beats.mjs` — changed Beat 1 from `expandable-cards` to `hub-mockup` and Beat 2 from `rich-text` to `timeline`, restructuring the content JSON to match the new type's schema.
@@ -30,6 +35,7 @@ Every feature below was performed via custom Supabase scripts because the produc
 **What we did manually:** Implicit in every script — beats shifted position whenever we added/removed/consolidated.
 **What the user needs in UI:** Drag-and-drop reordering in the sidebar or a dedicated "reorder" mode. Visual preview of the new order before saving.
 **Priority:** P0 — fundamental editing action. Every iteration involves reordering.
+**Status: SHIPPED** — `reorderSections(fromIndex, toIndex)` in `useEditor.ts`. DndKit drag-and-drop in sidebar (`SortableSectionList.tsx`). Grip handle appears on hover. Also: `duplicateSection(id)` ships as a bonus — deep copy with new UUID, inserts after original. Verified 2026-04-15: 8 drag handles + 8 duplicate buttons in DOM.
 
 ### F6: Replace Screenshot with Native Content
 **What we did manually:** `rebuild-proof-beat.mjs` — replaced a blurry screenshot-only beat with a native `expandable-cards` section built from the screenshot's content.
@@ -77,10 +83,11 @@ This is 5-6 loops of iteration. The product currently supports only the first st
 
 ## 3. Recommended Build Order
 
-### Phase A: Unblock Basic Editing (P0s — build first)
-1. **Reorder beats** — drag-and-drop in sidebar. Smallest scope, highest frequency.
-2. **Delete beats** — select + confirm. Trivial backend (splice array), big UX unlock.
-3. **Add beat at position** — "+" button between beats. Pick type, enter content. This completes the CRUD cycle.
+### Phase A: Unblock Basic Editing (P0s) — COMPLETE
+1. **Reorder beats** — SHIPPED. Drag-and-drop via DndKit in sidebar.
+2. **Delete beats** — SHIPPED. Trash icon with 2-click confirmation.
+3. **Add beat at position** — SHIPPED. "+" insert dividers between every section.
+4. **Duplicate beats** — SHIPPED (bonus). Copy icon with deep clone + new UUID.
 
 ### Phase B: Enable Iteration (P1s — build second)
 4. **Change section type** — dropdown on beat header. Content remapping logic per type pair. AI can assist with ambiguous mappings.
