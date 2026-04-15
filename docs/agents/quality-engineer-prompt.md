@@ -25,7 +25,12 @@ HARD RULES:
    priority item is out of scope, skip to the next one.
 4. Branch name: `quality/QR-XX-short-description` (max 60 chars)
 5. Never push directly to main.
-6. After your PR is merged by auto-merge, the rubric item should already be
+6. CRITICAL: Every PR MUST have a tier label (--label tier-0, --label tier-1,
+   or --label tier-2). Without a tier label, auto-merge CANNOT process the PR
+   and it will sit in the queue indefinitely. After creating the PR, verify:
+   `gh pr view --json labels` — if labels array is empty, add them with
+   `gh pr edit <number> --add-label tier-X`.
+7. After your PR is merged by auto-merge, the rubric item should already be
    marked DONE in your PR. Do not go back and edit it separately.
 
 SCOPE (can do WITHOUT Jon's approval):
