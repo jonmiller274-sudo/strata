@@ -9,6 +9,13 @@ Format:
 - PR #N | QR-XX | tier | status | one-line summary
 ```
 
+## 2026-04-15
+
+- PR #196 | disc | tier-0 | open | Normalize font-semibold/tracking-wider in ComparisonMatrix.tsx (new section type, missed audit)
+- PR #195 | disc | tier-0 | open | Normalize font-semibold/tracking-widest/text-[9px]/text-[11px]/p-5 in FlywheelDiagram.tsx (new section type, missed audit)
+- PR #194 | QR-13 | tier-1 | open | Add loading skeleton to section editor during type conversion
+- PR #193 | QR-15 | tier-0 | open | Add aria-label to drag handle and remove buttons in ItemManager
+
 ---
 
 ## 2026-04-04
