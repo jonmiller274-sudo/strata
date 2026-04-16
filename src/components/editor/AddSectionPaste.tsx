@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback } from "react";
 import type { Section } from "@/types/artifact";
-import { Loader2, Sparkles } from "lucide-react";
+import { Loader2, Sparkles, Globe } from "lucide-react";
 import { MultiSectionReview } from "./MultiSectionReview";
 
 const MAX_CHARS = 50_000;
@@ -26,23 +26,69 @@ export function AddSectionPaste({
     null
   );
   const [error, setError] = useState<string | null>(null);
+  const [statusText, setStatusText] = useState("");
   const abortRef = useRef<AbortController | null>(null);
+
+  // Detect if content is a single URL
+  const isUrl = /^https?:\/\/\S+$/i.test(content.trim());
+
+  /** Fetch text from a URL, then structure it */
+  const handleUrlImport = useCallback(
+    async (signal: AbortSignal) => {
+      setStatusText("Fetching page content...");
+
+      const extractRes = await fetch("/api/extract/url", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: content.trim() }),
+        signal,
+      });
+
+      if (!extractRes.ok) {
+        const errBody = await extractRes.json().catch(() => null);
+        throw new Error(
+          errBody?.error || "Failed to extract content from URL"
+        );
+      }
+
+      const extractData = await extractRes.json();
+
+      if (!extractData.text || extractData.text.trim().length === 0) {
+        throw new Error(
+          "Could not extract text from this page. Try pasting the content directly."
+        );
+      }
+
+      return extractData.text as string;
+    },
+    [content]
+  );
 
   const handleGenerate = useCallback(async () => {
     if (!content.trim() || isGenerating) return;
 
     setIsGenerating(true);
     setError(null);
+    setStatusText("");
 
     const controller = new AbortController();
     abortRef.current = controller;
 
     try {
+      let textToStructure = content.trim();
+
+      // If it's a URL, fetch the content first
+      if (isUrl) {
+        textToStructure = await handleUrlImport(controller.signal);
+      }
+
+      setStatusText("Structuring content... (15-30s)");
+
       const res = await fetch("/api/ai/structure", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          content: `Document: "${documentTitle}"${documentSubtitle ? ` — ${documentSubtitle}` : ""}\n\n${content.trim()}`,
+          content: `Document: "${documentTitle}"${documentSubtitle ? ` — ${documentSubtitle}` : ""}\n\n${textToStructure}`,
           templateType: "platform-vision",
         }),
         signal: controller.signal,
@@ -86,9 +132,10 @@ export function AddSectionPaste({
       setError(msg);
     } finally {
       setIsGenerating(false);
+      setStatusText("");
       abortRef.current = null;
     }
-  }, [content, isGenerating, documentTitle, documentSubtitle]);
+  }, [content, isGenerating, isUrl, handleUrlImport, documentTitle, documentSubtitle]);
 
   // Multi-section review mode
   if (generatedSections) {
@@ -114,13 +161,14 @@ export function AddSectionPaste({
     <div className="flex flex-col h-full overflow-hidden">
       <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
         <p className="text-xs text-muted-foreground">
-          Paste your content — AI will structure it into interactive sections.
+          Paste your content or a URL — AI will structure it into interactive
+          sections.
         </p>
 
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="Paste text from a doc, email, transcript, or notes..."
+          placeholder="Paste text from a doc, email, transcript, notes — or a URL to import from..."
           className="flex-1 min-h-[200px] w-full bg-white/5 rounded-lg px-3 py-2 text-sm outline-none placeholder:text-muted-foreground/50 focus:ring-1 focus:ring-accent/50 resize-none"
           disabled={isGenerating}
         />
@@ -149,7 +197,12 @@ export function AddSectionPaste({
           {isGenerating ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              Structuring... (15-30s)
+              {statusText || "Structuring... (15-30s)"}
+            </>
+          ) : isUrl ? (
+            <>
+              <Globe className="w-4 h-4" />
+              Import from URL
             </>
           ) : (
             <>

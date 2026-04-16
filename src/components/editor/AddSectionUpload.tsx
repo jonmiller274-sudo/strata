@@ -2,12 +2,15 @@
 
 import { useState, useRef, useCallback } from "react";
 import type { Section } from "@/types/artifact";
-import { Loader2, FileUp, Image as ImageIcon, FileText } from "lucide-react";
+import { Loader2, FileUp, Image as ImageIcon, FileText, Presentation } from "lucide-react";
 import { MultiSectionReview } from "./MultiSectionReview";
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
 const MAX_PDF_SIZE = 10 * 1024 * 1024; // 10MB
+const MAX_PPTX_SIZE = 4 * 1024 * 1024; // 4MB (Vercel body limit)
 const ALLOWED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp"];
+const PPTX_MIME =
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation";
 
 type UploadState = "idle" | "processing" | "review";
 
@@ -160,15 +163,97 @@ export function AddSectionUpload({
     [documentTitle, documentSubtitle]
   );
 
+  const processPptx = useCallback(
+    async (file: File, signal: AbortSignal) => {
+      // Step 1: Extract text from slides
+      setStatusText("Extracting text from slides...");
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const pptxRes = await fetch("/api/upload/pptx", {
+        method: "POST",
+        body: formData,
+        signal,
+      });
+
+      if (!pptxRes.ok) {
+        const errBody = await pptxRes.json().catch(() => null);
+        throw new Error(
+          errBody?.error || "Failed to extract text from presentation"
+        );
+      }
+
+      const pptxData = await pptxRes.json();
+
+      if (!pptxData.text || pptxData.text.trim().length === 0) {
+        throw new Error(
+          "Could not extract text from this presentation. It may be mostly images — try uploading a PDF export or screenshot instead."
+        );
+      }
+
+      // Step 2: Structure the text into sections via AI
+      setStatusText(
+        `Structuring ${pptxData.slideCount} slide${pptxData.slideCount !== 1 ? "s" : ""} into sections...`
+      );
+
+      const structureRes = await fetch("/api/ai/structure", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          content: `Document: "${documentTitle}"${documentSubtitle ? ` — ${documentSubtitle}` : ""}\n\n${pptxData.text}`,
+          templateType: "platform-vision",
+        }),
+        signal,
+      });
+
+      if (!structureRes.ok) {
+        const errBody = await structureRes.json().catch(() => null);
+        let errMsg = errBody?.error || "Failed to structure presentation content";
+        if (errMsg.includes("credit balance")) {
+          errMsg = "AI service credits depleted";
+        } else if (
+          errMsg.includes("rate limit") ||
+          errMsg.includes("rate_limit")
+        ) {
+          errMsg = "AI service is busy — try again in a moment";
+        } else if (errMsg.includes("overloaded")) {
+          errMsg = "AI service is temporarily overloaded";
+        }
+        throw new Error(errMsg);
+      }
+
+      const data = await structureRes.json();
+      const sections: Section[] = data.artifact?.sections ?? [];
+
+      if (sections.length === 0) {
+        throw new Error(
+          "AI could not structure the presentation content into sections"
+        );
+      }
+
+      // Deduplicate IDs
+      const ts = Date.now();
+      return sections.map((s: Section, i: number) => ({
+        ...s,
+        id: `${s.id}-${ts}-${i}`,
+      }));
+    },
+    [documentTitle, documentSubtitle]
+  );
+
   const handleFile = useCallback(
     async (file: File) => {
       setError(null);
 
       const isImage = ALLOWED_IMAGE_TYPES.includes(file.type);
       const isPdf = file.type === "application/pdf";
+      const isPptx = file.type === PPTX_MIME || file.name.endsWith(".pptx");
 
-      if (!isImage && !isPdf) {
-        setError("Unsupported file type. Upload a PDF, PNG, JPEG, or WebP.");
+      if (!isImage && !isPdf && !isPptx) {
+        setError(
+          "Unsupported file type. Upload a PDF, PPTX, PNG, JPEG, or WebP."
+        );
         return;
       }
 
@@ -182,6 +267,13 @@ export function AddSectionUpload({
         return;
       }
 
+      if (isPptx && file.size > MAX_PPTX_SIZE) {
+        setError(
+          "Presentation must be under 4MB. Try exporting as PDF instead."
+        );
+        return;
+      }
+
       setState("processing");
       setUploadFile({ name: file.name, size: formatFileSize(file.size) });
       const controller = new AbortController();
@@ -190,7 +282,9 @@ export function AddSectionUpload({
       try {
         const sections = isImage
           ? await processImage(file, controller.signal)
-          : await processPdf(file, controller.signal);
+          : isPptx
+            ? await processPptx(file, controller.signal)
+            : await processPdf(file, controller.signal);
 
         setGeneratedSections(sections);
         setState("review");
@@ -205,7 +299,7 @@ export function AddSectionUpload({
         abortRef.current = null;
       }
     },
-    [processImage, processPdf]
+    [processImage, processPdf, processPptx]
   );
 
   const handleDrop = useCallback(
@@ -308,9 +402,12 @@ export function AddSectionUpload({
                 <p className="text-sm font-medium">
                   Drop file here or click to browse
                 </p>
-                <div className="flex items-center justify-center gap-3 mt-2">
+                <div className="flex items-center justify-center gap-3 mt-2 flex-wrap">
                   <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
                     <FileText className="w-3 h-3" /> PDF (10MB)
+                  </span>
+                  <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                    <Presentation className="w-3 h-3" /> PPTX (4MB)
                   </span>
                   <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
                     <ImageIcon className="w-3 h-3" /> PNG, JPEG, WebP (5MB)
@@ -323,7 +420,7 @@ export function AddSectionUpload({
           <input
             ref={fileInputRef}
             type="file"
-            accept=".pdf,.png,.jpg,.jpeg,.webp,application/pdf,image/png,image/jpeg,image/webp"
+            accept=".pdf,.pptx,.png,.jpg,.jpeg,.webp,application/pdf,application/vnd.openxmlformats-officedocument.presentationml.presentation,image/png,image/jpeg,image/webp"
             onChange={handleFileInput}
             className="hidden"
           />
@@ -349,8 +446,8 @@ export function AddSectionUpload({
                 2
               </span>
               <span>
-                <strong>PDFs</strong> — text is extracted and structured into
-                multiple interactive sections
+                <strong>PDFs &amp; Slide Decks</strong> — text is extracted and
+                structured into multiple interactive sections
               </span>
             </div>
             <div className="flex gap-2 text-xs text-muted-foreground">

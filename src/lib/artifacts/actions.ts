@@ -224,3 +224,72 @@ export async function unarchiveArtifact(
 
   return { success: true };
 }
+
+export async function duplicateArtifact(
+  slug: string
+): Promise<{ artifact: Artifact } | { error: string }> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "Not authenticated" };
+  }
+
+  const original = await getArtifactForEdit(slug);
+  if (!original) {
+    return { error: "Artifact not found" };
+  }
+
+  if (original.author_id && original.author_id !== user.id) {
+    return { error: "Not authorized" };
+  }
+
+  // Deep-clone the artifact data
+  const clone = JSON.parse(JSON.stringify(original)) as Artifact;
+
+  // Assign new identity
+  const newSlug = generateSlug();
+  clone.id = crypto.randomUUID();
+  clone.slug = newSlug;
+  clone.title = `${original.title} (Copy)`;
+  clone.is_published = false;
+  clone.archived_at = undefined;
+
+  // Assign new IDs to all sections to avoid collisions
+  clone.sections = clone.sections.map((section) => ({
+    ...section,
+    id: crypto.randomUUID(),
+  }));
+
+  const now = new Date().toISOString();
+
+  const { data, error } = await getSupabase()
+    .from("artifacts")
+    .insert({
+      id: clone.id,
+      slug: clone.slug,
+      title: clone.title,
+      subtitle: clone.subtitle ?? null,
+      author_name: clone.author_name ?? null,
+      author_id: user.id,
+      plan_tier: clone.plan_tier,
+      theme: clone.theme,
+      layout_mode: clone.layout_mode ?? null,
+      nav_style: clone.nav_style ?? null,
+      branding: clone.branding ?? null,
+      sections: clone.sections,
+      is_published: false,
+      archived_at: null,
+      created_at: now,
+      updated_at: now,
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error("[duplicateArtifact]", error);
+    return { error: error.message };
+  }
+
+  return { artifact: data as Artifact };
+}

@@ -11,6 +11,7 @@ import {
   Archive,
   ArchiveRestore,
   Loader2,
+  Copy,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -78,6 +79,18 @@ export default function DashboardPage() {
     setActionLoading(null);
   }
 
+  async function handleDuplicate(slug: string) {
+    setActionLoading(`duplicate-${slug}`);
+    const { duplicateArtifact } = await import("@/lib/artifacts/actions");
+    const result = await duplicateArtifact(slug);
+    if ("artifact" in result) {
+      setArtifacts((prev) => [result.artifact, ...prev]);
+    } else {
+      console.error("[handleDuplicate]", result.error);
+    }
+    setActionLoading(null);
+  }
+
   if (authLoading || loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
@@ -141,6 +154,7 @@ export default function DashboardPage() {
                 artifacts={published}
                 actionLoading={actionLoading}
                 onArchive={handleArchive}
+                onDuplicate={handleDuplicate}
               />
             )}
 
@@ -152,6 +166,7 @@ export default function DashboardPage() {
                 artifacts={drafts}
                 actionLoading={actionLoading}
                 onArchive={handleArchive}
+                onDuplicate={handleDuplicate}
               />
             )}
 
@@ -180,6 +195,7 @@ function ArtifactSection({
   actionLoading,
   onArchive,
   onUnarchive,
+  onDuplicate,
   isArchived = false,
 }: {
   title: string;
@@ -188,6 +204,7 @@ function ArtifactSection({
   actionLoading: string | null;
   onArchive?: (slug: string) => void;
   onUnarchive?: (slug: string) => void;
+  onDuplicate?: (slug: string) => void;
   isArchived?: boolean;
 }) {
   return (
@@ -240,6 +257,20 @@ function ArtifactSection({
                       <ExternalLink className="h-3 w-3" />
                       View
                     </Link>
+                  )}
+                  {onDuplicate && (
+                    <button
+                      onClick={() => onDuplicate(artifact.slug)}
+                      disabled={actionLoading === `duplicate-${artifact.slug}`}
+                      className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-muted hover:text-foreground hover:bg-card-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                    >
+                      {actionLoading === `duplicate-${artifact.slug}` ? (
+                        <Loader2 className="h-3 w-3 animate-spin" />
+                      ) : (
+                        <Copy className="h-3 w-3" />
+                      )}
+                      Duplicate
+                    </button>
                   )}
                   {onArchive && (
                     <button

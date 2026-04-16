@@ -25,6 +25,7 @@ Every feature below was originally performed via custom Supabase scripts because
 **What we did manually:** `upgrade-investor-deck-beats.mjs` — changed Beat 1 from `expandable-cards` to `hub-mockup` and Beat 2 from `rich-text` to `timeline`, restructuring the content JSON to match the new type's schema.
 **What the user needs in UI:** "Change section type" dropdown on any beat. Content maps to the new type's structure where possible, with a preview before confirming. Unmappable fields flagged.
 **Priority:** P1 — the most common iteration pattern. Users will constantly realize "this content would work better as a timeline/cards/dashboard." Without this, they're stuck with their initial choice.
+**Status: SHIPPED** — TypeSelectorDropdown shows all 10 alternative types. Calls `/api/ai/remap-section` which uses AI to restructure content for the new type. Preview bar with Apply/Cancel buttons in SectionEditorPanel. Preview rendered in real-time in the right panel via `typeChangePreview` state in SplitViewLayout.
 
 ### F4: Consolidate Multiple Beats into One
 **What we did manually:** `consolidate-journeys.mjs` — merged 2 guided-journey beats + 1 tier-table into a single guided-journey with combined content (14 events, 2 phases, 4 counters).
@@ -41,6 +42,7 @@ Every feature below was originally performed via custom Supabase scripts because
 **What we did manually:** `rebuild-proof-beat.mjs` — replaced a blurry screenshot-only beat with a native `expandable-cards` section built from the screenshot's content.
 **What the user needs in UI:** Two paths: (1) When uploading a screenshot, offer "Convert to native section" using AI vision to extract structured content. (2) On any screenshot beat, show "Rebuild as native" action that uses AI to parse the image into structured section data.
 **Priority:** P1 — screenshots are a crutch during early creation. The upgrade path from screenshot → native is the quality escalator. This is also where the AI extraction gap matters most (see `memory/project_strata_ai_generation_gap.md`).
+**Status: SHIPPED** — Two paths implemented: (1) AddSectionUpload accepts images, calls `/api/ai/vision-to-section` with Claude vision to extract native sections. (2) "Extract structure" button in EditableSectionRenderer on sections with `image_url` — fetches image, runs vision extraction, replaces section content while preserving id/image_url.
 
 ---
 
@@ -89,9 +91,9 @@ This is 5-6 loops of iteration. The product currently supports only the first st
 3. **Add beat at position** — SHIPPED. "+" insert dividers between every section.
 4. **Duplicate beats** — SHIPPED (bonus). Copy icon with deep clone + new UUID.
 
-### Phase B: Enable Iteration (P1s — build second)
-4. **Change section type** — dropdown on beat header. Content remapping logic per type pair. AI can assist with ambiguous mappings.
-5. **Screenshot → native conversion** — AI vision extracts structured content from uploaded images. This is the quality bridge and directly addresses the AI extraction gap.
+### Phase B: Enable Iteration (P1s) — COMPLETE
+4. **Change section type** — SHIPPED. TypeSelectorDropdown with AI remapping + preview/confirm flow.
+5. **Screenshot → native conversion** — SHIPPED. Vision upload in AddSectionUpload + "Extract structure" button on image sections.
 
 ### Phase C: Advanced Editing (P2 — build third)
 6. **Consolidate beats** — AI-assisted merge of 2+ beats into one. Lower frequency but high impact when needed.

@@ -46,38 +46,52 @@ export default function CreatePage() {
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const [artifactUsage, setArtifactUsage] = useState({ current: 0, limit: 2 });
   const [error, setError] = useState<string | null>(null);
-  const [isExtractingPdf, setIsExtractingPdf] = useState(false);
-  const [pdfFileName, setPdfFileName] = useState<string | null>(null);
+  const [isExtractingFile, setIsExtractingFile] = useState(false);
+  const [uploadFileName, setUploadFileName] = useState<string | null>(null);
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handlePdfUpload = useCallback(async (file: File) => {
-    if (file.type !== "application/pdf") {
-      setError("Please upload a PDF file");
-      return;
-    }
-    if (file.size > 10 * 1024 * 1024) {
-      setError("PDF is too large (max 10MB)");
+  const handleFileUpload = useCallback(async (file: File) => {
+    const isPdf = file.type === "application/pdf";
+    const isPptx =
+      file.type ===
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation" ||
+      file.name.endsWith(".pptx");
+
+    if (!isPdf && !isPptx) {
+      setError("Please upload a PDF or PowerPoint (.pptx) file");
       return;
     }
 
-    setIsExtractingPdf(true);
+    if (isPdf && file.size > 10 * 1024 * 1024) {
+      setError("PDF is too large (max 10MB)");
+      return;
+    }
+    if (isPptx && file.size > 4 * 1024 * 1024) {
+      setError(
+        "Presentation is too large (max 4MB). Try exporting as PDF instead."
+      );
+      return;
+    }
+
+    setIsExtractingFile(true);
     setError(null);
-    setPdfFileName(file.name);
+    setUploadFileName(file.name);
 
     try {
       const formData = new FormData();
       formData.append("file", file);
 
-      const res = await fetch("/api/upload/pdf", {
+      const endpoint = isPptx ? "/api/upload/pptx" : "/api/upload/pdf";
+      const res = await fetch(endpoint, {
         method: "POST",
         body: formData,
       });
 
-      const pdfContentType = res.headers.get("content-type");
-      if (!pdfContentType?.includes("application/json")) {
+      const resContentType = res.headers.get("content-type");
+      if (!resContentType?.includes("application/json")) {
         setError("AI service timed out — please try again");
-        setPdfFileName(null);
+        setUploadFileName(null);
         return;
       }
 
@@ -86,25 +100,28 @@ export default function CreatePage() {
         data = await res.json();
       } catch {
         setError("AI service timed out — please try again");
-        setPdfFileName(null);
+        setUploadFileName(null);
         return;
       }
 
       if (!res.ok) {
-        setError(data.error || "Failed to extract text from PDF");
-        setPdfFileName(null);
+        setError(data.error || `Failed to extract text from ${isPptx ? "presentation" : "PDF"}`);
+        setUploadFileName(null);
         return;
       }
 
       setContent(data.text);
       if (data.truncated) {
-        setError(`PDF text was truncated to 50,000 characters (${data.pageCount} pages extracted)`);
+        const countLabel = isPptx
+          ? `${data.slideCount} slide${data.slideCount !== 1 ? "s" : ""}`
+          : `${data.pageCount} page${data.pageCount !== 1 ? "s" : ""}`;
+        setError(`Text was truncated to 50,000 characters (${countLabel} extracted)`);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to upload PDF");
-      setPdfFileName(null);
+      setError(err instanceof Error ? err.message : "Failed to process file");
+      setUploadFileName(null);
     } finally {
-      setIsExtractingPdf(false);
+      setIsExtractingFile(false);
     }
   }, []);
 
@@ -356,10 +373,10 @@ export default function CreatePage() {
                 />
               </div>
 
-              {/* PDF Upload Zone */}
+              {/* File Upload Zone */}
               <div>
                 <label className="text-sm font-medium text-muted">
-                  Upload a PDF
+                  Upload a file
                 </label>
                 <div
                   onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
@@ -368,7 +385,7 @@ export default function CreatePage() {
                     e.preventDefault();
                     setIsDragOver(false);
                     const file = e.dataTransfer.files[0];
-                    if (file) handlePdfUpload(file);
+                    if (file) handleFileUpload(file);
                   }}
                   onClick={() => fileInputRef.current?.click()}
                   className={cn(
@@ -376,38 +393,38 @@ export default function CreatePage() {
                     isDragOver
                       ? "border-accent bg-accent/10"
                       : "border-border hover:border-accent/40 hover:bg-card-hover",
-                    isExtractingPdf && "pointer-events-none opacity-70"
+                    isExtractingFile && "pointer-events-none opacity-70"
                   )}
                 >
                   <input
                     ref={fileInputRef}
                     type="file"
-                    accept=".pdf,application/pdf"
+                    accept=".pdf,.pptx,application/pdf,application/vnd.openxmlformats-officedocument.presentationml.presentation"
                     className="hidden"
                     onChange={(e) => {
                       const file = e.target.files?.[0];
-                      if (file) handlePdfUpload(file);
+                      if (file) handleFileUpload(file);
                       e.target.value = "";
                     }}
                   />
-                  {isExtractingPdf ? (
+                  {isExtractingFile ? (
                     <>
                       <Loader2 className="h-6 w-6 text-accent animate-spin" />
-                      <p className="text-sm text-muted">Extracting text from PDF...</p>
+                      <p className="text-sm text-muted">Extracting text...</p>
                     </>
-                  ) : pdfFileName ? (
+                  ) : uploadFileName ? (
                     <>
                       <FileText className="h-6 w-6 text-accent" />
-                      <p className="text-sm text-foreground font-medium">{pdfFileName}</p>
+                      <p className="text-sm text-foreground font-medium">{uploadFileName}</p>
                       <p className="text-xs text-muted-foreground">Text extracted — edit below or upload a different file</p>
                     </>
                   ) : (
                     <>
                       <Upload className="h-6 w-6 text-muted-foreground" />
                       <p className="text-sm text-muted">
-                        <span className="text-accent font-medium">Browse</span> or drop a PDF here
+                        <span className="text-accent font-medium">Browse</span> or drop a file here
                       </p>
-                      <p className="text-xs text-muted-foreground">Strategy docs, decks, and reports up to 10MB</p>
+                      <p className="text-xs text-muted-foreground">PDF (10MB) or PowerPoint PPTX (4MB)</p>
                     </>
                   )}
                 </div>
@@ -427,7 +444,7 @@ export default function CreatePage() {
                 <textarea
                   id="create-content"
                   value={content}
-                  onChange={(e) => { setContent(e.target.value); if (pdfFileName) setPdfFileName(null); }}
+                  onChange={(e) => { setContent(e.target.value); if (uploadFileName) setUploadFileName(null); }}
                   placeholder="Paste your strategy notes, outlines, bullet points, docs — anything you want to turn into an interactive artifact..."
                   rows={16}
                   className="mt-1 w-full rounded-xl border border-border bg-card px-4 py-3 text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent resize-y font-mono text-sm leading-relaxed"
