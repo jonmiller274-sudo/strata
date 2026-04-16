@@ -6,7 +6,10 @@
     "dev": "next dev --turbopack",
     "build": "NODE_ENV=production next build",
     "start": "next start",
-    "lint": "eslint src/"
+    "lint": "eslint src/",
+    "eval:screenshot": "tsx scripts/eval/screenshot-sections.ts",
+    "eval:score": "tsx scripts/eval/visual-eval.ts",
+    "eval:demo": "tsx scripts/eval/screenshot-sections.ts --demo && tsx scripts/eval/visual-eval.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.80.0",
@@ -32,6 +35,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^9.39.4",
+    "@playwright/test": "^1.59.1",
     "@tailwindcss/postcss": "^4.2.2",
     "@types/jszip": "^3.4.0",
     "@types/node": "^25.5.0",

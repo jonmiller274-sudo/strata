@@ -42,7 +42,7 @@ export function SectionRenderer({ section }: { section: Section }) {
   }
 
   return (
-    <section id={section.id} className="scroll-mt-8">
+    <section id={section.id} className="scroll-mt-8" data-section-type={section.type}>
       {/* Render uploaded image at full resolution when present.
           Uses max-width: 100% so it scales down in narrow containers but
           never scales UP (preserving native pixel density on retina displays).

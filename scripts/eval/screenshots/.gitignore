@@ -1,0 +1,5 @@
+# Screenshot outputs from visual eval harness
+# These are generated artifacts — don't commit to git
+*.png
+manifest.json
+scores.json
