@@ -74,6 +74,12 @@ Step 1 — Pull latest and read context
   4. tasks/lessons.md — past mistakes to avoid repeating
   5. docs/agents/quality/scratchpad.md — lessons from previous runs
   6. Last 5 entries of docs/agents/coordination-log.md
+  7. Check for LLM Judge feedback on your recent PRs:
+     gh pr list --repo jonmiller274-sudo/strata --state all \
+       --search "head:quality/ label:veto" --json number,title \
+       --limit 3
+     If any were vetoed, read the judge's comment to understand why
+     and avoid the same mistake in this run.
 
 Step 2 — Pick the target item
   Find the highest-priority (lowest P number) OPEN item that is:
@@ -97,6 +103,36 @@ Step 5 — Verify the fix
   npm run build
   If build fails, fix it. If you can't fix it, revert and log the failure.
   Verify the rubric item's test criteria passes (grep, visual check, etc).
+
+Step 5b — Visual Quality Score (VQS) before/after
+  If the fix is visual (CSS, layout, spacing, typography, colors), run the
+  visual eval harness to measure improvement:
+
+  # Start dev server in background
+  npm run dev &
+  DEV_PID=$!
+  sleep 6
+
+  # Screenshot the affected section(s) BEFORE the fix (stash changes first)
+  git stash
+  npx tsx scripts/eval/screenshot-sections.ts --demo
+  npx tsx scripts/eval/visual-eval.ts
+  cp scripts/eval/screenshots/scores.json /tmp/vqs-before.json
+  git stash pop
+
+  # Screenshot AFTER the fix
+  npx tsx scripts/eval/screenshot-sections.ts --demo
+  npx tsx scripts/eval/visual-eval.ts
+  cp scripts/eval/screenshots/scores.json /tmp/vqs-after.json
+
+  kill $DEV_PID
+
+  Compare scores. Include the VQS delta in the PR body (see Step 7).
+  If VQS decreased for any section, investigate — the fix may have caused
+  a regression. Fix the regression before opening the PR.
+
+  Note: If the eval harness fails (e.g., Playwright not installed), skip
+  this step and note "VQS: not measured" in the PR. Do not block on eval.
 
 Step 6 — Mark the rubric item as DONE
   In docs/quality-rubric.md, change the item's status:
@@ -128,6 +164,14 @@ Step 7 — Commit, push, and create PR
 
   ## Files changed
   {list of files}
+
+  ## Visual Quality Score
+  | Section | Before | After | Delta |
+  |---------|--------|-------|-------|
+  | {section} | {score} | {score} | {+/-N} |
+  Average VQS: {before} → {after} ({+/-N})
+
+  (If VQS was not measured, write: VQS: not measured — {reason})
 
   ## Test
   {how to verify — grep command, visual check, build output}
@@ -171,4 +215,5 @@ Step 10 — Stop. Do not pick up another item. One item per run.
 
 ## Changes log
 
+- **2026-04-15** — Added VQS before/after measurement (Step 5b), VQS delta in PR template, LLM Judge feedback reading (Step 1.7).
 - **2026-04-15** — Extracted from inline CLAUDE.md into standalone prompt file.
