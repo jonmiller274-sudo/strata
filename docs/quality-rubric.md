@@ -36,6 +36,30 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 ### ~~QR-21: Palette consistency audit — charts and active states should use Velocity palette~~ DONE
 - **Status:** DONE — PR #10
 
+### QR-25: Regression: QR-01 — text-[9px] persists in EditableSectionRenderer and GuidedJourney
+- **What:** Two components still use `text-[9px]`, which is on the design-system.md kill list ("normalize to text-[10px]"). QR-01 was marked DONE but these instances were missed or added afterward. EditableSectionRenderer uses it for column-header labels in the comparison table editor; GuidedJourney uses it for timeline node labels in the viewer. Both must be normalized to `text-[10px]`.
+- **Files:** `src/components/editor/EditableSectionRenderer.tsx:960`, `src/components/viewer/sections/GuidedJourney.tsx:350`
+- **Test:** `grep -rn "text-\[9px\]" src/components/` — must return 0 matches
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-26: Non-standard primary action button variant in AddSectionPaste
+- **What:** The "Structure with AI" / "Import from URL" button in AddSectionPaste uses `bg-accent/20 text-accent hover:bg-accent/30` — a ghost-accent variant that doesn't match any of the 3 button patterns defined in design-system.md § Buttons: "Every button in the editor must be one of these." As the primary action of this panel it should use the Primary pattern: `bg-accent text-white hover:bg-accent/80 transition-colors`.
+- **Files:** `src/components/editor/AddSectionPaste.tsx:195`
+- **Test:** Check "Structure with AI" button — must have `bg-accent text-white hover:bg-accent/80` classes, not `bg-accent/20 text-accent`
+- **Priority:** 1
+- **Tier:** 1
+- **Status:** OPEN
+
+### QR-27: Non-standard border-accent/40 in AddSectionUpload processing state
+- **What:** The upload drop zone uses `border-accent/40` in its processing state (`AddSectionUpload.tsx:379`). The design system border system defines only `border-accent/30` (soft focus ring) and `border-accent/50` (focus ring on inputs). `/40` is an undocumented intermediate value. Normalize to `border-accent/30` — a passive processing indicator doesn't need stronger emphasis than a soft focus ring.
+- **Files:** `src/components/editor/AddSectionUpload.tsx:379`
+- **Test:** `grep "border-accent/40" src/components/` — must return 0 matches
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
 ---
 
 ## Priority 2: Interaction Completeness (4-state rule)

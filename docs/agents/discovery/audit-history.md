@@ -11,6 +11,10 @@ Format:
 
 ---
 
+## 2026-04-15
+
+- 14:15 | visual-consistency | src/components/editor/, src/components/viewer/sections/, AddSectionPaste.tsx, AddSectionUpload.tsx | 3 filed (QR-25, QR-26, QR-27) | Regression text-[9px] in EditableSectionRenderer+GuidedJourney; non-standard ghost-accent button in AddSectionPaste; non-standard border-accent/40 in AddSectionUpload
+
 ## 2026-04-04
 
 *(No audits run yet. First scheduled run pending.)*
