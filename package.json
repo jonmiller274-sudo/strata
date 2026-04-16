@@ -9,7 +9,10 @@
     "lint": "eslint src/",
     "eval:screenshot": "tsx scripts/eval/screenshot-sections.ts",
     "eval:score": "tsx scripts/eval/visual-eval.ts",
-    "eval:demo": "tsx scripts/eval/screenshot-sections.ts --demo && tsx scripts/eval/visual-eval.ts"
+    "eval:demo": "tsx scripts/eval/screenshot-sections.ts --demo && tsx scripts/eval/visual-eval.ts",
+    "eval:generate": "tsx scripts/eval/generate-fixtures.ts",
+    "eval:run": "tsx scripts/eval/run-eval.ts",
+    "eval:quick": "tsx scripts/eval/run-eval.ts --quick"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.80.0",
