@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -12,10 +12,16 @@ import {
   ArchiveRestore,
   Loader2,
   Copy,
+  Search,
+  X,
+  ArrowUpDown,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
+import { getRelativeTime } from "@/lib/utils/relative-time";
 import { useAuth } from "@/components/auth/AuthProvider";
 import type { Artifact } from "@/types/artifact";
+
+type SortBy = "updated" | "created" | "title";
 
 export default function DashboardPage() {
   const { user, loading: authLoading } = useAuth();
@@ -23,6 +29,8 @@ export default function DashboardPage() {
   const [artifacts, setArtifacts] = useState<Artifact[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState<SortBy>("updated");
 
   useEffect(() => {
     if (authLoading) return;
@@ -43,6 +51,7 @@ export default function DashboardPage() {
     loadArtifacts();
   }, [user, authLoading, router]);
 
+  // The "X of Y free artifacts" counter is based on the full artifacts array — unaffected by search/sort
   const activeCount = artifacts.filter(
     (a) => a.is_published && !a.archived_at
   ).length;
@@ -91,6 +100,31 @@ export default function DashboardPage() {
     setActionLoading(null);
   }
 
+  // Apply search filter and sort — client-side only
+  const filteredAndSorted = useMemo(() => {
+    let result = artifacts;
+
+    // Filter by search query (case-insensitive title substring match)
+    if (searchQuery.trim()) {
+      const q = searchQuery.trim().toLowerCase();
+      result = result.filter((a) => a.title.toLowerCase().includes(q));
+    }
+
+    // Sort
+    result = [...result].sort((a, b) => {
+      if (sortBy === "title") {
+        return a.title.localeCompare(b.title);
+      }
+      if (sortBy === "created") {
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      }
+      // "updated" — default
+      return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+    });
+
+    return result;
+  }, [artifacts, searchQuery, sortBy]);
+
   if (authLoading || loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
@@ -99,9 +133,12 @@ export default function DashboardPage() {
     );
   }
 
-  const published = artifacts.filter((a) => a.is_published && !a.archived_at);
-  const drafts = artifacts.filter((a) => !a.is_published && !a.archived_at);
-  const archived = artifacts.filter((a) => a.archived_at);
+  const published = filteredAndSorted.filter((a) => a.is_published && !a.archived_at);
+  const drafts = filteredAndSorted.filter((a) => !a.is_published && !a.archived_at);
+  const archived = filteredAndSorted.filter((a) => a.archived_at);
+
+  const hasResults = published.length > 0 || drafts.length > 0 || archived.length > 0;
+  const isSearching = searchQuery.trim().length > 0;
 
   return (
     <div className="min-h-screen bg-background">
@@ -146,6 +183,60 @@ export default function DashboardPage() {
           </div>
         ) : (
           <div className="mt-6 space-y-8">
+            {/* Search and Sort Controls */}
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+              {/* Search bar */}
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted pointer-events-none" />
+                <input
+                  type="text"
+                  placeholder="Search documents..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full rounded-lg border border-border bg-card py-2 pl-9 pr-9 text-sm placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent/50 transition-colors"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-foreground transition-colors"
+                    aria-label="Clear search"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+
+              {/* Sort dropdown */}
+              <div className="flex items-center gap-2 shrink-0">
+                <ArrowUpDown className="h-4 w-4 text-muted" />
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as SortBy)}
+                  className="rounded-lg border border-border bg-card py-2 pl-3 pr-8 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 transition-colors appearance-none cursor-pointer"
+                  aria-label="Sort by"
+                >
+                  <option value="updated">Last edited</option>
+                  <option value="created">Date created</option>
+                  <option value="title">Title</option>
+                </select>
+              </div>
+            </div>
+
+            {/* No search results state */}
+            {isSearching && !hasResults && (
+              <div className="mt-4 text-center py-12">
+                <p className="text-muted">
+                  No documents match &ldquo;{searchQuery}&rdquo;
+                </p>
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="mt-3 text-sm text-accent hover:underline"
+                >
+                  Clear search
+                </button>
+              </div>
+            )}
+
             {/* Published artifacts */}
             {published.length > 0 && (
               <ArtifactSection
@@ -213,99 +304,105 @@ function ArtifactSection({
         {title} ({count})
       </h2>
       <div className="mt-3 space-y-2">
-        {artifacts.map((artifact) => (
-          <div
-            key={artifact.id}
-            className={cn(
-              "flex items-center justify-between rounded-xl border border-border bg-card p-4 transition-colors hover:bg-card-hover",
-              isArchived && "opacity-60"
-            )}
-          >
-            <div className="min-w-0">
-              <h3 className="font-medium truncate">{artifact.title}</h3>
-              {artifact.subtitle && (
-                <p className="mt-0.5 text-sm text-muted truncate">
-                  {artifact.subtitle}
-                </p>
-              )}
-              <p className="mt-1 text-xs text-muted-foreground">
-                Updated{" "}
-                {new Date(artifact.updated_at).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-              </p>
-            </div>
+        {artifacts.map((artifact) => {
+          const relativeTime = getRelativeTime(artifact.updated_at);
+          const absoluteDate = new Date(artifact.updated_at).toLocaleDateString(
+            "en-US",
+            { month: "short", day: "numeric", year: "numeric" }
+          );
+          const sectionCount = artifact.sections.length;
 
-            <div className="flex items-center gap-2 ml-4 shrink-0">
-              {!isArchived && (
-                <>
-                  <Link
-                    href={`/edit/${artifact.slug}`}
-                    className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-card-hover transition-colors"
-                  >
-                    <Pencil className="h-3 w-3" />
-                    Edit
-                  </Link>
-                  {artifact.is_published && (
+          return (
+            <div
+              key={artifact.id}
+              className={cn(
+                "flex items-center justify-between rounded-xl border border-border bg-card p-4 transition-colors hover:bg-card-hover",
+                isArchived && "opacity-60"
+              )}
+            >
+              <div className="min-w-0">
+                <h3 className="font-medium truncate">{artifact.title}</h3>
+                {artifact.subtitle && (
+                  <p className="mt-0.5 text-sm text-muted truncate">
+                    {artifact.subtitle}
+                  </p>
+                )}
+                <p className="mt-1 text-xs text-muted-foreground flex items-center gap-2">
+                  <span title={absoluteDate}>Updated {relativeTime}</span>
+                  <span className="text-muted opacity-50">·</span>
+                  <span>{sectionCount} {sectionCount === 1 ? "section" : "sections"}</span>
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 ml-4 shrink-0">
+                {!isArchived && (
+                  <>
                     <Link
-                      href={`/${artifact.slug}`}
-                      target="_blank"
+                      href={`/edit/${artifact.slug}`}
                       className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-card-hover transition-colors"
                     >
-                      <ExternalLink className="h-3 w-3" />
-                      View
+                      <Pencil className="h-3 w-3" />
+                      Edit
                     </Link>
-                  )}
-                  {onDuplicate && (
-                    <button
-                      onClick={() => onDuplicate(artifact.slug)}
-                      disabled={actionLoading === `duplicate-${artifact.slug}`}
-                      className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-muted hover:text-foreground hover:bg-card-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-                    >
-                      {actionLoading === `duplicate-${artifact.slug}` ? (
-                        <Loader2 className="h-3 w-3 animate-spin" />
-                      ) : (
-                        <Copy className="h-3 w-3" />
-                      )}
-                      Duplicate
-                    </button>
-                  )}
-                  {onArchive && (
-                    <button
-                      onClick={() => onArchive(artifact.slug)}
-                      disabled={actionLoading === artifact.slug}
-                      className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-muted hover:text-foreground hover:bg-card-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-                    >
-                      {actionLoading === artifact.slug ? (
-                        <Loader2 className="h-3 w-3 animate-spin" />
-                      ) : (
-                        <Archive className="h-3 w-3" />
-                      )}
-                      Archive
-                    </button>
-                  )}
-                </>
-              )}
+                    {artifact.is_published && (
+                      <Link
+                        href={`/${artifact.slug}`}
+                        target="_blank"
+                        className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-card-hover transition-colors"
+                      >
+                        <ExternalLink className="h-3 w-3" />
+                        View
+                      </Link>
+                    )}
+                    {onDuplicate && (
+                      <button
+                        onClick={() => onDuplicate(artifact.slug)}
+                        disabled={actionLoading === `duplicate-${artifact.slug}`}
+                        className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-muted hover:text-foreground hover:bg-card-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                      >
+                        {actionLoading === `duplicate-${artifact.slug}` ? (
+                          <Loader2 className="h-3 w-3 animate-spin" />
+                        ) : (
+                          <Copy className="h-3 w-3" />
+                        )}
+                        Duplicate
+                      </button>
+                    )}
+                    {onArchive && (
+                      <button
+                        onClick={() => onArchive(artifact.slug)}
+                        disabled={actionLoading === artifact.slug}
+                        className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-muted hover:text-foreground hover:bg-card-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                      >
+                        {actionLoading === artifact.slug ? (
+                          <Loader2 className="h-3 w-3 animate-spin" />
+                        ) : (
+                          <Archive className="h-3 w-3" />
+                        )}
+                        Archive
+                      </button>
+                    )}
+                  </>
+                )}
 
-              {isArchived && onUnarchive && (
-                <button
-                  onClick={() => onUnarchive(artifact.slug)}
-                  disabled={actionLoading === artifact.slug}
-                  className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-accent hover:bg-card-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-                >
-                  {actionLoading === artifact.slug ? (
-                    <Loader2 className="h-3 w-3 animate-spin" />
-                  ) : (
-                    <ArchiveRestore className="h-3 w-3" />
-                  )}
-                  Restore
-                </button>
-              )}
+                {isArchived && onUnarchive && (
+                  <button
+                    onClick={() => onUnarchive(artifact.slug)}
+                    disabled={actionLoading === artifact.slug}
+                    className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-accent hover:bg-card-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    {actionLoading === artifact.slug ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      <ArchiveRestore className="h-3 w-3" />
+                    )}
+                    Restore
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
