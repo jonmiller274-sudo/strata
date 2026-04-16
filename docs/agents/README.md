@@ -6,12 +6,13 @@ Home for all autonomous agent state. Every file here is human-readable markdown 
 
 ## Agent Registry
 
-Six agents operate autonomously. Each has a prompt, scratchpad, and history file.
+Seven agents operate autonomously. Each has a prompt, scratchpad, and history file.
 
 | Agent | Purpose | Schedule | Time (ET) | Status |
 |-------|---------|----------|-----------|--------|
 | **Quality Engineer** | Picks highest-priority QR item, fixes it, opens a PR | Every 2h | :00/:30 | PAUSED |
 | **Discovery** | Audits deployed app, files new QR items (never fixes) | Every 2h | :15 | PAUSED |
+| **Visual QA** | Monitors visual quality, detects regressions, files issues | Daily | 5:00 AM | PAUSED |
 | **Director** | Morning digest summarizing agent activity | Daily | 7:00 AM | Active |
 | **Usability Tester** | Playwright scenarios against prod, files findings as Issues | Daily | 6:00 AM | Active |
 | **Competitive Researcher** | Self-audit vs feature matrix (weekly) + competitor monitoring (monthly) | Mon + 1st | 8:00/9:00 AM | Building |
@@ -21,8 +22,9 @@ Six agents operate autonomously. Each has a prompt, scratchpad, and history file
 
 | Agent | Prompt | State Directory | Workflow |
 |-------|--------|-----------------|----------|
-| Quality Engineer | `CLAUDE.md` (inline) | `docs/agents/quality/` | Cloud trigger (paused) |
+| Quality Engineer | `docs/agents/quality-engineer-prompt.md` | `docs/agents/quality/` | Cloud trigger (paused) |
 | Discovery | `docs/agents/discovery-prompt.md` | `docs/agents/discovery/` | Cloud trigger (paused) |
+| Visual QA | `docs/agents/vqa-prompt.md` | `docs/agents/vqa/` | Cloud trigger (paused) |
 | Director | `docs/agents/director-prompt.md` | `docs/agents/director/` | Cloud trigger |
 | Usability Tester | `docs/plans/usability-tester-implementation-plan.md` | `tests/usability/` | `.github/workflows/usability-test.yml` |
 | Competitive Researcher | `docs/agents/competitive-researcher-prompt.md` | `docs/agents/competitive-researcher/` | `.github/workflows/competitive-research.yml` |
@@ -37,6 +39,7 @@ Six agents operate autonomously. Each has a prompt, scratchpad, and history file
 
 ### Read-Only (open PRs that touch docs only, or create Issues)
 - **Discovery** — writes to `quality-rubric.md` only
+- **Visual QA** — writes VQS reports to `docs/vqa/`, files regression/failure GitHub Issues
 - **Director** — writes digest markdown + creates GitHub Issue
 - **Usability Tester** — creates GitHub Issue with findings
 - **Competitive Researcher** — creates GitHub Issue + updates snapshots

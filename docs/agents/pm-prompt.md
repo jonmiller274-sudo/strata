@@ -42,6 +42,14 @@ Step 2 — Collect quality rubric status
   Count items completed in the last 7 days.
   Calculate total completed (all time).
 
+Step 2b — Collect VQA data
+  Read docs/agents/vqa/vqs-index.md for the last 7 days of VQS scores.
+  Read the latest docs/vqa/YYYY-MM-DD.md report for details.
+  Count regressions and failures this week.
+  Check gh issue list --label vqa-regression,vqa-failure --state open for
+  active visual quality issues.
+  If no VQA data exists, note "VQA: not yet active" and skip.
+
 Step 3 — Collect coordination log activity (last 7 days)
   Read docs/agents/coordination-log.md.
   Count entries per agent. Note any unusual patterns (agent not running,
@@ -113,6 +121,14 @@ If nothing important, write "Quiet day. No action needed."}
 - Rubric: {N} open, {N} completed this week, {N} total completed
 - Agent velocity: {N} PRs opened this week, {N} merged
 - Backlog health: {Jon's review queue has N PRs. Oldest is N days old.}
+
+## Visual Quality
+
+- 7-day avg VQS: {N} (trend: {improving / stable / degrading})
+- Regressions this week: {N} ({top issue or "none"})
+- Sections below ship threshold: {N} ({list or "none"})
+- LLM Judge: {N} PRs reviewed, {N} vetoed ({reason or "none"})
+{If no VQA data: "VQA: not yet active — baselines being established"}
 
 ## Competitive
 

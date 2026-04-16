@@ -231,7 +231,7 @@ Keep infrastructure boring. Ship in 4 weeks.
 
 ## Autonomous Agent System
 
-Six agents operate autonomously to maintain quality, monitor competition, and keep Jon informed. Each agent has a standalone prompt file in `docs/agents/`.
+Seven agents operate autonomously to maintain quality, monitor competition, and keep Jon informed. Each agent has a standalone prompt file in `docs/agents/`.
 
 ### Agent Registry
 
@@ -239,10 +239,12 @@ Six agents operate autonomously to maintain quality, monitor competition, and ke
 |-------|--------|-----------|----------|--------|
 | **Quality Engineer** | `docs/agents/quality-engineer-prompt.md` | Scheduled task | Every 2h (8AM-8PM ET) | Active |
 | **Discovery** | `docs/agents/discovery-prompt.md` | Scheduled task | Every 4h | Active |
+| **Visual QA** | `docs/agents/vqa-prompt.md` | Scheduled task | Daily 5 AM ET | Paused |
 | **Director** | `docs/agents/director-prompt.md` | Scheduled task | Daily 7 AM ET | Active |
 | **PM Agent** | `docs/agents/pm-prompt.md` | GitHub Actions | Daily 6 PM ET | Active |
 | **Competitive Researcher** | `docs/agents/competitive-researcher-prompt.md` | GitHub Actions | Mon 8AM + 1st of month | Active |
 | **Usability Tester** | `.github/workflows/usability-test.yml` | GitHub Actions | Daily 6 AM ET | Active |
+| **LLM Judge** | `.github/workflows/llm-judge.yml` | GitHub Actions | On QE PR open | Active |
 
 ### Execution Models
 - **Scheduled tasks** (Quality Engineer, Discovery, Director): Cloud-hosted Claude Code sessions that run on a cron schedule. Managed via `~/.claude/scheduled-tasks/`.
@@ -251,6 +253,8 @@ Six agents operate autonomously to maintain quality, monitor competition, and ke
 ### Reference Documents
 - **Design system:** `docs/design-system.md` — visual patterns, colors, typography, buttons, states
 - **Quality rubric:** `docs/quality-rubric.md` — prioritized work queue with pass/fail tests
+- **Visual quality rubric:** `docs/eval/visual-quality-rubric.md` — VQS scoring (6 dimensions, 0-100 scale)
+- **VQA reports:** `docs/vqa/` — daily visual quality reports with regressions and failures
 - **Agent coordination:** `docs/agents/README.md` — full registry, tier system, coordination protocol
 - **Quality Engineer advisor:** `~/.claude/skills/personal/advisors/quality-engineer.md`
 

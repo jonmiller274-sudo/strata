@@ -69,6 +69,12 @@ Step 8 — Read coordination-log.md
   Read the most recent 5 entries to understand what other agents did.
   Do not rewrite them — just use them to inform the "Notable" section.
 
+Step 8b — Read VQA report (if available)
+  Check if docs/vqa/YYYY-MM-DD.md exists (today or yesterday).
+  If it does, read the Summary table and include VQS data in the digest.
+  Also read docs/agents/vqa/vqs-index.md for trend data (last 7 days).
+  If no VQA report exists, write "VQA: not yet active" in the digest.
+
 Step 9 — Produce the digest using the template below. Save it to:
   /Users/JonMiller/strata/docs/digest/YYYY-MM-DD.md
   (YYYY-MM-DD = today's date in America/New_York)
@@ -113,6 +119,14 @@ DIGEST TEMPLATE:
 
 - Discovery agent: {N} new items ({list top 3, or "phase 2 — not yet active"})
 - Analytics agent: {N} items (phase 2 — not yet active)
+
+## Visual Quality
+
+- Avg VQS: {N} ({trend: up/down/stable vs 7-day average})
+- Regressions: {N} ({section names or "none"})
+- Failures: {N} below ship threshold ({section names or "none"})
+- Coverage: {N} sections scored
+{If no VQA report: "VQA: not yet active"}
 
 ## Rubric Health
 

@@ -12,7 +12,9 @@
     "eval:demo": "tsx scripts/eval/screenshot-sections.ts --demo && tsx scripts/eval/visual-eval.ts",
     "eval:generate": "tsx scripts/eval/generate-fixtures.ts",
     "eval:run": "tsx scripts/eval/run-eval.ts",
-    "eval:quick": "tsx scripts/eval/run-eval.ts --quick"
+    "eval:quick": "tsx scripts/eval/run-eval.ts --quick",
+    "eval:monitor": "tsx scripts/eval/vqa-monitor.ts",
+    "eval:judge": "tsx scripts/eval/llm-judge.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.80.0",
