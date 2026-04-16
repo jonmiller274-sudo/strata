@@ -10,6 +10,11 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-16 — Twenty-fourth run: QR-15 final close
+- QR-15 audit: SortableSectionList.tsx had 2 remaining icon-only buttons without aria-label: InsertDivider Plus button (line 52) and GripVertical drag handle (line 114).
+- The rubric's heuristic test (`grep className=.*w-[34].*h-[34] | grep <button`) returned 0 results because these buttons have `w-5 h-5` or no size class on the button itself — the icons inside them carry the size class. Test heuristic can miss violations where the button is not sized with w-3/w-4.
+- Rule: for icon-only audits, also manually check buttons whose className doesn't contain `w-3`/`w-4` but which have no visible text content.
+
 ### 2026-04-15 — Twenty-third run: 2 PRs (both Tier 0), discovery on newly-added section types
 - All rubric items closed or Tier 3 blocked. Went straight to discovery.
 - New pattern: when new viewer section types are added (d6815eb added FlywheelDiagram, ComparisonMatrix, HeroStats, CallToAction), they bypass the quality rubric history and need immediate audit.
