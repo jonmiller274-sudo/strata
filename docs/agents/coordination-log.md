@@ -2,7 +2,7 @@
 
 
 ## 2026-04-16
-- 14:00 | quality | QR-15: Add aria-label to InsertDivider Plus and GripVertical drag handle in SortableSectionList | PR #199 | tier-0
+- 14:00 | quality | QR-15: Add aria-label to InsertDivider Plus and GripVertical drag handle in SortableSectionList | PR #202 | tier-0
 - 08:11 | vqa | VQS Report → docs/vqa/2026-04-16.md (0 regressions, 2 failures, 11 sections scored, avg VQS 78)
 
 - 08:05 | vqa | VQS Report → docs/vqa/2026-04-16.md (0 regressions, 0 failures, 8 sections scored, avg VQS 86)
