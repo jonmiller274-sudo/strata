@@ -17,6 +17,10 @@ Discovery rotates through these audit types so no single mode goes stale:
 
 *(Which mode last ran. Append newest at top. Agent picks the oldest mode that hasn't run in the last 3 days.)*
 
+### 2026-04-15 14:15 — Visual consistency sweep
+Ran visual consistency sweep. Filed 3 new items: QR-25 (regression text-[9px]), QR-26 (non-standard button in AddSectionPaste), QR-27 (non-standard border-accent/40 in AddSectionUpload).
+Next rotation: **Interaction completeness sweep**.
+
 ### 2026-04-04 — Seeded
 No audits run yet. First scheduled run will start with **visual sweep** (deployed app vs design-system.md).
 
@@ -27,6 +31,12 @@ First audit queue is post-Phase-1 visual polish. After that, rotate through inte
 ## What I Learned
 
 *(Patterns Discovery noticed about where bugs tend to cluster. Append newest at top.)*
+
+### 2026-04-15 — New feature files skip design-system review
+New components added for the multi-format ingestion feature (AddSectionPaste, AddSectionUpload) introduced non-standard button and border patterns not caught by the Quality Engineer's existing sweeps. New feature files should be audited on the next visual sweep cycle — they tend to introduce one-off patterns that pre-date the design system conventions.
+
+### 2026-04-15 — Kill-list items can regress silently
+QR-01 (text-[9px] kill) was marked DONE but two instances of text-[9px] remain in the codebase — one in a newly-modified editor file, one in a viewer component. Kill-list items should be re-verified with a grep after any feature build, not assumed fixed permanently.
 
 ### 2026-04-04 — Seeded
 Nothing yet.
