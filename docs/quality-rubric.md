@@ -93,12 +93,12 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 ### ~~QR-14: ARIA live regions for dynamic content~~ DONE
 - **Status:** DONE — PR #QR-14. Added `aria-live="polite"` to save status in TopBar, message list in AiChatPanel, and all 6 error message containers in editor components.
 
-### QR-15: ARIA labels on all icon-only buttons
+### ~~QR-15: ARIA labels on all icon-only buttons~~ DONE
 - **Tier:** 0
 - **What:** Every button that contains only an icon (no text) must have `aria-label`. Audit all editor components.
 - **Files:** All files in `src/components/editor/`
 - **Test:** `grep -r "className=.*w-[34].*h-[34]" src/components/editor/ | grep "<button"` — every match has `aria-label`
-- **Status:** OPEN
+- **Status:** DONE (2026-04-16, PR #199)
 
 ---
 
