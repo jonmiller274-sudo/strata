@@ -1,0 +1,45 @@
+name: LLM Judge — Review Agent PRs
+
+on:
+  pull_request:
+    types: [opened, ready_for_review, labeled]
+
+# Only run on quality/discovery branches
+# Skip if already reviewed (check for existing judge comment)
+jobs:
+  judge:
+    if: |
+      !github.event.pull_request.draft &&
+      (startsWith(github.head_ref, 'quality/') || startsWith(github.head_ref, 'discovery/'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pull-requests: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - run: npm ci
+
+      # Check if judge already reviewed this PR (avoid duplicate comments)
+      - name: Check for existing review
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          EXISTING=$(gh pr view ${{ github.event.pull_request.number }} --json comments --jq '.comments[].body' | grep -c "LLM Judge Review" || true)
+          echo "already_reviewed=$EXISTING" >> "$GITHUB_OUTPUT"
+
+      - name: Run LLM Judge
+        if: steps.check.outputs.already_reviewed == '0'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: npx tsx scripts/eval/llm-judge.ts --pr ${{ github.event.pull_request.number }}
