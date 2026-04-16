@@ -26,7 +26,7 @@ function DesktopTable({ section }: { section: ComparisonMatrixSection }) {
         <thead>
           <tr>
             {/* Row label column header */}
-            <th className="pb-3 pr-4 text-left text-xs font-semibold uppercase tracking-wider text-muted w-40" />
+            <th className="pb-3 pr-4 text-left text-xs font-medium uppercase tracking-wide text-muted w-40" />
             {columns.map((col, colIdx) => (
               <motion.th
                 key={col.id}
@@ -85,7 +85,7 @@ function DesktopTable({ section }: { section: ComparisonMatrixSection }) {
 
           {verdict && (
             <tr className="border-t-2 border-border bg-card-hover">
-              <td className="py-3 pr-4 text-xs font-semibold uppercase tracking-wider text-muted">
+              <td className="py-3 pr-4 text-xs font-medium uppercase tracking-wide text-muted">
                 {verdict.label}
               </td>
               {columns.map((col, colIdx) => (
@@ -129,7 +129,7 @@ function MobileStacked({ section }: { section: ComparisonMatrixSection }) {
           viewport={{ once: true, margin: "-50px" }}
           className="rounded-xl border border-border bg-card p-4"
         >
-          <p className="text-sm font-semibold text-foreground">{row.label}</p>
+          <p className="text-sm font-medium text-foreground">{row.label}</p>
           {row.description && (
             <p className="mt-0.5 text-xs text-muted">{row.description}</p>
           )}
@@ -167,7 +167,7 @@ function MobileStacked({ section }: { section: ComparisonMatrixSection }) {
           viewport={{ once: true, margin: "-50px" }}
           className="rounded-xl border border-border bg-card-hover p-4"
         >
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted">
+          <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted">
             {verdict.label}
           </p>
           <div className="grid grid-cols-2 gap-2">
