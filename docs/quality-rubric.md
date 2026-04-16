@@ -36,8 +36,8 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 ### ~~QR-21: Palette consistency audit — charts and active states should use Velocity palette~~ DONE
 - **Status:** DONE — PR #10
 
-### QR-25: Normalize text-[9px] to text-[10px] in editor and viewer
-- **What:** Two components use `text-[9px]`, which is on the design system kill list. Per `docs/design-system.md` Typography section, `text-[9px]` must normalize to `text-[10px]`. The sub-10px size is too small for legibility and falls outside the defined type scale.
+### QR-25: Regression — text-[9px] kill-list violations in editor and viewer
+- **What:** Two components contain `text-[9px]`, which is on the design system kill list (QR-01, merged 2026-04-04). Per `docs/design-system.md` Typography section, `text-[9px]` must normalize to `text-[10px]`. These instances were either missed by PR #1 or introduced since. Both appear in label contexts where `text-[10px]` is the correct token.
 - **Files:** `src/components/editor/EditableSectionRenderer.tsx:960`, `src/components/viewer/sections/GuidedJourney.tsx:350`
 - **Test:** `grep -r "text-\[9px\]" src/components/editor/ src/components/viewer/` returns zero results
 - **Priority:** 1
@@ -45,7 +45,7 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 - **Status:** OPEN
 
 ### QR-26: Replace raw hex colors in not-found.tsx with CSS variable tokens
-- **What:** `not-found.tsx` uses 5 raw hex values (`#0a0b10`, `#6366f1`, `#e8eaf0`, `#8b92a8`) instead of semantic CSS variable tokens. Per `docs/design-system.md` Colors section: "Never use raw hex in components." All values have direct CSS variable equivalents: `#0a0b10` → `background`, `#6366f1` → `accent`, `#e8eaf0` → `foreground`, `#8b92a8` → `muted`.
+- **What:** `not-found.tsx` uses 5 raw hex values (`#0a0b10`, `#6366f1`, `#e8eaf0`, `#8b92a8`) directly in Tailwind arbitrary classes and a `bg-[#6366f1]` button. Per `docs/design-system.md` Colors section: "Never use raw hex in components." All values have direct CSS variable equivalents: `#0a0b10` → `background`, `#6366f1` → `accent`, `#e8eaf0` → `foreground`, `#8b92a8` → `muted`.
 - **Files:** `src/app/[slug]/not-found.tsx:5,7,10,13,18`
 - **Test:** `grep -E "#[0-9a-fA-F]{6}" src/app/\[slug\]/not-found.tsx` returns zero results
 - **Priority:** 1
@@ -53,7 +53,7 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 - **Status:** OPEN
 
 ### QR-27: Replace raw hex color palette in FlywheelDiagram.tsx with CSS variable tokens
-- **What:** `FlywheelDiagram.tsx` (a recently added section type) uses a custom 4-color visualization palette via raw hex values (`#FF6B6B`, `#F7B731`, `#4ECDC4`, `#6C5CE7`, `#A8E6CF`) in JavaScript data arrays (LOOP_STEPS, EXPAND_TEAMS), Tailwind arbitrary-value classes, and an inline `style` gradient. Per `docs/design-system.md`: "Never use raw hex in components." The teal `#4ECDC4` maps to `accent-secondary`; remaining colors need CSS variable equivalents defined in `globals.css` (e.g., `--color-flywheel-coral`, `--color-flywheel-amber`, `--color-flywheel-purple`).
+- **What:** `FlywheelDiagram.tsx` (new section type) uses a custom 4-color visualization palette via raw hex values (`#FF6B6B`, `#F7B731`, `#4ECDC4`, `#6C5CE7`, `#A8E6CF`) in JavaScript data arrays (LOOP_STEPS, EXPAND_TEAMS), Tailwind arbitrary-value classes (`text-[#4ECDC4]`, `text-[#6C5CE7]`, `text-[#FF6B6B]`), and an inline `style` gradient on line 202. Per `docs/design-system.md`: "Never use raw hex in components." The teal `#4ECDC4` maps to `accent-secondary`; remaining colors need CSS variable definitions in `globals.css`.
 - **Files:** `src/components/viewer/sections/FlywheelDiagram.tsx:6-17` (data arrays), `:202` (inline style gradient), `:219,225,227,254,281,283` (Tailwind arbitrary classes)
 - **Test:** `grep -cE "#[0-9A-Fa-f]{6}" src/components/viewer/sections/FlywheelDiagram.tsx` returns 0
 - **Priority:** 1
@@ -61,7 +61,7 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 - **Status:** OPEN
 
 ### QR-28: Normalize hover:border-white/40 to /30 in upload zone buttons
-- **What:** Three editor components use `hover:border-white/40` on dashed-border upload zone buttons, which exceeds the defined border opacity system. Per `docs/design-system.md` Borders section, `border-white/30` is the maximum for "deep hover (upload zones, interactive borders)." The `/40` step is not in the defined system and creates inconsistency across upload surfaces.
+- **What:** Three editor components use `hover:border-white/40` on dashed-border upload zone buttons, which exceeds the defined border opacity system. Per `docs/design-system.md` Borders section, `border-white/30` is the maximum step for "deep hover (upload zones, interactive borders)" — `/40` is not in the system and creates inconsistency across upload surfaces.
 - **Files:** `src/components/editor/SplitViewLayout.tsx:327,338`, `src/components/editor/EditorLayout.tsx:532,540`, `src/components/editor/LogoUpload.tsx:140`
 - **Test:** `grep "hover:border-white/40" src/components/editor/SplitViewLayout.tsx src/components/editor/EditorLayout.tsx src/components/editor/LogoUpload.tsx` returns zero results
 - **Priority:** 1
@@ -69,7 +69,7 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 - **Status:** OPEN
 
 ### QR-29: Normalize disabled:opacity-50 to disabled:opacity-30 in upload buttons
-- **What:** The disabled state of upload-zone buttons in SplitViewLayout and EditorLayout uses `disabled:opacity-50`, which violates the design system's disabled state pattern. Per `docs/design-system.md` Buttons section: "disabled:opacity-30 disabled:cursor-not-allowed" is the standard. The heavier 50% opacity is visually inconsistent with the defined disabled state system.
+- **What:** The disabled state of upload-zone buttons in SplitViewLayout and EditorLayout uses `disabled:opacity-50`, violating the design system disabled state pattern. Per `docs/design-system.md` Buttons section: "disabled:opacity-30 disabled:cursor-not-allowed" is the standard for all buttons. The heavier 50% opacity is visually inconsistent with disabled states elsewhere in the editor.
 - **Files:** `src/components/editor/SplitViewLayout.tsx:338`, `src/components/editor/EditorLayout.tsx:540`
 - **Test:** `grep "disabled:opacity-50" src/components/editor/SplitViewLayout.tsx src/components/editor/EditorLayout.tsx` returns zero results
 - **Priority:** 1

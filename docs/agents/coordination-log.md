@@ -2,6 +2,7 @@
 
 
 ## 2026-04-16
+- 10:15 | discovery | Visual consistency sweep — 5 new items filed: QR-25 (text-[9px] regression), QR-26 (raw hex in not-found.tsx), QR-27 (raw hex in FlywheelDiagram), QR-28 (hover:border-white/40), QR-29 (disabled:opacity-50). Next rotation: interaction completeness sweep.
 - 14:00 | quality | QR-15: Add aria-label to InsertDivider Plus and GripVertical drag handle in SortableSectionList | PR #202 | tier-0
 - 08:11 | vqa | VQS Report → docs/vqa/2026-04-16.md (0 regressions, 2 failures, 11 sections scored, avg VQS 78)
 

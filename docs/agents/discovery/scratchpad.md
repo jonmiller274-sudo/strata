@@ -32,7 +32,7 @@ First audit queue is post-Phase-1 visual polish. After that, rotate through inte
 *(Patterns Discovery noticed about where bugs tend to cluster. Append newest at top.)*
 
 ### 2026-04-16 — Visual sweep
-New section types (FlywheelDiagram, ComparisonMatrix) are introduced with raw hex colors and non-standard weights — these bypass the quality agent's existing sweep because they're new files. Each new section type added to `src/components/viewer/sections/` should be audited immediately. The `not-found.tsx` in `src/app/[slug]/` was created with raw hex and the quality agent PR to fix it (#43) did not appear to merge. Upload zone dashed-border buttons in SplitViewLayout and EditorLayout share the same non-standard hover/disabled patterns — these two files are likely maintained in sync so drift together.
+New section types (FlywheelDiagram) introduced with raw hex color palettes and non-standard tokens — these bypass existing quality sweeps because they are new files not covered by earlier PRs. Each new viewer section type added to `src/components/viewer/sections/` should be audited at creation. The not-found.tsx in `src/app/[slug]/` was created with raw hex values; an earlier quality agent PR (#43) to fix this did not merge. SplitViewLayout and EditorLayout share duplicated upload-button patterns and drift in sync — fix one, check the other.
 
 ### 2026-04-04 — Seeded
 Nothing yet.
