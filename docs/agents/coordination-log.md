@@ -1,5 +1,10 @@
 # Agent Coordination Log
 
+## 2026-04-15
+
+- 08:00 | quality | PR #195 | disc | tier-0 | open | Normalize font-semibold/tracking-widest/text-[9px]/text-[11px]/p-5 in FlywheelDiagram.tsx (newly-added section type missed by audit)
+- 08:00 | quality | PR #196 | disc | tier-0 | open | Normalize font-semibold/tracking-wider in ComparisonMatrix.tsx (newly-added section type missed by audit)
+
 ## 2026-04-13
 
 - 10:55 | competitive-researcher | Self-audit: 4 checks, 3 gaps → GitHub Issue

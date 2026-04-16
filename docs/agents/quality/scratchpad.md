@@ -10,6 +10,19 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-15 — Twenty-third run: 2 PRs (both Tier 0), discovery on newly-added section types
+- All rubric items closed or Tier 3 blocked. Went straight to discovery.
+- New pattern: when new viewer section types are added (d6815eb added FlywheelDiagram, ComparisonMatrix, HeroStats, CallToAction), they bypass the quality rubric history and need immediate audit.
+- FlywheelDiagram had 6 `font-semibold`, 4 `tracking-widest`, 2 `text-[9px]`, 1 `text-[11px]`, 1 `p-5` violation.
+- ComparisonMatrix had 4 `font-semibold`, 3 `tracking-wider` violations.
+- HeroStats and CallToAction were clean — no violations found.
+- Rule going forward: grep newly-added files in `src/components/viewer/sections/` at the start of each discovery run.
+
+### 2026-04-15 — Twenty-second run: 2 PRs (1 Tier 0, 1 Tier 1), closed QR-13 and QR-15
+- QR-15 (ItemManager aria-labels): only 2 buttons remained — GripVertical drag handle and Trash2 remove button in `ItemManager.tsx`.
+- QR-13 (loading skeleton): onLoadingChange prop on TypeSelectorDropdown → isRemapping state in SectionEditorPanel → animate-pulse skeleton replaces EditableSectionRenderer content during AI remap.
+- GitHub PAT in ~/.zshrc was expired — use `gh` CLI directly for all GitHub operations.
+
 ### 2026-04-05 — Nineteenth run: 6 PRs (all Tier 0), 2 rubric items closed
 - QR-03 and QR-13 were both effectively fixed in main but never marked done — audit the rubric against current code at start of run, not just "is status OPEN?"
 - `focus:outline-none focus:border-white/20` is a non-standard focus ring pattern; design system says `outline-none focus:ring-1 focus:ring-accent/50`. Found in 4 inputs in EditableSectionRenderer (tier-table card editor, callout textarea).
