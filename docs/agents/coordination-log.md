@@ -1,5 +1,12 @@
 # Agent Coordination Log
 
+## 2026-04-15
+
+## 2026-04-15 14:15 ET — Discovery
+- Ran visual consistency sweep. Filed 3 new items: QR-25 (Regression text-[9px] in EditableSectionRenderer+GuidedJourney), QR-26 (non-standard ghost-accent button in AddSectionPaste), QR-27 (non-standard border-accent/40 in AddSectionUpload).
+- PR: https://github.com/jonmiller274-sudo/strata/pull/198
+- Next rotation: Interaction completeness sweep
+
 ## 2026-04-13
 
 - 10:55 | competitive-researcher | Self-audit: 4 checks, 3 gaps → GitHub Issue
