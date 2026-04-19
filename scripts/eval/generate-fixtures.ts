@@ -23,40 +23,117 @@ const FIXTURES_DIR = path.join(__dirname, "fixtures");
 // Word generators — deterministic fake content
 // ---------------------------------------------------------------------------
 
-const BUSINESS_WORDS = [
-  "revenue", "growth", "pipeline", "retention", "churn", "ARR", "MRR",
-  "conversion", "engagement", "activation", "expansion", "enterprise",
-  "strategic", "operational", "quarterly", "performance", "benchmark",
-  "opportunity", "competitive", "differentiation", "positioning", "market",
-  "customer", "acquisition", "lifecycle", "onboarding", "integration",
+// Realistic sentence pool — pulled from actual strategy-document patterns.
+// Using full sentences (not word salad) so VQS scoring reflects real-world usage.
+const SENTENCE_POOL = [
+  "We closed twelve enterprise deals this quarter, exceeding plan by 23%.",
+  "The EMEA team onboarded 340 new customers across four verticals.",
+  "Pipeline coverage improved to 4.2x, up from 3.1x at the start of Q2.",
+  "Net retention held steady at 118%, with logo churn down to 2.1%.",
+  "We launched three new features this sprint, shipping two weeks early.",
+  "Our CAC payback period compressed from 14 months to 9 months year-over-year.",
+  "Customer satisfaction scores reached an all-time high of 72 NPS.",
+  "The finance team identified 18 months of runway at current burn.",
+  "Product velocity doubled after we consolidated the design system.",
+  "Partnership with Vertex unlocked access to 15,000 mid-market accounts.",
+  "We reduced page load time by 40% through aggressive code splitting.",
+  "Hiring pipeline remains healthy with 12 offers extended this month.",
+  "The board approved the expansion into APAC starting next fiscal year.",
+  "Our strongest channel remains outbound, contributing 62% of closed-won revenue.",
+  "Marketing qualified leads grew 31% quarter over quarter.",
+  "We retired two legacy systems and migrated 400 tenants to the new platform.",
+  "The engineering team shipped 47 production deployments without an incident.",
+  "Win rates on competitive deals climbed from 28% to 41% after the playbook update.",
+  "Average contract value increased 18% due to better packaging and positioning.",
+  "We invested in SOC 2 Type II compliance to unblock enterprise procurement.",
+  "The mobile team hit 4.7 stars on the App Store across 2,400 reviews.",
+  "Infrastructure costs dropped 22% after migrating to reserved instances.",
+  "Support ticket resolution time improved from 18 hours to 6 hours median.",
+  "We expanded our technical advisory board with three senior operators.",
 ];
 
-function words(count: number): string {
-  const result: string[] = [];
-  for (let i = 0; i < count; i++) {
-    result.push(BUSINESS_WORDS[i % BUSINESS_WORDS.length]);
-  }
-  return result.join(" ");
+const TITLE_POOL = [
+  "Q2 Performance Review",
+  "Strategic Priorities",
+  "Market Expansion Plan",
+  "Product Roadmap",
+  "Customer Success Metrics",
+  "Competitive Landscape",
+  "Investment Thesis",
+  "Operating Model",
+  "Growth Strategy",
+  "Revenue Forecast",
+  "Team Structure",
+  "Risk Assessment",
+  "Technology Stack",
+  "Go-to-Market",
+  "Key Partnerships",
+  "Financial Summary",
+];
+
+const SHORT_WORDS = [
+  "growth", "scale", "focus", "impact", "clarity", "momentum", "alignment",
+  "velocity", "precision", "leverage", "insight", "direction", "execution",
+];
+
+function pick<T>(arr: T[], idx: number): T {
+  return arr[idx % arr.length];
 }
 
+// Deterministic counter — same idx always picks same sentence
+let sentenceCursor = 0;
+
 function sentence(wordCount: number): string {
-  const w = words(wordCount);
-  return w.charAt(0).toUpperCase() + w.slice(1) + ".";
+  // Use the pool if wordCount is reasonable for a full sentence (6-20 words)
+  if (wordCount >= 6 && wordCount <= 20) {
+    const s = pick(SENTENCE_POOL, sentenceCursor++);
+    return s;
+  }
+  // Very short: truncate to N words
+  if (wordCount < 6) {
+    const s = pick(SENTENCE_POOL, sentenceCursor++);
+    return s.split(" ").slice(0, wordCount).join(" ") + ".";
+  }
+  // Very long: concatenate multiple sentences
+  const sentences: string[] = [];
+  let remaining = wordCount;
+  while (remaining > 0) {
+    const s = pick(SENTENCE_POOL, sentenceCursor++);
+    sentences.push(s);
+    remaining -= s.split(" ").length;
+  }
+  return sentences.join(" ");
 }
 
 function paragraph(wordCount: number): string {
   const sentences: string[] = [];
-  let remaining = wordCount;
-  while (remaining > 0) {
-    const len = Math.min(remaining, 8 + (sentences.length % 5) * 2);
-    sentences.push(sentence(len));
-    remaining -= len;
+  let used = 0;
+  while (used < wordCount) {
+    const s = pick(SENTENCE_POOL, sentenceCursor++);
+    sentences.push(s);
+    used += s.split(" ").length;
   }
   return sentences.join(" ");
 }
 
 function title(wordCount: number): string {
-  return words(wordCount).split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+  // For short titles, use the title pool directly
+  if (wordCount <= 4) {
+    return pick(TITLE_POOL, sentenceCursor++);
+  }
+  // For longer titles, combine title + short word
+  const base = pick(TITLE_POOL, sentenceCursor++);
+  const extra = pick(SHORT_WORDS, sentenceCursor++);
+  return `${base}: ${extra.charAt(0).toUpperCase() + extra.slice(1)}`;
+}
+
+// Kept for backward compat — generates short word string (used for tags, etc.)
+function words(count: number): string {
+  const result: string[] = [];
+  for (let i = 0; i < count; i++) {
+    result.push(pick(SHORT_WORDS, sentenceCursor++));
+  }
+  return result.join(" ");
 }
 
 function kebab(str: string): string {

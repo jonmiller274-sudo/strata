@@ -1,0 +1,71 @@
+{
+  "updated_at": "2026-04-19T18:48:08.224Z",
+  "baselines": {
+    "eval/eval-baseline-all/rich-text-baseline-0": {
+      "sectionId": "rich-text-baseline-0",
+      "sectionType": "rich-text",
+      "vqs": 88,
+      "recorded_at": "2026-04-19T18:48:08.223Z"
+    },
+    "eval/eval-baseline-all/expandable-cards-baseline-1": {
+      "sectionId": "expandable-cards-baseline-1",
+      "sectionType": "expandable-cards",
+      "vqs": 86,
+      "recorded_at": "2026-04-19T18:48:08.223Z"
+    },
+    "eval/eval-baseline-all/timeline-baseline-2": {
+      "sectionId": "timeline-baseline-2",
+      "sectionType": "timeline",
+      "vqs": 90,
+      "recorded_at": "2026-04-19T18:48:08.223Z"
+    },
+    "eval/eval-baseline-all/tier-table-baseline-3": {
+      "sectionId": "tier-table-baseline-3",
+      "sectionType": "tier-table",
+      "vqs": 86,
+      "recorded_at": "2026-04-19T18:48:08.223Z"
+    },
+    "eval/eval-baseline-all/metric-dashboard-baseline-4": {
+      "sectionId": "metric-dashboard-baseline-4",
+      "sectionType": "metric-dashboard",
+      "vqs": 89,
+      "recorded_at": "2026-04-19T18:48:08.223Z"
+    },
+    "eval/eval-baseline-all/data-viz-baseline-5": {
+      "sectionId": "data-viz-baseline-5",
+      "sectionType": "data-viz",
+      "vqs": 86,
+      "recorded_at": "2026-04-19T18:48:08.223Z"
+    },
+    "eval/eval-baseline-all/hub-mockup-baseline-6": {
+      "sectionId": "hub-mockup-baseline-6",
+      "sectionType": "hub-mockup",
+      "vqs": 86,
+      "recorded_at": "2026-04-19T18:48:08.223Z"
+    },
+    "eval/eval-baseline-all/guided-journey-baseline-7": {
+      "sectionId": "guided-journey-baseline-7",
+      "sectionType": "guided-journey",
+      "vqs": 88,
+      "recorded_at": "2026-04-19T18:48:08.223Z"
+    },
+    "eval/eval-baseline-all/comparison-matrix-baseline-8": {
+      "sectionId": "comparison-matrix-baseline-8",
+      "sectionType": "comparison-matrix",
+      "vqs": 83,
+      "recorded_at": "2026-04-19T18:48:08.223Z"
+    },
+    "eval/eval-baseline-all/hero-stats-baseline-9": {
+      "sectionId": "hero-stats-baseline-9",
+      "sectionType": "hero-stats",
+      "vqs": 81,
+      "recorded_at": "2026-04-19T18:48:08.223Z"
+    },
+    "eval/eval-baseline-all/call-to-action-baseline-10": {
+      "sectionId": "call-to-action-baseline-10",
+      "sectionType": "call-to-action",
+      "vqs": 88,
+      "recorded_at": "2026-04-19T18:48:08.223Z"
+    }
+  }
+}
