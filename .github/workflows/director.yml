@@ -1,0 +1,54 @@
+name: Director Morning Digest
+
+on:
+  schedule:
+    - cron: '0 11 * * *'  # 7 AM ET daily (11:00 UTC)
+  workflow_dispatch: {}
+
+permissions:
+  issues: write
+  contents: write
+  pull-requests: write
+
+jobs:
+  director:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci --prefix scripts/director
+
+      - name: Generate digest
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          REPO_ROOT: ${{ github.workspace }}
+        run: npx tsx src/runner.ts
+        working-directory: scripts/director
+
+      - name: Commit digest and state files
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/digest/ docs/agents/director/ docs/agents/coordination-log.md
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            BRANCH="director/digest-$(date +%Y%m%d)"
+            git checkout -b "$BRANCH"
+            git commit -m "Director: daily digest $(date +%Y-%m-%d)"
+            git push -u origin "$BRANCH"
+            gh pr create \
+              --title "Daily Digest $(date +%Y-%m-%d)" \
+              --label digest \
+              --label tier-0 \
+              --body "Automated morning digest. Markdown + coordination log only. Risk-free."
+          fi

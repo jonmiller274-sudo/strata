@@ -1,0 +1,65 @@
+name: Quality Engineer
+
+on:
+  schedule:
+    # Every 2 hours during business hours ET (UTC offsets: 12-00)
+    # 8 AM, 10, 12, 2, 4, 6, 8 PM ET = 12, 14, 16, 18, 20, 22, 0 UTC
+    - cron: '0 12,14,16,18,20,22,0 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  quality-engineer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install project dependencies
+        run: npm ci
+
+      # Backlog guard — skip run if too many open quality PRs
+      - name: Check backlog
+        id: backlog
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          OPEN_QUALITY=$(gh pr list --repo "${{ github.repository }}" --state open --search "head:quality/" --json number | python3 -c "import sys, json; print(len(json.load(sys.stdin)))")
+          echo "open_quality=$OPEN_QUALITY" >> "$GITHUB_OUTPUT"
+          if [ "$OPEN_QUALITY" -ge 5 ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "Backlog full ($OPEN_QUALITY open quality PRs) — skipping run"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run Quality Engineer agent
+        if: steps.backlog.outputs.skip != 'true'
+        uses: anthropics/claude-code-base-action@beta
+        with:
+          prompt_file: docs/agents/quality-engineer-prompt.md
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          allowed_tools: "Bash,View,GlobTool,GrepTool,Edit,Write,Read"
+          max_turns: "30"
+          claude_env: |
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            REPO: ${{ github.repository }}
+            REPO_ROOT: ${{ github.workspace }}
+
+      - name: Report backlog skip
+        if: steps.backlog.outputs.skip == 'true'
+        run: |
+          echo "## Quality Engineer skipped" >> $GITHUB_STEP_SUMMARY
+          echo "Open quality PR backlog at ${{ steps.backlog.outputs.open_quality }} — skipping to avoid piling up." >> $GITHUB_STEP_SUMMARY
