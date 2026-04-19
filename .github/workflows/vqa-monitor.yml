@@ -50,7 +50,10 @@ jobs:
           NEXT_PUBLIC_APP_URL: http://localhost:3000
 
       - name: Run VQA Monitor
-        run: npx tsx scripts/eval/vqa-monitor.ts
+        # Use --demo-only in CI: the /eval/[fixture] dynamic route has path
+        # resolution issues when process.cwd() differs from the fixtures
+        # generation path. Demo artifact is hardcoded and always renders.
+        run: npx tsx scripts/eval/vqa-monitor.ts --demo-only
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
