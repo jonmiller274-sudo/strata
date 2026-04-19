@@ -31,17 +31,31 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Start dev server
+      # Production build is much more reliable than dev in CI — no Turbopack
+      # on-demand compilation, no hydration races. Slightly slower to start
+      # but pages render fully on first request.
+      - name: Build app (production)
+        run: NODE_ENV=production npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          NEXT_PUBLIC_APP_URL: http://localhost:3000
+
+      - name: Start production server
         run: |
-          npm run dev &
-          echo $! > /tmp/dev.pid
-          # Wait for server to be ready
+          npm run start &
+          echo $! > /tmp/server.pid
+          # Wait for server to respond with a real page (not 500 / not empty)
           for i in {1..30}; do
-            if curl -s -o /dev/null http://localhost:3000/demo; then
-              echo "Dev server ready after $i seconds"
+            BODY=$(curl -s http://localhost:3000/demo || true)
+            # Look for a marker that confirms the page actually rendered
+            if echo "$BODY" | grep -q "data-section-type\|Velocity\|Strata Demo"; then
+              echo "Server ready after $i seconds"
               break
             fi
-            sleep 1
+            echo "Attempt $i: not ready yet..."
+            sleep 2
           done
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
@@ -59,11 +73,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
 
-      - name: Stop dev server
+      - name: Stop server
         if: always()
         run: |
-          if [ -f /tmp/dev.pid ]; then
-            kill $(cat /tmp/dev.pid) || true
+          if [ -f /tmp/server.pid ]; then
+            kill $(cat /tmp/server.pid) || true
           fi
 
       - name: Commit VQA artifacts
