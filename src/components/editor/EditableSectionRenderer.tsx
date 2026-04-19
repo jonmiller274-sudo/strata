@@ -957,7 +957,7 @@ function EditableComparisonMatrix({
                     title={`Toggle ${col.label} — click to cycle checkmark / dash / text`}
                     className="flex flex-col items-center gap-0.5 px-2 py-1 rounded bg-white/5 hover:bg-white/10 transition-colors border border-white/10 min-w-[48px]"
                   >
-                    <span className="text-[9px] text-muted-foreground/60 truncate max-w-[48px]">{col.label}</span>
+                    <span className="text-[10px] text-muted-foreground/60 truncate max-w-[48px]">{col.label}</span>
                     {renderCellValue(row.values[ci] ?? false)}
                   </button>
                 ))}

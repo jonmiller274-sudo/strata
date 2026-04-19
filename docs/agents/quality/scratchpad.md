@@ -10,6 +10,12 @@ Working through Tier 1 items in `docs/quality-rubric.md`. Next unblocked item af
 
 *(Patterns that worked. Append newest at top.)*
 
+### 2026-04-19 — Twenty-fourth run: 1 PR (Tier 0) — QR-25 text-[9px] regression
+- QR-13 and QR-15 already had open PRs (#194, #202) — skipped to discovery.
+- QR-25 confirmed in code: text-[9px] in EditableSectionRenderer.tsx:960 (tier table column headers) and GuidedJourney.tsx:350 (timeline event labels). Fixed both to text-[10px].
+- coordination-log.md had accidentally-committed git conflict markers (<<<<<<< HEAD) — resolved them as part of this PR. Watch for this pattern when other agents push to the same file concurrently.
+- Discovery PRs #198 and #203 both propose QR-25 in rubric — my PR adds and resolves QR-25 so those discovery PRs will see a conflict on the rubric file when they eventually merge. Acceptable — resolves cleanly by removing QR-25 from their diff.
+
 ### 2026-04-15 — Twenty-third run: 2 PRs (both Tier 0), discovery on newly-added section types
 - All rubric items closed or Tier 3 blocked. Went straight to discovery.
 - New pattern: when new viewer section types are added (d6815eb added FlywheelDiagram, ComparisonMatrix, HeroStats, CallToAction), they bypass the quality rubric history and need immediate audit.

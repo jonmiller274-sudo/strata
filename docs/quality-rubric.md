@@ -36,6 +36,12 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 ### ~~QR-21: Palette consistency audit — charts and active states should use Velocity palette~~ DONE
 - **Status:** DONE — PR #10
 
+### ~~QR-25: Normalize text-[9px] regression to text-[10px]~~ DONE
+- **Tier:** 0
+- **What:** `text-[9px]` is below the design system minimum (`text-[10px]` from QR-01 kill-list). Regression found in EditableSectionRenderer.tsx (tier table column headers) and GuidedJourney.tsx (timeline event labels).
+- **Files:** `src/components/editor/EditableSectionRenderer.tsx`, `src/components/viewer/sections/GuidedJourney.tsx`
+- **Status:** DONE (2026-04-19, PR #213)
+
 ---
 
 ## Priority 2: Interaction Completeness (4-state rule)
