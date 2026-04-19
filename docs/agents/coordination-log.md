@@ -1,7 +1,10 @@
 # Agent Coordination Log
 
 ## 2026-04-19
-- 18:00 | quality | QR-25: Normalize text-[9px] regression to text-[10px] | PR #213 | tier-0
+- 07:00 | director | Generated daily digest → docs/digest/2026-04-19.md (0 merged, 0 open review, 2 Tier 3 planning items, 0 reverts) [corrects 14:57 entry]
+- 14:59 | discovery | visual-consistency sweep — 10 new items: QR-32, QR-33, QR-34, QR-35, QR-36, QR-37, QR-38, QR-39, QR-40, QR-41
+
+- 18:00 | quality | QR-25: Normalize text-[9px] regression to text-[10px] | PR #215 | tier-0
 - 14:57 | director | Generated daily digest → docs/digest/2026-04-19.md (0 merged, 0 open review, 13 Tier 3 planning items, 0 reverts)
 - 14:48 | vqa | VQS Report → docs/vqa/2026-04-19.md (0 regressions, 0 failures, 11 sections scored, avg VQS 86)
 
