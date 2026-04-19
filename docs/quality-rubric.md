@@ -36,6 +36,12 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 ### ~~QR-21: Palette consistency audit — charts and active states should use Velocity palette~~ DONE
 - **Status:** DONE — PR #10
 
+### ~~QR-25: Normalize text-[9px] regression to text-[10px]~~ DONE
+- **Tier:** 0
+- **What:** `text-[9px]` is below the design system minimum (`text-[10px]` from QR-01 kill-list). Regression found in EditableSectionRenderer.tsx (tier table column headers) and GuidedJourney.tsx (timeline event labels).
+- **Files:** `src/components/editor/EditableSectionRenderer.tsx`, `src/components/viewer/sections/GuidedJourney.tsx`
+- **Status:** DONE (2026-04-19, PR #215)
+
 ---
 
 ## Priority 2: Interaction Completeness (4-state rule)
@@ -54,6 +60,24 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 
 ### ~~QR-10: Keyboard shortcut discoverability~~ DONE
 - **Status:** DONE — PR opened 2026-04-04. `?` key triggers overlay listing all 5 shortcuts; Escape or `?` again dismisses it; overlay blocked when focus is in input/textarea.
+
+### QR-30: LogoUpload upload zone shows animate-pulse icon instead of Loader2 spinner
+- **Tier:** 1
+- **What:** When a logo is being uploaded, `LogoUpload.tsx` renders `<Upload className="h-4 w-4 animate-pulse" />` as the loading indicator. Per the design system (Interactive States › Async Operation States), all async loading states must use `<Loader2 className="h-4 w-4 animate-spin" />` + descriptive text. The pulsing Upload icon is non-standard and inconsistent with every other async loading indicator in the editor (TypeSelectorDropdown, AiChatPanel, AddSectionPaste, AddSectionUpload, and EditorLayout all use Loader2 animate-spin).
+- **Files:** `src/components/editor/LogoUpload.tsx:145`
+- **Test:** Trigger a logo upload — the upload zone should show `<Loader2 className="h-4 w-4 animate-spin" />` + "Uploading..." text; the Upload icon should not be visible during upload
+- **Priority:** 2
+- **Tier:** 1
+- **Status:** OPEN
+
+### QR-31: LogoUpload remove button lacks Loader2 spinner during async remove
+- **Tier:** 1
+- **What:** When a logo is being removed via `handleRemove`, the Remove button at `LogoUpload.tsx:112-119` shows `<X className="h-3 w-3" />` + "Removing..." text. The X icon persists instead of changing to a `Loader2` spinner. Per the design system, all async operations must show a `Loader2 animate-spin` spinner while in-flight. Every comparable async action in the editor (TypeSelectorDropdown type-change, AiChatPanel send, AddSectionPaste generate) swaps the action icon for a Loader2 during the call.
+- **Files:** `src/components/editor/LogoUpload.tsx:112-119`
+- **Test:** Click "Remove" on an uploaded logo — while the DELETE API call is in-flight the button should render `<Loader2 className="h-3 w-3 animate-spin" />` + "Removing..." (X icon hidden); on completion the logo zone should return to idle state
+- **Priority:** 2
+- **Tier:** 1
+- **Status:** OPEN
 
 ---
 
@@ -140,3 +164,84 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 ---
 
 *This rubric is the agent's work queue. Items are worked top-to-bottom within each priority level. Jon can reprioritize during planning sessions.*
+
+### QR-32: raw-hex in src/components/editor/DocumentSettings.tsx:7
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/editor/DocumentSettings.tsx:7
+- **Test:** Find the line `const DEFAULT_PRIMARY = "#6366f1";` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-33: raw-hex in src/components/editor/DocumentSettings.tsx:8
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/editor/DocumentSettings.tsx:8
+- **Test:** Find the line `const DEFAULT_SECONDARY = "#f59e0b";` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-34: raw-hex in src/components/editor/EditableHubMockup.tsx:75
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/editor/EditableHubMockup.tsx:75
+- **Test:** Find the line `color: "#6366f1",` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-35: raw-hex in src/components/editor/EditableHubMockup.tsx:340
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/editor/EditableHubMockup.tsx:340
+- **Test:** Find the line `value={node.color || "#6366f1"}` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-36: raw-hex in src/components/editor/EditableGuidedJourney.tsx:111
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/editor/EditableGuidedJourney.tsx:111
+- **Test:** Find the line `color: "#6366f1",` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-37: raw-hex in src/components/viewer/sections/HubMockup.tsx:9
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/viewer/sections/HubMockup.tsx:9
+- **Test:** Find the line `"#6366f1", // indigo (accent)` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-38: raw-hex in src/components/viewer/sections/HubMockup.tsx:10
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/viewer/sections/HubMockup.tsx:10
+- **Test:** Find the line `"#2fd8c8", // teal` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-39: raw-hex in src/components/viewer/sections/HubMockup.tsx:11
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/viewer/sections/HubMockup.tsx:11
+- **Test:** Find the line `"#a78bfa", // violet` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-40: raw-hex in src/components/viewer/sections/HubMockup.tsx:12
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/viewer/sections/HubMockup.tsx:12
+- **Test:** Find the line `"#f59e0b", // amber` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-41: raw-hex in src/components/viewer/sections/HubMockup.tsx:13
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/viewer/sections/HubMockup.tsx:13
+- **Test:** Find the line `"#ef4444", // red` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
