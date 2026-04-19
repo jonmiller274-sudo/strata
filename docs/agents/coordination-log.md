@@ -5,6 +5,8 @@
 
 
 ## 2026-04-19
+
+- 19:35 | pm | Product Briefing → docs/briefings/2026-04-19.md (7 usability, 0 quality open, 13 PRs)
 - 14:48 | vqa | VQS Report → docs/vqa/2026-04-19.md (0 regressions, 0 failures, 11 sections scored, avg VQS 86)
 
 ## 2026-04-16
