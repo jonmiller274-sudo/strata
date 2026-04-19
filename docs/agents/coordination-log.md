@@ -2,6 +2,7 @@
 
 ## 2026-04-19
 - 07:00 | director | Generated daily digest → docs/digest/2026-04-19.md (0 merged, 0 open review, 2 Tier 3 planning items, 0 reverts) [corrects 14:57 entry]
+- 14:59 | discovery | Interaction completeness sweep — 2 new items filed: QR-30 (LogoUpload animate-pulse → Loader2 in upload zone), QR-31 (LogoUpload remove button lacks Loader2 spinner). Next rotation: accessibility sweep.
 - 14:59 | discovery | visual-consistency sweep — 10 new items: QR-32, QR-33, QR-34, QR-35, QR-36, QR-37, QR-38, QR-39, QR-40, QR-41
 
 - 18:00 | quality | QR-25: Normalize text-[9px] regression to text-[10px] | PR #215 | tier-0
