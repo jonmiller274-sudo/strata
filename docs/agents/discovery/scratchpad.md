@@ -15,6 +15,9 @@ Discovery rotates through these audit types so no single mode goes stale:
 
 ## Rotation Log
 
+
+### 2026-04-24 16:00 — visual-consistency
+Ran visual-consistency. Filed 10 new items: QR-25, QR-26, QR-27, QR-28, QR-29, QR-30, QR-31, QR-32, QR-33, QR-34.
 *(Which mode last ran. Append newest at top. Agent picks the oldest mode that hasn't run in the last 3 days.)*
 
 ### 2026-04-04 — Seeded
