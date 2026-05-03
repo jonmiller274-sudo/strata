@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-04-19T18:48:08.224Z",
+  "updated_at": "2026-05-03T22:06:33.724Z",
   "baselines": {
     "eval/eval-baseline-all/rich-text-baseline-0": {
       "sectionId": "rich-text-baseline-0",
@@ -66,6 +66,54 @@
       "sectionType": "call-to-action",
       "vqs": 88,
       "recorded_at": "2026-04-19T18:48:08.223Z"
+    },
+    "demo/the-case-for-emea": {
+      "sectionId": "the-case-for-emea",
+      "sectionType": "rich-text",
+      "vqs": 89,
+      "recorded_at": "2026-05-03T22:06:33.722Z"
+    },
+    "demo/market-sizing": {
+      "sectionId": "market-sizing",
+      "sectionType": "data-viz",
+      "vqs": 91,
+      "recorded_at": "2026-05-03T22:06:33.724Z"
+    },
+    "demo/first-90-days": {
+      "sectionId": "first-90-days",
+      "sectionType": "guided-journey",
+      "vqs": 85,
+      "recorded_at": "2026-05-03T22:06:33.724Z"
+    },
+    "demo/target-segments": {
+      "sectionId": "target-segments",
+      "sectionType": "expandable-cards",
+      "vqs": 79,
+      "recorded_at": "2026-05-03T22:06:33.724Z"
+    },
+    "demo/twelve-month-rollout": {
+      "sectionId": "twelve-month-rollout",
+      "sectionType": "timeline",
+      "vqs": 89,
+      "recorded_at": "2026-05-03T22:06:33.724Z"
+    },
+    "demo/competitive-landscape": {
+      "sectionId": "competitive-landscape",
+      "sectionType": "tier-table",
+      "vqs": 81,
+      "recorded_at": "2026-05-03T22:06:33.724Z"
+    },
+    "demo/gtm-architecture": {
+      "sectionId": "gtm-architecture",
+      "sectionType": "hub-mockup",
+      "vqs": 79,
+      "recorded_at": "2026-05-03T22:06:33.724Z"
+    },
+    "demo/revenue-model": {
+      "sectionId": "revenue-model",
+      "sectionType": "metric-dashboard",
+      "vqs": 85,
+      "recorded_at": "2026-05-03T22:06:33.724Z"
     }
   }
 }
