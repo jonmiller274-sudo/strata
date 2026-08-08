@@ -5,6 +5,10 @@
 
 
 
+
+## 2026-08-08
+- 07:16 | director | Generated daily digest → docs/digest/2026-08-08.md (0 merged, 0 open review, 13 Tier 3 planning items, 0 reverts)
+
 ## 2026-05-03
 - 18:06 | vqa | VQS Report → docs/vqa/2026-05-03.md (0 regressions, 0 failures, 8 sections scored, avg VQS 85)
 
