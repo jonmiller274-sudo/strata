@@ -140,3 +140,84 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 ---
 
 *This rubric is the agent's work queue. Items are worked top-to-bottom within each priority level. Jon can reprioritize during planning sessions.*
+
+### QR-25: raw-hex in src/components/editor/EditableHubMockup.tsx:75
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/editor/EditableHubMockup.tsx:75
+- **Test:** Find the line `color: "#6366f1",` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-26: raw-hex in src/components/editor/EditableHubMockup.tsx:340
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/editor/EditableHubMockup.tsx:340
+- **Test:** Find the line `value={node.color || "#6366f1"}` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-27: raw-hex in src/components/editor/EditableGuidedJourney.tsx:111
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/editor/EditableGuidedJourney.tsx:111
+- **Test:** Find the line `color: "#6366f1",` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-28: raw-hex in src/components/editor/DocumentSettings.tsx:7
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/editor/DocumentSettings.tsx:7
+- **Test:** Find the line `const DEFAULT_PRIMARY = "#6366f1";` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-29: raw-hex in src/components/editor/DocumentSettings.tsx:8
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/editor/DocumentSettings.tsx:8
+- **Test:** Find the line `const DEFAULT_SECONDARY = "#f59e0b";` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-30: raw-hex in src/components/viewer/sections/HubMockup.tsx:9
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/viewer/sections/HubMockup.tsx:9
+- **Test:** Find the line `"#6366f1", // indigo (accent)` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-31: raw-hex in src/components/viewer/sections/HubMockup.tsx:10
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/viewer/sections/HubMockup.tsx:10
+- **Test:** Find the line `"#2fd8c8", // teal` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-32: raw-hex in src/components/viewer/sections/HubMockup.tsx:11
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/viewer/sections/HubMockup.tsx:11
+- **Test:** Find the line `"#a78bfa", // violet` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-33: raw-hex in src/components/viewer/sections/HubMockup.tsx:12
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/viewer/sections/HubMockup.tsx:12
+- **Test:** Find the line `"#f59e0b", // amber` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-34: raw-hex in src/components/viewer/sections/HubMockup.tsx:13
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/viewer/sections/HubMockup.tsx:13
+- **Test:** Find the line `"#ef4444", // red` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
