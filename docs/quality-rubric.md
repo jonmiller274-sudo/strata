@@ -140,3 +140,84 @@ Every rubric item has a **Tier** (0-3) that determines how its PR is handled:
 ---
 
 *This rubric is the agent's work queue. Items are worked top-to-bottom within each priority level. Jon can reprioritize during planning sessions.*
+
+### QR-25: raw-hex in src/components/editor/EditableHubMockup.tsx:75
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/editor/EditableHubMockup.tsx:75
+- **Test:** Find the line `color: "#6366f1",` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-26: raw-hex in src/components/editor/EditableHubMockup.tsx:340
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/editor/EditableHubMockup.tsx:340
+- **Test:** Find the line `value={node.color || "#6366f1"}` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-27: raw-hex in src/components/editor/DocumentSettings.tsx:7
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/editor/DocumentSettings.tsx:7
+- **Test:** Find the line `const DEFAULT_PRIMARY = "#6366f1";` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-28: raw-hex in src/components/editor/DocumentSettings.tsx:8
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/editor/DocumentSettings.tsx:8
+- **Test:** Find the line `const DEFAULT_SECONDARY = "#f59e0b";` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-29: raw-hex in src/components/editor/EditableGuidedJourney.tsx:111
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/editor/EditableGuidedJourney.tsx:111
+- **Test:** Find the line `color: "#6366f1",` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-30: raw-hex in src/components/viewer/sections/FlywheelDiagram.tsx:6
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/viewer/sections/FlywheelDiagram.tsx:6
+- **Test:** Find the line `{ label: "Discover\nBADAS", color: "#FF6B6B" },` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-31: raw-hex in src/components/viewer/sections/FlywheelDiagram.tsx:7
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/viewer/sections/FlywheelDiagram.tsx:7
+- **Test:** Find the line `{ label: "Gaps\nexposed", color: "#F7B731" },` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-32: raw-hex in src/components/viewer/sections/FlywheelDiagram.tsx:8
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/viewer/sections/FlywheelDiagram.tsx:8
+- **Test:** Find the line `{ label: "Buy\ndata", color: "#4ECDC4" },` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-33: raw-hex in src/components/viewer/sections/FlywheelDiagram.tsx:9
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/viewer/sections/FlywheelDiagram.tsx:9
+- **Test:** Find the line `{ label: "More gaps\nfound", color: "#FF6B6B" },` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
+### QR-34: raw-hex in src/components/viewer/sections/FlywheelDiagram.tsx:10
+- **What:** Raw hex color in JSX — use CSS variable tokens from globals.css (per design-system.md Colors section)
+- **Files:** src/components/viewer/sections/FlywheelDiagram.tsx:10
+- **Test:** Find the line `{ label: "Enrich\ndata", color: "#6C5CE7" },` is replaced with the correct pattern
+- **Priority:** 1
+- **Tier:** 0
+- **Status:** OPEN
+
