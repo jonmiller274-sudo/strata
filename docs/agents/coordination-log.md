@@ -1,5 +1,9 @@
 # Agent Coordination Log
 
+## 2026-11-21
+
+- 21:49 | pm | Product Briefing → docs/briefings/2026-11-21.md (quiet — no new activity)
+
 <<<<<<< HEAD
 =======
 
